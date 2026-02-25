@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -10,9 +11,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/',
         builder: (context, state) => const SplashScreen(),
       ),
-
-      // مستقبلاً هضيف Teacher Dashboard
-      // GoRoute(path: '/teacher', builder: (context, state) => const TeacherDashboard()),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
     ],
   );
 });
