@@ -1,4 +1,4 @@
-import '../models/user_model.dart';
+/*import '../models/user_model.dart';
 import '../../domain/params/login_params.dart';
 
 abstract class AuthRemoteDataSource {
@@ -8,4 +8,14 @@ abstract class AuthRemoteDataSource {
     required String idToken,
     required String provider,
   });
+}*/
+import '../models/user_model.dart';
+import '../../domain/params/login_params.dart';
+
+abstract class AuthRemoteDataSource {
+  /// Login using email, password, and role
+  Future<UserModel> login(LoginParams params);
+
+  /// Get current logged-in user (using stored token)
+  Future<UserModel> getCurrentUser();
 }

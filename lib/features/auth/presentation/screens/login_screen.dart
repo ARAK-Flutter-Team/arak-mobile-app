@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import '../../domain/entities/user.dart';
 import '../providers/auth_notifier.dart';
 import '../providers/auth_state.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/account_type_dropdown.dart';
 import '../widgets/login_button.dart';
-import '../widgets/social_login_section.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -36,8 +36,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
 
     ref.listen<AuthState>(authProvider, (previous, next) {
-      if (next.isSuccess) {
-        context.go('/main');
+      if (next.isSuccess && next.user != null) {
+        switch (next.user!.role) {
+          case UserRole.admin:
+            context.go('/adminHome');
+            break;
+          case UserRole.teacher:
+            context.go('/teacherHome');
+            break;
+          case UserRole.parent:
+            context.go('/parentHome');
+            break;
+        }
       }
     });
 
@@ -127,8 +137,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
 
               SizedBox(height: 24.h),
-
-              const SocialLoginSection(),
+              Column(
+                children: [
+                  SizedBox(height: 16.h),
+                  Text(
+                    "Username and password are provided by school administration.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    "For assistance, please contact: 01012345678",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              )
+// TODO: Social login removed as per product decision (Closed system)
+              //const SocialLoginSection(),
             ],
           ),
         ),
