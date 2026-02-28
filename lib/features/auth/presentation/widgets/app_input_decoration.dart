@@ -12,12 +12,12 @@ class AppInputDecoration {
       contentPadding:
       EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       filled: true,
-      fillColor: AppColors.coloredFilled,
+      fillColor: Color(0xF5F5F5),
       label: RichText(
         text: TextSpan(
           text: label,
           style: TextStyle(
-            color: AppColors.gray,
+            color: Colors.grey,
             fontFamily: 'Inter',
           ),
           children: const [

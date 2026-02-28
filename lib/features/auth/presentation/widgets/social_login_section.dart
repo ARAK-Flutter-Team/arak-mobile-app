@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../shared/theme/app_colors.dart';
 import '../providers/auth_notifier.dart';
 
@@ -20,19 +19,19 @@ class SocialLoginSection extends ConsumerWidget {
         // --- Or Divider ---
         Row(
           children: [
-            Expanded(child: Divider(color: AppColors.secondary)),
+            Expanded(child: Divider(color: Color(0x0B2545))),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
                 "or",
                 style: TextStyle(
                   fontFamily: 'Inter',
-                  color: AppColors.secondary,
+                  color: Color(0x0B2545),
                   fontSize: 14.sp,
                 ),
               ),
             ),
-            Expanded(child: Divider(color: AppColors.secondary)),
+            Expanded(child: Divider(color: Color(0x0B2545))),
           ],
         ),
         SizedBox(height: 16.h),
@@ -70,7 +69,7 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-                color: AppColors.secondary,
+                color: Color(0x0B2545),
               ),
             )
                 : Row(
@@ -80,7 +79,7 @@ class SocialLoginSection extends ConsumerWidget {
                   "Continue with Apple",
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    color: AppColors.secondary,
+                    color:Color(0x0B2545),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -135,7 +134,7 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-                color: AppColors.secondary,
+                color: Color(0x0B2545),
               ),
             )
                 : Row(
@@ -145,7 +144,7 @@ class SocialLoginSection extends ConsumerWidget {
                   "Continue with Google",
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    color: AppColors.secondary,
+                    color: Color(0x0B2545),
                   ),
                 ),
                 SizedBox(width: 12.w),

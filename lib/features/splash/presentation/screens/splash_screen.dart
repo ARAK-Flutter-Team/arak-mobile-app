@@ -32,7 +32,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondary,
+      backgroundColor: Color(0x0B2545),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +40,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             // --------- اللوجو ---------
             Shimmer.fromColors(
               baseColor: AppColors.primaryBlue,
-              highlightColor: AppColors.white,
+              highlightColor: Colors.white,
               period: const Duration(seconds: 3),
               child: Image.asset(
                 'assets/images/app_icon.png',
