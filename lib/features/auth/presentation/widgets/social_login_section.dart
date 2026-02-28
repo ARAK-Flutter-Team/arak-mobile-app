@@ -136,7 +136,6 @@ class SocialLoginSection extends ConsumerWidget {
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
                 color: Color(0xFF0B2545),
-                color: Color(0x0B2545),
               ),
             )
                 : Row(
