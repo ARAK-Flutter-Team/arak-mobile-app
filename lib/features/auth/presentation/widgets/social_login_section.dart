@@ -19,19 +19,20 @@ class SocialLoginSection extends ConsumerWidget {
         // --- Or Divider ---
         Row(
           children: [
-            Expanded(child: Divider(color: Color(0x0B2545))),
+            Expanded(child: Divider(color: Color(0xFF0B2545))),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
                 "or",
                 style: TextStyle(
                   fontFamily: 'Inter',
-                  color: Color(0x0B2545),
+                  color: Color(0xFF0B2545),
                   fontSize: 14.sp,
                 ),
               ),
             ),
-            Expanded(child: Divider(color: Color(0x0B2545))),
+
+            Expanded(child: Divider(color: Color(0xFF0B2545))),
           ],
         ),
         SizedBox(height: 16.h),
@@ -69,7 +70,7 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-                color: Color(0x0B2545),
+                color: Color(0xFF0B2545),
               ),
             )
                 : Row(
@@ -79,7 +80,7 @@ class SocialLoginSection extends ConsumerWidget {
                   "Continue with Apple",
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    color:Color(0x0B2545),
+                    color:Color(0xFF0B2545),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -134,6 +135,7 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
+                color: Color(0xFF0B2545),
                 color: Color(0x0B2545),
               ),
             )
@@ -144,7 +146,7 @@ class SocialLoginSection extends ConsumerWidget {
                   "Continue with Google",
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    color: Color(0x0B2545),
+                    color: Color(0xFF0B2545),
                   ),
                 ),
                 SizedBox(width: 12.w),

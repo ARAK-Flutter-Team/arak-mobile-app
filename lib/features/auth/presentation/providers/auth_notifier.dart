@@ -35,21 +35,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(emailError: "Invalid email format");
       return;
     } else {
-      state = state.copyWith(emailError: null); // تختفي لما صح
+      state = state.copyWith(clearEmailError: true);
     }
 
     if (password.isEmpty) {
       state = state.copyWith(passwordError: "Password is required");
       return;
     } else {
-      state = state.copyWith(passwordError: null); // تختفي لما صح
+      state = state.copyWith(clearPasswordError: true);
     }
 
     if (role == null) {
       state = state.copyWith(accountError: "Select account type");
       return;
     } else {
-      state = state.copyWith(accountError: null); // تختفي لما صح
+      state = state.copyWith(clearAccountError: true);
     }
     state = state.copyWith(isLoadingLogin: true);
 
