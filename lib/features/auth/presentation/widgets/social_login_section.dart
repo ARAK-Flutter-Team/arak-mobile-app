@@ -20,31 +20,22 @@ class SocialLoginSection extends ConsumerWidget {
         // --- Or Divider ---
         Row(
           children: [
-<<<<<<< Updated upstream
-            Expanded(child: Divider(color: AppColors.secondary)),
-=======
+
             Expanded(child: Divider(color: Color(0xFF0B2545))),
->>>>>>> Stashed changes
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
                 "or",
                 style: TextStyle(
                   fontFamily: 'Inter',
-<<<<<<< Updated upstream
-                  color: AppColors.secondary,
-=======
+
                   color: Color(0xFF0B2545),
->>>>>>> Stashed changes
                   fontSize: 14.sp,
                 ),
               ),
             ),
-<<<<<<< Updated upstream
-            Expanded(child: Divider(color: AppColors.secondary)),
-=======
+
             Expanded(child: Divider(color: Color(0xFF0B2545))),
->>>>>>> Stashed changes
           ],
         ),
         SizedBox(height: 16.h),
@@ -82,11 +73,8 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-<<<<<<< Updated upstream
-                color: AppColors.secondary,
-=======
+
                 color: Color(0xFF0B2545),
->>>>>>> Stashed changes
               ),
             )
                 : Row(
@@ -96,11 +84,7 @@ class SocialLoginSection extends ConsumerWidget {
                   "Continue with Apple",
                   style: TextStyle(
                     fontFamily: 'Inter',
-<<<<<<< Updated upstream
-                    color: AppColors.secondary,
-=======
                     color:Color(0xFF0B2545),
->>>>>>> Stashed changes
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -155,11 +139,7 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-<<<<<<< Updated upstream
-                color: AppColors.secondary,
-=======
                 color: Color(0xFF0B2545),
->>>>>>> Stashed changes
               ),
             )
                 : Row(
@@ -169,11 +149,7 @@ class SocialLoginSection extends ConsumerWidget {
                   "Continue with Google",
                   style: TextStyle(
                     fontFamily: 'Inter',
-<<<<<<< Updated upstream
-                    color: AppColors.secondary,
-=======
                     color: Color(0xFF0B2545),
->>>>>>> Stashed changes
                   ),
                 ),
                 SizedBox(width: 12.w),
