@@ -175,7 +175,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         id: 1,
         name: "Noha Mahmoud",
         email: email,
-        role: UserRole.parent,
+        role:  _mapRole(role),
       ),
     );
 
@@ -230,5 +230,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
     );
     return emailRegex.hasMatch(email);
+  }
+
+  void reset() {
+    state = AuthState.initial();
+  }
+
+  UserRole _mapRole(String role) {
+    switch (role.toLowerCase()) {
+      case 'admin':
+        return UserRole.admin;
+      case 'teacher':
+        return UserRole.teacher;
+      case 'parent':
+        return UserRole.parent;
+      default:
+        return UserRole.parent;
+    }
   }
 }
