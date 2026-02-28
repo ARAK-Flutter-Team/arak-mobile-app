@@ -73,8 +73,29 @@ class AuthState extends Equatable {
     passwordError: null,
     accountError: null,
   );
-
   AuthState copyWith({
+    bool? isLoadingLogin,
+    bool? isLoadingGoogle,
+    bool? isLoadingApple,
+    bool? isSuccess,
+    String? emailError,
+    String? passwordError,
+    String? accountError,
+    bool clearEmailError = false,
+    bool clearPasswordError = false,
+    bool clearAccountError = false,
+  }) {
+    return AuthState(
+      isLoadingLogin: isLoadingLogin ?? this.isLoadingLogin,
+      isLoadingGoogle: isLoadingGoogle ?? this.isLoadingGoogle,
+      isLoadingApple: isLoadingApple ?? this.isLoadingApple,
+      isSuccess: isSuccess ?? this.isSuccess,
+      emailError: clearEmailError ? null : (emailError ?? this.emailError),
+      passwordError: clearPasswordError ? null : (passwordError ?? this.passwordError),
+      accountError: clearAccountError ? null : (accountError ?? this.accountError),
+    );
+  }
+  /*AuthState copyWith({
     bool? isLoadingLogin,
     bool? isLoadingGoogle,
     bool? isLoadingApple,
@@ -92,7 +113,7 @@ class AuthState extends Equatable {
       passwordError: passwordError ?? this.passwordError,
       accountError: accountError ?? this.accountError,
     );
-  }
+  }*/
 
   @override
   List<Object?> get props => [

@@ -58,8 +58,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 style: TextStyle(
                   fontFamily: 'Teko',
                   fontSize: 50.sp,
+<<<<<<< Updated upstream
                   fontWeight: FontWeight.bold,
                   color: AppColors.secondary,
+=======
+                  color: Color(0xFF0B2545),
+>>>>>>> Stashed changes
                 ),
               ),
               SizedBox(height: 8.h),
@@ -68,7 +72,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14.sp,
+<<<<<<< Updated upstream
                   color: AppColors.secondary,
+=======
+                  color: Color(0xFF0B2545),
+>>>>>>> Stashed changes
                 ),
               ),
               SizedBox(height: 24.h),
@@ -91,6 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _obscurePassword
                         ? Icons.visibility_off
                         : Icons.visibility,
+                    size: 20,
                   ),
                   onPressed: () {
                     setState(() {
