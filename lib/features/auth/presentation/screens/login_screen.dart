@@ -8,6 +8,7 @@ import '../providers/auth_state.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/account_type_dropdown.dart';
 import '../widgets/login_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,25 +32,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+  Future<void> openAdminPanel() async {
+    final Uri url = Uri.parse("https://admin.yoursite.com");
 
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception("Could not launch $url");
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
-    ref.listen<AuthState>(authProvider, (previous, next) {
-      if (next.isSuccess && next.user != null) {
-        switch (next.user!.role) {
-          case UserRole.admin:
-            context.go('/adminHome');
-            break;
-          case UserRole.teacher:
-            context.go('/teacherHome');
-            break;
-          case UserRole.parent:
-            context.go('/parentHome');
-            break;
+    @override
+    void initState() {
+      super.initState();
+
+      ref.listen<AuthState>(authProvider, (previous, next) {
+        if (next.isSuccess && next.user != null) {
+          switch (next.user!.role) {
+            case UserRole.admin:
+              openAdminPanel();
+              break;
+
+            case UserRole.teacher:
+              context.go('/teacherHome');
+              break;
+
+            case UserRole.parent:
+              context.go('/parentHome');
+              break;
+          }
         }
-      }
-    });
+      });
+    }
 
     final state = ref.watch(authProvider);
     final notifier = ref.read(authProvider.notifier);
