@@ -1,3 +1,4 @@
+import 'package:arak_app/shared/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,11 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Arak',
       debugShowCheckedModeBanner: false,
+
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system, // حالياً حسب الجهاز
+
       routerConfig: router,
     );
   }

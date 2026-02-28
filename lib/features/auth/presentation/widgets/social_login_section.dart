@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../shared/theme/app_colors.dart';
 import '../providers/auth_notifier.dart';
 
@@ -20,7 +19,6 @@ class SocialLoginSection extends ConsumerWidget {
         // --- Or Divider ---
         Row(
           children: [
-
             Expanded(child: Divider(color: Color(0xFF0B2545))),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -28,7 +26,6 @@ class SocialLoginSection extends ConsumerWidget {
                 "or",
                 style: TextStyle(
                   fontFamily: 'Inter',
-
                   color: Color(0xFF0B2545),
                   fontSize: 14.sp,
                 ),
@@ -73,7 +70,6 @@ class SocialLoginSection extends ConsumerWidget {
               height: 24.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-
                 color: Color(0xFF0B2545),
               ),
             )
@@ -140,6 +136,7 @@ class SocialLoginSection extends ConsumerWidget {
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
                 color: Color(0xFF0B2545),
+                color: Color(0x0B2545),
               ),
             )
                 : Row(
