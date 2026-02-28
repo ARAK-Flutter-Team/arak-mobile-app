@@ -32,11 +32,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< Updated upstream
-      backgroundColor: AppColors.secondary,
-=======
       backgroundColor: Color(0xFF0B2545),
->>>>>>> Stashed changes
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
