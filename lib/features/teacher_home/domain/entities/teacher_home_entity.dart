@@ -1,7 +1,7 @@
 class TeacherHomeEntity {
   final String teacherName;
   final String subjectName;
-  final double? performance;
+  final double performance;
   final List<String> assignedClasses;
 
   final bool hasNewTasks;

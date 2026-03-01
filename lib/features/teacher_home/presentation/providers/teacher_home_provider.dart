@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/datasources/teacher_home_remote_data_source.dart';
 import '../../data/datasources/teacher_home_mock_data_source.dart';
@@ -50,4 +50,38 @@ FutureProvider<TeacherHomeEntity>((ref) async {
         (failure) => throw Exception(failure.message),
         (data) => data,
   );
+});*/
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// ================= Teacher Profile Model =================
+class TeacherProfile {
+  final String teacherName;
+  final String subjectName;
+  final String profileImage;
+
+  TeacherProfile({
+    required this.teacherName,
+    required this.subjectName,
+    required this.profileImage,
+  });
+}
+
+/// ================= Teacher Profile Provider =================
+final teacherProfileProvider =
+FutureProvider<TeacherProfile>((ref) async {
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  return TeacherProfile(
+    teacherName: "Mr. Ahmed",
+    subjectName: "Mathematics",
+    profileImage:
+    "https://i.pravatar.cc/150?img=3",
+  );
+});
+
+/// ================= Teacher Performance Provider =================
+final teacherPerformanceProvider =
+FutureProvider<double>((ref) async {
+  await Future.delayed(const Duration(milliseconds: 400));
+  return 82.0;
 });

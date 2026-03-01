@@ -1,6 +1,5 @@
-import 'package:arak_app/features/teacher_home/data/datasources/teacher_home_remote_data_source.dart';
-
 import '../models/teacher_home_model.dart';
+import 'teacher_home_remote_data_source.dart';
 
 class TeacherHomeMockDataSource
     implements TeacherHomeRemoteDataSource {
