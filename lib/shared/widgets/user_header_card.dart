@@ -46,7 +46,8 @@ class UserHeaderCard extends StatelessWidget {
             backgroundImage: imageUrl != null
                 ? NetworkImage(imageUrl!)
                 : const AssetImage(
-                'assets/images/default_avatar.png')
+                'assets/images/download(1).jpg')
+
             as ImageProvider,
           ),
 
