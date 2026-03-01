@@ -9,9 +9,8 @@ class MarkNotificationsAsSeen {
   /// ---------------------------
   /// Mark Tasks
   /// ---------------------------
-  Future<void> markTasksSeen() async {
+  Future<void> markTasksSeen(int latestId) async {
     final local = await repository.getLocalStatus();
-    final latestId = await repository.getLatestTaskId();
 
     final updated = local.copyWith(
       lastSeenTaskId: latestId,

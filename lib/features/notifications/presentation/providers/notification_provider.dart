@@ -54,7 +54,8 @@ class NotificationUIState {
 /// ----------------------------------------------------------------
 final notificationProvider =
 AsyncNotifierProvider<NotificationNotifier, NotificationUIState>(
-    NotificationNotifier.new);
+  NotificationNotifier.new,
+);
 
 class NotificationNotifier
     extends AsyncNotifier<NotificationUIState> {

@@ -51,7 +51,7 @@ FutureProvider<TeacherHomeEntity>((ref) async {
         (data) => data,
   );
 });*/
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// ================= Teacher Profile Model =================
 class TeacherProfile {
@@ -75,7 +75,7 @@ FutureProvider<TeacherProfile>((ref) async {
     teacherName: "Mr. Ahmed",
     subjectName: "Mathematics",
     profileImage:
-    "https://i.pravatar.cc/150?img=3",
+    "download (1).jpg",
   );
 });
 
@@ -84,4 +84,56 @@ final teacherPerformanceProvider =
 FutureProvider<double>((ref) async {
   await Future.delayed(const Duration(milliseconds: 400));
   return 82.0;
+});
+*/
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// ================= Teacher Profile Model =================
+class TeacherProfile {
+  final String teacherName;
+  final String subjectName;
+  final String profileImage;
+
+  TeacherProfile({
+    required this.teacherName,
+    required this.subjectName,
+    required this.profileImage,
+  });
+}
+
+/// ================= Teacher Profile Provider (Mock) =================
+final teacherProfileProvider = FutureProvider<TeacherProfile>((ref) async {
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  return TeacherProfile(
+    teacherName: "Mr. Ahmed",
+    subjectName: "Mathematics",
+    profileImage: "https://www.pinterest.com/pin/820781100878995639/",
+  );
+
+  /*
+  // ================= Teacher Profile Provider (Real API) =================
+  final api = ref.read(apiClientProvider); // API Client
+  final response = await api.get('/teacher/profile');
+
+  return TeacherProfile(
+    teacherName: response.data['teacherName'],
+    subjectName: response.data['subjectName'],
+    profileImage: response.data['profileImage'],
+  );
+  */
+});
+
+/// ================= Teacher Performance Provider (Mock) =================
+final teacherPerformanceProvider = FutureProvider<double>((ref) async {
+  await Future.delayed(const Duration(milliseconds: 400));
+  return 82.0;
+
+  /*
+  // ================= Teacher Performance Provider (Real API) =================
+  final api = ref.read(apiClientProvider); // API Client
+  final response = await api.get('/teacher/performance');
+
+  return response.data['performance'].toDouble();
+  */
 });
