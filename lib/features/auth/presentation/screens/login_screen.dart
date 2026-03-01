@@ -18,6 +18,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -42,28 +43,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-    @override
-    void initState() {
-      super.initState();
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.isSuccess && next.user != null) {
+        switch (next.user!.role) {
+          case UserRole.admin:
+            openAdminPanel();
+            break;
 
-      ref.listen<AuthState>(authProvider, (previous, next) {
-        if (next.isSuccess && next.user != null) {
-          switch (next.user!.role) {
-            case UserRole.admin:
-              openAdminPanel();
-              break;
+          case UserRole.teacher:
+            context.go('/teacher-home');
+            break;
 
-            case UserRole.teacher:
-              context.go('/teacherHome');
-              break;
-
-            case UserRole.parent:
-              context.go('/parentHome');
-              break;
-          }
+          case UserRole.parent:
+            context.go('/parentHome');
+            break;
         }
-      });
-    }
+      }
+    });
 
     final state = ref.watch(authProvider);
     final notifier = ref.read(authProvider.notifier);

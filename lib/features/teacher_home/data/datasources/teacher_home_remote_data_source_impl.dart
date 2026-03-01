@@ -1,6 +1,5 @@
-import 'package:arak_app/features/teacher_home/data/datasources/teacher_home_remote_data_source.dart';
-
 import '../models/teacher_home_model.dart';
+import 'teacher_home_remote_data_source.dart';
 
 class TeacherHomeRemoteDataSourceImpl
     implements TeacherHomeRemoteDataSource {
@@ -11,7 +10,10 @@ class TeacherHomeRemoteDataSourceImpl
 
   @override
   Future<TeacherHomeModel> getTeacherHomeData() async {
-    // TODO: replace with real API call when backend is ready
+
+    // TODO: Replace with real API call when backend is ready
+    // final response = await dio.get('/teacher/home');
+    // return TeacherHomeModel.fromJson(response.data);
 
     throw UnimplementedError();
   }
