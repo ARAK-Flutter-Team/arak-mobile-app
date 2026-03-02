@@ -7,7 +7,7 @@ import '../../../../shared/widgets/performance_indicator.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
 import '../../../../shared/widgets/recent_activities_section.dart';
 import '../../../../shared/widgets/user_header_card.dart';
-import '../../../notifications/presentation/providers/notification_provider.dart';
+import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
 import '../providers/recent_activities_provider.dart';
 import '../providers/teacher_home_provider.dart';
 

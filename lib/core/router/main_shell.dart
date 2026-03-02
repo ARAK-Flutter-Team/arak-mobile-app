@@ -130,7 +130,7 @@ class MainShell extends StatelessWidget {
               case 1:
                 context.go('/profile');
                 break;
-              case 2:
+               case 2:
                 context.go('/notifications');
                 break;
               case 3:
