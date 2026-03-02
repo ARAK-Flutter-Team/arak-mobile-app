@@ -50,7 +50,7 @@ class AppTheme {
       centerTitle: true,
     ),
 
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: lightColorScheme.surface,
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -136,7 +136,7 @@ class AppTheme {
       centerTitle: true,
     ),
 
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: darkColorScheme.surface,
       elevation: 2,
       shape: RoundedRectangleBorder(

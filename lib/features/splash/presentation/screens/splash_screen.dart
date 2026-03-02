@@ -64,7 +64,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     style: TextStyle(
                       fontFamily: 'Teko',
                       fontSize: 45.sp,
-                      fontWeight: FontWeight.w700,
+                      //fontWeight: FontWeight.w700,
                       color: Colors.white,
                       letterSpacing: 2.5,
                     ),
