@@ -93,7 +93,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: "Email Address",
                 controller: _emailController,
                 errorText: state.emailError,
-                onChanged: (value) => notifier.validateEmail(value),
+                onChanged: (value) {
+                  ref.read(authProvider.notifier).validateEmail(value);
+                },
               ),
               SizedBox(height: 12.h),
 
@@ -115,7 +117,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     });
                   },
                 ),
-                onChanged: (value) => notifier.validatePassword(value),
+                onChanged: (value) {
+                  ref.read(authProvider.notifier).validatePassword(value);
+                },
               ),
               SizedBox(height: 12.h),
 
@@ -127,7 +131,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   setState(() {
                     selectedAccountType = value;
                   });
-                  notifier.clearAccountError();
+
+                  notifier.validateRole(value); 
                 },
               ),
               SizedBox(height: 16.h),

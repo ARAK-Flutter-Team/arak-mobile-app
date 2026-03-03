@@ -52,6 +52,28 @@ class AppMainAppBar extends StatelessWidget
           ? leadingWidget
           : showBackButton
           ? IconButton(
+        onPressed: onBack ?? () {
+          if (context.canPop()) {
+            context.pop(); // هيرجع للصفحة اللي فاتت
+          } else {
+            context.go('/home'); // fallback لو مفيش صفحة ترجع لها
+          }
+        },
+        icon: SvgPicture.asset(
+          'assets/icons/arrow.svg',
+          width: 24.w,
+          height: 24.h,
+          colorFilter: ColorFilter.mode(
+            theme.iconTheme.color ?? theme.colorScheme.onSurface,
+            BlendMode.srcIn,
+          ),
+        ),
+      )
+          : null,
+      /*leading: disableDefaultLeading
+          ? leadingWidget
+          : showBackButton
+          ? IconButton(
         onPressed: onBack ??
                 () {
               if (context.canPop()) {
@@ -69,7 +91,7 @@ class AppMainAppBar extends StatelessWidget
           ),
         ),
       )
-          : null,
+          : null,*/
 
       actions: actions,
     );

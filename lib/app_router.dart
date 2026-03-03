@@ -8,7 +8,7 @@ import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'core/router/main_shell.dart';
 
-// هنعملهم بعدين
+import 'features/tasks/presentation/pages/add_task_page.dart';
 import 'features/tasks/presentation/pages/teacher_tasks_page.dart';
 import 'features/teacher_home/presentation/screens/teacher_home_screen.dart';
 
@@ -94,9 +94,19 @@ final routerProvider = Provider<GoRouter>((ref) {
 
                   return TeacherTasksScreen(
                     teacherId: user?.id.toString() ?? '',
-                    classes: user?.classes ?? [],
                   );
                 },
+              );
+            },
+          ),
+          ///teacher add task
+          GoRoute(
+            path: '/teacher/add-task',
+            builder: (context, state) {
+              final teacherId = state.extra as String;
+
+              return AddTaskPage(
+                teacherId: teacherId,
               );
             },
           ),

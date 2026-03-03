@@ -1,5 +1,4 @@
 import '../repositories/notification_repository.dart';
-import '../entities/notification_status.dart';
 
 class MarkNotificationsAsSeen {
   final NotificationRepository repository;
