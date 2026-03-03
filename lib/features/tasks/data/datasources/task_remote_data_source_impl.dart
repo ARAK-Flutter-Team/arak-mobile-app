@@ -5,13 +5,15 @@ import '../../domain/entities/teacher_tasks_result.dart';
 import '../models/task_model.dart';
 
 class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
-  /*@override
-  Future<List<TaskModel>> getTeacherTasks({
+
+  @override
+  Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
     required String classId,
   }) async {
-    return [
-      TaskModel(
+
+    final tasks = [
+     TaskModel(
         id: '1',
         title: 'Math Homework',
         description: 'Solve page 10',
@@ -20,21 +22,30 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
         status: TaskStatus.pending,
         assignedTo: classId,
       ),
-    ];
-  }*/
-  @override
-  Future<TeacherTasksResult> getTeacherTasks({
-    required String teacherId,
-    required String classId,
-  }) async {
-
-    final tasks = [
       TaskModel(
-        id: '1',
-        title: 'Math Homework',
-        description: 'Solve page 10',
-        subject: 'Math',
-        dueDate: DateTime.now(),
+        id: '2',
+        title: 'English Essay',
+        description: 'Write 200 words about nature',
+        subject: 'English',
+        dueDate: DateTime.now().add(const Duration(days: 2)),
+        status: TaskStatus.pending, // 👈 مش completed
+        assignedTo: classId,
+      ),
+      TaskModel(
+        id: '3',
+        title: 'Science Project',
+        description: 'Prepare volcano model',
+        subject: 'Science',
+        dueDate: DateTime.now().add(const Duration(days: 3)),
+        status: TaskStatus.completed,
+        assignedTo: classId,
+      ),
+      TaskModel(
+        id: '4',
+        title: 'History Presentation',
+        description: 'Prepare slides about Ancient Egypt',
+        subject: 'History',
+        dueDate: DateTime.now().add(const Duration(days: 4)),
         status: TaskStatus.pending,
         assignedTo: classId,
       ),
