@@ -132,7 +132,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     selectedAccountType = value;
                   });
 
-                  notifier.validateRole(value); 
+                  notifier.validateRole(value);
                 },
               ),
               SizedBox(height: 16.h),
