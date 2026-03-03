@@ -5,26 +5,16 @@ import 'package:go_router/go_router.dart';
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
 
-  const AppBottomNavBar({
-    super.key,
-    required this.currentIndex,
-  });
+  const AppBottomNavBar({super.key, required this.currentIndex});
 
-  Widget _buildSvgIcon(
-      BuildContext context,
-      String assetPath,
-      bool isActive,
-      ) {
+  Widget _buildSvgIcon(BuildContext context, String assetPath, bool isActive) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return SvgPicture.asset(
       assetPath,
       width: 24,
       height: 24,
       colorFilter: ColorFilter.mode(
-        isActive
-            ? const Color(0xFF42B0FF)
-            : (isDark ? Colors.white : Colors.black),
+        isActive ? const Color(0xFF2979FF) : (isDark ? Colors.white : Colors.black),
         BlendMode.srcIn,
       ),
     );
@@ -39,7 +29,6 @@ class AppBottomNavBar extends StatelessWidget {
       backgroundColor: isDark ? Colors.black : Colors.white,
       elevation: 5,
       currentIndex: currentIndex,
-
       onTap: (index) {
         switch (index) {
           case 0:
@@ -56,41 +45,23 @@ class AppBottomNavBar extends StatelessWidget {
             break;
         }
       },
-
-      selectedItemColor: const Color(0xFF42B0FF),
+      selectedItemColor: const Color(0xFF2979FF),
       unselectedItemColor: isDark ? Colors.white : Colors.black,
-
       items: [
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(
-            context,
-            'assets/icons/home-1.svg',
-            currentIndex == 0,
-          ),
+          icon: _buildSvgIcon(context, 'assets/icons/home-1.svg', currentIndex == 0),
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(
-            context,
-            'assets/icons/user-1.svg',
-            currentIndex == 1,
-          ),
+          icon: _buildSvgIcon(context, 'assets/icons/user-1.svg', currentIndex == 1),
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(
-            context,
-            'assets/icons/bell.svg',
-            currentIndex == 2,
-          ),
+          icon: _buildSvgIcon(context, 'assets/icons/bell.svg', currentIndex == 2),
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(
-            context,
-            'assets/icons/settings.svg',
-            currentIndex == 3,
-          ),
+          icon: _buildSvgIcon(context, 'assets/icons/settings.svg', currentIndex == 3),
           label: "",
         ),
       ],
