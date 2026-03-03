@@ -176,6 +176,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         name: "Noha Mahmoud",
         email: email,
         role:  _mapRole(role),
+        classes: _mapRole(role) == UserRole.teacher
+            ? ["Class A", "Class B", "Class C"]
+            : [],
       ),
     );
 

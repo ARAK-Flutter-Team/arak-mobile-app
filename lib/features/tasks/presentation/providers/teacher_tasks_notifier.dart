@@ -1,8 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../data/datasources/task_remote_data_source.dart';
 import '../../data/datasources/task_remote_data_source_impl.dart'; // MOCK NOW
-import '../../data/datasources/task_local_data_source.dart';
 import '../../data/datasources/task_local_data_source_impl.dart';
 import '../../data/repositories/task_repository_impl.dart';
 import '../../domain/entities/task.dart';
@@ -37,7 +34,7 @@ class TeacherTasksState {
       tasks: [],
       completedPercentage: 0,
       isLoading: false,
-      selectedClass: 'Class A',
+      selectedClass: '',
       error: null,
       lastUpdated: null,
     );
@@ -91,7 +88,7 @@ class TeacherTasksNotifier
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final tasks = await getTeacherTasks(
+      final result = await getTeacherTasks(
         teacherId: teacherId,
         classId: classId,
       );
@@ -100,10 +97,10 @@ class TeacherTasksNotifier
       await getTeacherStats(teacherId);
 
       state = state.copyWith(
-        tasks: tasks,
+        tasks: result.tasks,
         completedPercentage: percentage,
         isLoading: false,
-        lastUpdated: DateTime.now(),
+        lastUpdated: result.lastUpdated, // ✅ من السيرفر
       );
 
     } catch (e) {
@@ -126,7 +123,6 @@ class TeacherTasksNotifier
     );
   }
 }
-
 
 // =====================================================
 // -------------------- PROVIDERS ----------------------

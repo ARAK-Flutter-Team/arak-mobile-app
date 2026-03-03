@@ -21,7 +21,7 @@ class AppTheme {
     error: Color(0xFFED1A1A),
     onError: Colors.white,
 
-    background: Color(0xFFF8F9FA),
+    background: Colors.white,
     onBackground: Colors.black,
 
     surface: Colors.white,

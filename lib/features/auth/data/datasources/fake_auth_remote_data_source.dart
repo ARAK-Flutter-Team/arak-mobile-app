@@ -28,7 +28,8 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
       id: 1,
       name: "Noha Mahmoud",
       email: "noha@example.com",
-      role: UserRole.parent,
+      role: UserRole.teacher,
+      classes: ["Class A", "Class B", "Class C"],
     );
   }
 }

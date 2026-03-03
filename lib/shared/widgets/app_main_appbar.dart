@@ -55,7 +55,7 @@ class AppMainAppBar extends StatelessWidget
         onPressed: onBack ??
                 () {
               if (context.canPop()) {
-                context.pop();
+                context.go('/home');
               }
             },
         icon: SvgPicture.asset(
