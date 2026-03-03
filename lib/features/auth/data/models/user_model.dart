@@ -34,6 +34,7 @@ class UserModel extends User {
     required super.name,
     required super.email,
     required super.role,
+    super.classes = const [],
   });
 
   /// --- Fake Data Factory ---
@@ -43,7 +44,8 @@ class UserModel extends User {
       id: 1,
       name: "Noha Mahmoud",
       email: "noha@example.com",
-      role: UserRole.parent,
+      role: UserRole.teacher,
+      classes: ["Class A", "Class B", "Class C"],
     );
   }
 
@@ -82,6 +84,7 @@ class UserModel extends User {
       "name": name,
       "email": email,
       "role": role.name,
+      "classes": classes,
     };
   }
 }

@@ -1,21 +1,3 @@
-/*import 'package:equatable/equatable.dart';
-
-class User extends Equatable {
-  final String id;
-  final String name;
-  final String email;
-  final String role;
-
-  const User({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.role,
-  });
-
-  @override
-  List<Object> get props => [id, name, email, role];
-}*/
 import 'package:equatable/equatable.dart';
 
 enum UserRole { admin, teacher, parent }
@@ -25,12 +7,14 @@ class User extends Equatable {
   final String name;
   final String email;
   final UserRole role;
+  final List<String> classes;
 
   const User({
     required this.id,
     required this.name,
     required this.email,
     required this.role,
+    this.classes = const [],
   });
 
   /// --- لو هتربطي مع الباك بعدين، ممكن تضيفي fromJson و toJson ---

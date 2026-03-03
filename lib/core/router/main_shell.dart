@@ -1,61 +1,4 @@
 /*import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
-class MainShell extends StatelessWidget {
-  final Widget child;
-
-  const MainShell({super.key, required this.child});
-
-  int _calculateIndex(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-
-    if (location.startsWith('/home')) return 0;
-    if (location.startsWith('/profile')) return 1;
-    if (location.startsWith('/notifications')) return 2;
-    if (location.startsWith('/settings')) return 3;
-
-    return 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final currentIndex = _calculateIndex(context);
-
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/home');
-              break;
-            case 1:
-              context.go('/profile');
-              break;
-            case 2:
-              context.go('/notifications');
-              break;
-            case 3:
-              context.go('/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: "Profile"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications), label: "Notifications"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
-        ],
-      ),
-    );
-  }
-}*/
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -66,7 +9,6 @@ class MainShell extends StatelessWidget {
 
   int _calculateIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
-
     if (location.startsWith('/home')) return 0;
     if (location.startsWith('/profile')) return 1;
     if (location.startsWith('/notifications')) return 2;
@@ -80,14 +22,16 @@ class MainShell extends StatelessWidget {
       String assetPath,
       bool isActive,
       ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SvgPicture.asset(
       assetPath,
       width: 24,
       height: 24,
       colorFilter: ColorFilter.mode(
         isActive
-            ? const Color(0xFF2979FF) // الأزرق للـ active
-            : Colors.black,
+            ? const Color(0xFF42B0FF)
+            : (isDark ? Colors.white : Colors.black),
         BlendMode.srcIn,
       ),
     );
@@ -139,8 +83,8 @@ class MainShell extends StatelessWidget {
             }
           },
 
-          selectedItemColor: const Color(0xFF2979FF),
-          unselectedItemColor: Colors.black,
+          selectedItemColor: const Color(0xFF42B0FF),
+          unselectedItemColor: isDark ? Colors.white : Colors.black,
 
           items: [
             BottomNavigationBarItem(
@@ -166,6 +110,38 @@ class MainShell extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}*/
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../shared/widgets/app_bottom_navbar.dart';
+
+class MainShell extends StatelessWidget {
+  final Widget child;
+
+  const MainShell({super.key, required this.child});
+
+  int _calculateIndex(BuildContext context) {
+    final location = GoRouterState.of(context).uri.toString();
+
+    if (location.startsWith('/home')) return 0;
+    if (location.startsWith('/profile')) return 1;
+    if (location.startsWith('/notifications')) return 2;
+    if (location.startsWith('/settings')) return 3;
+
+    return 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final currentIndex = _calculateIndex(context);
+
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: AppBottomNavBar(
+        currentIndex: currentIndex,
       ),
     );
   }

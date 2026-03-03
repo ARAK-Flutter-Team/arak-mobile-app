@@ -51,11 +51,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             break;
 
           case UserRole.teacher:
-            context.go('/teacher-home');
-            break;
-
           case UserRole.parent:
-            context.go('/parentHome');
+            context.go('/home');
             break;
         }
       }

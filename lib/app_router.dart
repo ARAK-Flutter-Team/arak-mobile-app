@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/auth/domain/entities/user.dart';
+import 'features/auth/presentation/providers/auth_notifier.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'core/router/main_shell.dart';
 
 // هنعملهم بعدين
+import 'features/tasks/presentation/pages/teacher_tasks_page.dart';
 import 'features/teacher_home/presentation/screens/teacher_home_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -39,10 +42,28 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
 
           /// Home
-           GoRoute(
-            path: '/teacher-home',
-            builder: (context, state) => const TeacherHomeScreen(),
-            ),
+          GoRoute(
+            path: '/home',
+            builder: (context, state) {
+              return Consumer(
+                builder: (context, ref, _) {
+                  final role = ref.watch(authProvider).user?.role;
+
+                  if (role == UserRole.teacher) {
+                    return const TeacherHomeScreen();
+                  } else if (role == UserRole.parent) {
+                    //return const ParentHomeScreen();
+                    return const Scaffold(
+                        body: Center(
+                          child: Text("Parent Module Under Development"),
+                        ),);
+                  }
+
+                  return const SizedBox();
+                },
+              );
+            },
+          ),
           /// Profile
           GoRoute(
             path: '/profile',
@@ -62,6 +83,22 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/settings',
             builder: (context, state) =>
             const Placeholder(),
+          ),
+          ///teacher task
+          GoRoute(
+            path: '/teacher/tasks',
+            builder: (context, state) {
+              return Consumer(
+                builder: (context, ref, _) {
+                  final user = ref.watch(authProvider).user;
+
+                  return TeacherTasksScreen(
+                    teacherId: user?.id.toString() ?? '',
+                    classes: user?.classes ?? [],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),

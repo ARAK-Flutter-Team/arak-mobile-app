@@ -73,24 +73,16 @@ class QuickActionsGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
 
-        final isTasks = item.route == '/tasks';
+        final isTasks = item.route == '/teacher/tasks';
         final isMessages = item.route == '/messages';
 
         return ActionCard(
           title: item.title,
           iconPath: item.iconPath,
-          showDot: isTasks
-              ? hasNewTasks
-              : isMessages
-              ? hasNewMessages
-              : false,
-          showNewLabel: isTasks
-              ? hasNewTasks
-              : isMessages
-              ? hasNewMessages
-              : false,
+          showDot: isTasks && hasNewTasks,
+          showNewLabel: isMessages && hasNewMessages,
           onTap: () {
-            context.push(item.route);
+            context.go(item.route);
 
             if (isTasks) {
               onTasksOpened();
