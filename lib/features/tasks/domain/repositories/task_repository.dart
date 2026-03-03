@@ -1,8 +1,10 @@
 import '../entities/task.dart';
+import '../entities/teacher_tasks_result.dart';
 
 abstract class TaskRepository {
   // Teacher
-  Future<List<Task>> getTeacherTasks({
+  //Future<List<Task>> getTeacherTasks({
+  Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
     required String classId,
   });

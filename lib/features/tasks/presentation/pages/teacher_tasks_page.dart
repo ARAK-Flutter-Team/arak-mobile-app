@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
-import '../../../auth/presentation/providers/auth_notifier.dart';
 import '../providers/teacher_tasks_notifier.dart';
 import '../widgets/add_task_button.dart';
 import '../widgets/class_dropdown.dart';
@@ -13,7 +14,7 @@ import '../widgets/last_update_text.dart';
 import '../widgets/loading_view.dart';
 import '../widgets/tasks_container.dart';
 
-class TeacherTasksScreen extends ConsumerWidget {
+class TeacherTasksScreen extends ConsumerStatefulWidget {
   final String teacherId;
   final List<String> classes;
 
@@ -24,40 +25,79 @@ class TeacherTasksScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TeacherTasksScreen> createState() =>
+      _TeacherTasksScreenState();
+}
+
+class _TeacherTasksScreenState
+    extends ConsumerState<TeacherTasksScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.classes.isNotEmpty) {
+        ref
+            .read(teacherTasksNotifierProvider.notifier)
+            .changeClass(
+          teacherId: widget.teacherId,
+          newClassId: widget.classes.first,
+        );
+      }
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(teacherTasksNotifierProvider);
-    final notifier = ref.read(teacherTasksNotifierProvider.notifier);
+    final notifier =
+    ref.read(teacherTasksNotifierProvider.notifier);
 
     return Scaffold(
-      appBar: const AppMainAppBar(
+      appBar: AppMainAppBar(
         title: "Tasks",
         showBackButton: true,
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: SvgPicture.asset(
+              'assets/icons/file-search-alt.svg',
+              width: 25.w,
+              height: 25.h,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).iconTheme.color ??
+                    Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+        ],
       ),
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              /// 🔹 Class Dropdown
-              ClassDropdown(
-                selectedClass: state.selectedClass,
-                classes: classes,
-                onChanged: (newClass) {
-                  notifier.changeClass(
-                    teacherId: teacherId,
-                    newClassId: newClass,
-                  );
-                },
-              ),
+          child: SingleChildScrollView(
 
-              const SizedBox(height: 20),
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 10),
 
-              /// 🔹 Body State Switcher
-              Expanded(
-                child: Builder(
+                ClassDropdown(
+                  selectedClass: state.selectedClass,
+                  classes: widget.classes,
+                  onChanged: (newClass) {
+                    notifier.changeClass(
+                      teacherId: widget.teacherId,
+                      newClassId: newClass,
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                Builder(
                   builder: (_) {
                     if (state.isLoading) {
                       return const LoadingView();
@@ -71,27 +111,44 @@ class TeacherTasksScreen extends ConsumerWidget {
                       return const EmptyView();
                     }
 
-                    return TasksContainer(tasks: state.tasks);
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.strokeColor,
+                          width: 1,
+                        ),
+                      ),
+                      child: TasksContainer(tasks: state.tasks),
+                    );
                   },
                 ),
-              ),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 12),
+                const LastUpdateText(),
+                const SizedBox(height: 20),
 
-              /// 🔹 Last Update
-              const LastUpdateText(),
-
-              const SizedBox(height: 20),
-
-              /// 🔹 Add Task Button
-              AddTaskButton(
-                onPressed: () {
-                  context.go('/add-task');
-                },
-              ),
-              const SizedBox(height: 10),
-            ],
+                /*AddTaskButton(
+                  onPressed: () {
+                    context.go('/add-task');
+                  },
+                ),
+                const SizedBox(height: 10),*/
+              ],
+            ),
           ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: AddTaskButton(
+          onPressed: () {
+            context.go('/add-task');
+          },
         ),
       ),
     );

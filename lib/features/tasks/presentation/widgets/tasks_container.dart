@@ -13,6 +13,8 @@ class TasksContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: tasks.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (_, index) {
         return TaskItemCard(task: tasks[index]);
       },

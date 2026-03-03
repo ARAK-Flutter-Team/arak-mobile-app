@@ -1,4 +1,5 @@
 import '../../domain/entities/task.dart';
+import '../../domain/entities/teacher_tasks_result.dart';
 import '../../domain/repositories/task_repository.dart';
 import '../datasources/task_local_data_source.dart';
 import '../datasources/task_remote_data_source.dart';
@@ -11,21 +12,41 @@ class TaskRepositoryImpl implements TaskRepository {
   TaskRepositoryImpl(this.remote, this.local);
 
   @override
-  Future<List<Task>> getTeacherTasks({
+  Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
     required String classId,
   }) async {
     try {
-      final tasks = await remote.getTeacherTasks(
+      final result = await remote.getTeacherTasks(
         teacherId: teacherId,
         classId: classId,
       );
 
-      await local.cacheTeacherTasks(tasks, classId);
+      // ✅ نحول Task → TaskModel قبل التخزين
+      final models = result.tasks.map((task) {
+        return TaskModel(
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          subject: task.subject,
+          dueDate: task.dueDate,
+          status: task.status,
+          imageUrl: task.imageUrl,
+          assignedTo: task.assignedTo,
+        );
+      }).toList();
 
-      return tasks;
+      await local.cacheTeacherTasks(models, classId);
+
+      return result;
     } catch (_) {
-      return await local.getCachedTeacherTasks(classId);
+      final cachedModels =
+      await local.getCachedTeacherTasks(classId);
+
+      return TeacherTasksResult(
+        tasks: cachedModels, // هنا غالبًا already Task
+        lastUpdated: DateTime.now(),
+      );
     }
   }
 
@@ -43,8 +64,6 @@ class TaskRepositoryImpl implements TaskRepository {
     );
 
     await remote.addTask(model);
-
-    // 🔥 Clear cache for that class so next fetch gets fresh data
     await local.clearTeacherTasks(task.assignedTo);
   }
 
@@ -63,14 +82,10 @@ class TaskRepositoryImpl implements TaskRepository {
       String taskId,
       TaskStatus status,
       ) async {
-
     try {
       await remote.updateTaskStatus(taskId, status.name);
-    } catch (_) {
-      // ممكن نسجل error في المستقبل
-    }
+    } catch (_) {}
 
-    // Update locally anyway (Optimistic update)
     await local.updateTaskStatusLocally(taskId, status.name);
   }
 }

@@ -1,10 +1,11 @@
 import 'package:arak_app/features/tasks/data/datasources/task_remote_data_source.dart';
 
 import '../../domain/entities/task.dart';
+import '../../domain/entities/teacher_tasks_result.dart';
 import '../models/task_model.dart';
 
 class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
-  @override
+  /*@override
   Future<List<TaskModel>> getTeacherTasks({
     required String teacherId,
     required String classId,
@@ -20,6 +21,29 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
         assignedTo: classId,
       ),
     ];
+  }*/
+  @override
+  Future<TeacherTasksResult> getTeacherTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+
+    final tasks = [
+      TaskModel(
+        id: '1',
+        title: 'Math Homework',
+        description: 'Solve page 10',
+        subject: 'Math',
+        dueDate: DateTime.now(),
+        status: TaskStatus.pending,
+        assignedTo: classId,
+      ),
+    ];
+
+    return TeacherTasksResult(
+      tasks: tasks,
+      lastUpdated: DateTime.parse("2026-03-03T10:15:00Z"),
+    );
   }
 
   @override

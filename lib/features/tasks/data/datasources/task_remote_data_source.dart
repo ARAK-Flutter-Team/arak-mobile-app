@@ -1,7 +1,9 @@
+import '../../domain/entities/teacher_tasks_result.dart';
 import '../models/task_model.dart';
 
 abstract class TaskRemoteDataSource {
-  Future<List<TaskModel>> getTeacherTasks({
+ // Future<List<TaskModel>> getTeacherTasks({
+  Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
     required String classId,
   });
