@@ -20,12 +20,16 @@ class TeacherHomeScreen extends ConsumerWidget {
     final performanceAsync = ref.watch(teacherPerformanceProvider);
     final teacherAsync = ref.watch(teacherProfileProvider);
     final notificationAsync = ref.watch(notificationProvider);
+
     return teacherAsync.when(
       loading: () =>
       const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (_, __) =>
       const Scaffold(body: Center(child: Text("Error loading profile"))),
       data: (data) {
+        // ✅ ناخد آخر قيمة بدون ما نخفي الواجهة
+        final notificationState = notificationAsync.value;
+
         return Scaffold(
           backgroundColor: Theme.of(context).brightness == Brightness.dark
               ? Colors.black
@@ -73,44 +77,19 @@ class TeacherHomeScreen extends ConsumerWidget {
 
                     const SizedBox(height: 24),
 
-                    /// 3️⃣ Quick Actions
+                    /// 3️⃣ Quick Actions (حل احترافي بدون اختفاء)
+                    QuickActionsGrid(
+                      hasNewTasks:
+                      notificationState?.hasNewTasks ?? false,
+                      hasNewMessages:
+                      notificationState?.hasNewMessages ?? false,
+                      onTasksOpened: () async {
+                        await context.push('/teacher/tasks');
 
-                    notificationAsync.when(
-                      data: (state) => QuickActionsGrid(
-                        items: [
-                          QuickActionItem(
-                            title: "Tasks",
-                            iconPath: 'assets/icons/tasks.svg',
-                            route: '/teacher/tasks',
-                          ),
-                          QuickActionItem(
-                            title: "Schedule",
-                            iconPath: 'assets/icons/schedule.svg',
-                            route: '/teacher/schedule',
-                          ),
-                          QuickActionItem(
-                            title: "Attendance",
-                            iconPath: 'assets/icons/attendance.svg',
-                            route: '/teacher/attendance',
-                          ),
-                          QuickActionItem(
-                            title: "Messages",
-                            iconPath: 'assets/icons/messages.svg',
-                            route: '/teacher/messages',
-                          ),
-                        ],
-                        hasNewTasks: state.hasNewTasks,
-                        hasNewMessages: state.hasNewMessages,
-                        onTasksOpened: () async {
-                          await context.push('/teacher/tasks');
-
-                          await ref
-                              .read(notificationProvider.notifier)
-                              .markTasksAsSeen();
-                        },
-                      ),
-                      loading: () => const SizedBox(),
-                      error: (_, __) => const SizedBox(),
+                        await ref
+                            .read(notificationProvider.notifier)
+                            .markTasksAsSeen();
+                      },
                     ),
 
                     const SizedBox(height: 24),
