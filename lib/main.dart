@@ -5,14 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_router.dart';
 
 void main() {
-  runApp(
-    ProviderScope(
-      child: ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        builder: (context, child) {
-          return const MyApp();
-        },
+  runApp(ProviderScope(
+    child: ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return const MyApp();
+      },
     ),
   ));
 }

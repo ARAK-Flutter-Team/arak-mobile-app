@@ -66,13 +66,14 @@ class QuickActionsGrid extends ConsumerWidget {
   final bool hasNewTasks;
   final bool hasNewMessages;
   final VoidCallback onTasksOpened;
+  final List<QuickActionItem> items;
 
-  const QuickActionsGrid({
-    super.key,
-    required this.hasNewTasks,
-    required this.hasNewMessages,
-    required this.onTasksOpened,
-  });
+  const QuickActionsGrid(
+      {super.key,
+      required this.hasNewTasks,
+      required this.hasNewMessages,
+      required this.onTasksOpened,
+      required this.items});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -103,11 +104,9 @@ class QuickActionsGrid extends ConsumerWidget {
             if (isTasks) {
               await context.push('/teacher/tasks');
 
-              await ref
-                  .read(notificationProvider.notifier)
-                  .markTasksAsSeen();
+              await ref.read(notificationProvider.notifier).markTasksAsSeen();
             } else {
-              context.push(item.route);
+              context.push(item.route ?? '');
             }
           },
         );

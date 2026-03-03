@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../shared/models/quick_action_item.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/performance_indicator.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
@@ -10,7 +9,6 @@ import '../../../../shared/widgets/user_header_card.dart';
 import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
 import '../providers/recent_activities_provider.dart';
 import '../providers/teacher_home_provider.dart';
-
 
 class TeacherHomeScreen extends ConsumerWidget {
   const TeacherHomeScreen({super.key});
@@ -23,9 +21,9 @@ class TeacherHomeScreen extends ConsumerWidget {
 
     return teacherAsync.when(
       loading: () =>
-      const Scaffold(body: Center(child: CircularProgressIndicator())),
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (_, __) =>
-      const Scaffold(body: Center(child: Text("Error loading profile"))),
+          const Scaffold(body: Center(child: Text("Error loading profile"))),
       data: (data) {
         // ✅ ناخد آخر قيمة بدون ما نخفي الواجهة
         final notificationState = notificationAsync.value;
@@ -51,15 +49,17 @@ class TeacherHomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     /// 1️⃣ User Header
                     UserHeaderCard(
+                      students: [],
                       name: data.teacherName,
                       subtitle: data.subjectName,
                       imageUrl: data.profileImage,
                       showSearch: true,
                       showVerifiedIcon: true,
                       searchRoute: '/teacher-search',
+                      selectedStudentIndex: 0,
+                      onStudentSelected: (int value) {},
                     ),
 
                     const SizedBox(height: 30),
@@ -67,7 +67,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                     /// 2️⃣ Performance
                     performanceAsync.when(
                       loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                          const Center(child: CircularProgressIndicator()),
                       error: (_, __) => const SizedBox(),
                       data: (percentage) => AppPerformanceIndicator(
                         percentage: percentage,
@@ -79,10 +79,10 @@ class TeacherHomeScreen extends ConsumerWidget {
 
                     /// 3️⃣ Quick Actions (حل احترافي بدون اختفاء)
                     QuickActionsGrid(
-                      hasNewTasks:
-                      notificationState?.hasNewTasks ?? false,
+                      items: [],
+                      hasNewTasks: notificationState?.hasNewTasks ?? false,
                       hasNewMessages:
-                      notificationState?.hasNewMessages ?? false,
+                          notificationState?.hasNewMessages ?? false,
                       onTasksOpened: () async {
                         await context.push('/teacher/tasks');
 

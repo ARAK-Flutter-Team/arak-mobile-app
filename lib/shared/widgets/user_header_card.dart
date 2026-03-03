@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../shared/domain/entities/student.dart';
 import '../theme/app_colors.dart';
 
 class UserHeaderCard extends StatelessWidget {
@@ -13,6 +13,10 @@ class UserHeaderCard extends StatelessWidget {
   final bool showVerifiedIcon;
   final String? searchRoute;
 
+  final List<Student> students;
+  final int selectedStudentIndex;
+  final ValueChanged<int> onStudentSelected;
+
   const UserHeaderCard({
     super.key,
     required this.name,
@@ -21,6 +25,9 @@ class UserHeaderCard extends StatelessWidget {
     this.showSearch = false,
     this.showVerifiedIcon = false,
     this.searchRoute,
+    required this.students,
+    required this.selectedStudentIndex,
+    required this.onStudentSelected,
   });
 
   @override
@@ -45,10 +52,8 @@ class UserHeaderCard extends StatelessWidget {
             backgroundColor: theme.colorScheme.surfaceVariant,
             backgroundImage: imageUrl != null
                 ? NetworkImage(imageUrl!)
-                : const AssetImage(
-                'assets/images/download(1).jpg')
-
-            as ImageProvider,
+                : const AssetImage('assets/images/download(1).jpg')
+                    as ImageProvider,
           ),
 
           SizedBox(width: 12.w),
@@ -71,7 +76,6 @@ class UserHeaderCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 6.w),
-
                     if (showVerifiedIcon)
                       SvgPicture.asset(
                         'assets/icons/true sign.svg',
@@ -81,7 +85,6 @@ class UserHeaderCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 4.h),
-
                 if (subtitle != null)
                   Text(
                     subtitle!,

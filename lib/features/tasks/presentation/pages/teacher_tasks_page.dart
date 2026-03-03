@@ -169,7 +169,6 @@ class _TeacherTasksScreenState
   }
 }*/
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -197,21 +196,16 @@ class TeacherTasksScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<TeacherTasksScreen> createState() =>
-      _TeacherTasksScreenState();
+  ConsumerState<TeacherTasksScreen> createState() => _TeacherTasksScreenState();
 }
 
-class _TeacherTasksScreenState
-    extends ConsumerState<TeacherTasksScreen> {
-
+class _TeacherTasksScreenState extends ConsumerState<TeacherTasksScreen> {
   @override
   Widget build(BuildContext context) {
-    final classesAsync =
-    ref.watch(teacherClassesProvider(widget.teacherId));
+    final classesAsync = ref.watch(teacherClassesProvider(widget.teacherId));
 
     final state = ref.watch(teacherTasksNotifierProvider);
-    final notifier =
-    ref.read(teacherTasksNotifierProvider.notifier);
+    final notifier = ref.read(teacherTasksNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppMainAppBar(
@@ -234,7 +228,6 @@ class _TeacherTasksScreenState
           ),
         ],
       ),
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -247,17 +240,15 @@ class _TeacherTasksScreenState
                 /// ✅ Dropdown مربوط بالـ provider
                 classesAsync.when(
                   loading: () =>
-                  const Center(child: CircularProgressIndicator()),
-                  error: (e, _) =>
-                  const Text("Error loading classes"),
+                      const Center(child: CircularProgressIndicator()),
+                  error: (e, _) => const Text("Error loading classes"),
                   data: (classes) {
                     if (classes.isEmpty) {
                       return const SizedBox();
                     }
 
                     /// 👇 اختيار أول كلاس تلقائيًا
-                    if ((state.selectedClass == null ||
-                        state.selectedClass!.isEmpty)) {
+                    if ((state.selectedClass.isEmpty)) {
                       Future.microtask(() {
                         notifier.changeClass(
                           teacherId: widget.teacherId,
@@ -267,8 +258,7 @@ class _TeacherTasksScreenState
                     }
 
                     return AppDropdown(
-                      selectedClass:
-                      state.selectedClass ?? '',
+                      selectedClass: state.selectedClass,
                       classes: classes,
                       onChanged: (newClass) {
                         notifier.changeClass(
@@ -299,17 +289,13 @@ class _TeacherTasksScreenState
 
                     return ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight:
-                        MediaQuery.of(context).size.height * 0.53,
+                        maxHeight: MediaQuery.of(context).size.height * 0.53,
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceVariant,
-                          borderRadius:
-                          BorderRadius.circular(16),
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: AppColors.strokeColor,
                             width: 1,
@@ -318,8 +304,7 @@ class _TeacherTasksScreenState
                         child: ListView.builder(
                           itemCount: state.tasks.length,
                           shrinkWrap: true,
-                          physics:
-                          const AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return TaskItemCard(
                               task: state.tasks[index],
@@ -339,10 +324,7 @@ class _TeacherTasksScreenState
           ),
         ),
       ),
-
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerFloat,
-
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: AddTaskButton(
