@@ -12,6 +12,7 @@ import 'core/router/main_shell.dart';
 import 'features/tasks/presentation/pages/add_task_page.dart';
 import 'features/tasks/presentation/pages/teacher_tasks_page.dart';
 import 'features/teacher_home/presentation/screens/teacher_home_screen.dart';
+import 'features/parent_home/presentation/screens/parent_home_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -21,7 +22,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
     routes: [
-
       /// Splash
       GoRoute(
         path: '/',
@@ -41,50 +41,48 @@ final routerProvider = Provider<GoRouter>((ref) {
           return MainShell(child: child);
         },
         routes: [
-
+          /// Home
           /// Home
           GoRoute(
             path: '/home',
             builder: (context, state) {
               return Consumer(
                 builder: (context, ref, _) {
-                  final role = ref.watch(authProvider).user?.role;
+                  final authState = ref.watch(authProvider);
+                  final role = authState.user?.role;
 
                   if (role == UserRole.teacher) {
                     return const TeacherHomeScreen();
                   } else if (role == UserRole.parent) {
-                    //return const ParentHomeScreen();
-                    return const Scaffold(
-                        body: Center(
-                          child: Text("Parent Module Under Development"),
-                        ),);
+                    return const ParentHomeScreen(); // ✅ شغّلها
                   }
 
-                  return const SizedBox();
+                  return const Scaffold(
+                    body: Center(child: Text("Loading...")),
+                  );
                 },
               );
             },
           ),
+
           /// Profile
           GoRoute(
             path: '/profile',
-            builder: (context, state) =>
-            const Placeholder(),
+            builder: (context, state) => const Placeholder(),
           ),
 
           /// Notifications
           GoRoute(
             path: '/notifications',
-            builder: (context, state) =>
-            const Placeholder(),
+            builder: (context, state) => const Placeholder(),
           ),
 
           /// Settings
           GoRoute(
             path: '/settings',
-            builder: (context, state) =>
-            const Placeholder(),
+            builder: (context, state) => const Placeholder(),
           ),
+
           ///teacher task
           GoRoute(
             path: '/teacher/tasks',
@@ -100,6 +98,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
+
           ///teacher add task
           GoRoute(
             path: '/teacher/add-task',
