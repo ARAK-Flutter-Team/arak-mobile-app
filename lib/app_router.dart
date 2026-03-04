@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
 import 'features/auth/domain/entities/user.dart';
 import 'features/auth/presentation/providers/auth_notifier.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
@@ -115,6 +116,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/teacher-schedule',
             builder: (context, state) =>
             const TeacherSchedulePage(),
+          ),
+          /// teacher attendance
+          GoRoute(
+            path: '/teacher/attendance/:classId',
+            builder: (context, state) {
+              final classId = state.pathParameters['classId']!;
+
+              return TeacherAttendanceScreen(
+                classId: classId,
+              );
+            },
           ),
         ],
       ),

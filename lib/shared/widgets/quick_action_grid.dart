@@ -217,7 +217,13 @@ class QuickActionsGrid extends ConsumerWidget {
                 '/teacher-schedule',
                 extra: teacherId,
               );
-            } else if (item.route != null) {
+            }
+            else if (item.route == '/teacher/attendance') {
+              final classId = "1";
+
+              context.push('/teacher/attendance/$classId');
+            }
+            else if (item.route != null) {
               context.push(item.route!);
             }
           },

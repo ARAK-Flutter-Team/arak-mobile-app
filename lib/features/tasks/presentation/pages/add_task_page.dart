@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../providers/add_task_notifier.dart';
 import '../providers/teacher_classes_provider.dart';
-import '../widgets/app_dropdown.dart';
+import '../../../../shared/widgets/app_dropdown.dart';
 import '../widgets/deadline_picker.dart';
 import '../widgets/subject_dropdown.dart';
 import '../widgets/task_text_field.dart';
@@ -74,7 +74,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 const Text('Assign a new activity or homework to your students.'),
                 const SizedBox(height: 24),
 
-                // 👇 Class Dropdown
+// 👇 Class Dropdown
                 classesAsync.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (e, _) => const Text("Error loading classes"),
@@ -89,10 +89,21 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                       });
                     }
 
-                    return AppDropdown(
-                      selectedClass: state.selectedClassId ?? classes.first,
-                      classes: classes,
-                      onChanged: notifier.setClass,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Select Class",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+
+                        AppDropdown(
+                          selectedClass: state.selectedClassId ?? classes.first,
+                          classes: classes,
+                          onChanged: notifier.setClass,
+                        ),
+                      ],
                     );
                   },
                 ),

@@ -7,12 +7,14 @@ class AttendanceModel extends AttendanceRecord {
     required super.classId,
     required super.date,
     required super.session,
+    super.studentImageUrl,
     required super.status,
   });
 
   factory AttendanceModel.fromJson(Map<String, dynamic> json) {
     return AttendanceModel(
       studentId: json['studentId'],
+      studentImageUrl: json['student_image'],
       studentName: json['studentName'],
       classId: json['classId'],
       date: DateTime.parse(json['date']),

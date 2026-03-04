@@ -1,5 +1,5 @@
-/*import '../entities/attendance_record.dart';
-import '../repositories/attendance_repository.dart' hide AttendanceRecord, AttendanceSession;
+import '../entities/attendance_record.dart';
+import '../repositories/attendance_repository.dart';
 
 class LoadAttendanceUseCase {
   final AttendanceRepository repository;
@@ -11,10 +11,10 @@ class LoadAttendanceUseCase {
     required DateTime date,
     required AttendanceSession session,
   }) {
-    return repository.getAttendance(
+    return repository.getAttendanceForSession(
       classId: classId,
       date: date,
       session: session,
     );
   }
-}*/
+}

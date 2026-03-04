@@ -1,34 +1,13 @@
-enum AttendanceSession { morning, afternoon }
+import '../entities/attendance_record.dart';
 
-enum AttendanceStatus { present, absent, late }
-
-class AttendanceRecord {
-  final String studentId;
-  final String studentName;
-  final String classId;
-  final DateTime date;
-  final AttendanceSession session;
-  final AttendanceStatus status;
-
-  const AttendanceRecord({
-    required this.studentId,
-    required this.studentName,
-    required this.classId,
-    required this.date,
-    required this.session,
-    required this.status,
+abstract class AttendanceRepository {
+  Future<List<AttendanceRecord>> getAttendanceForSession({
+    required String classId,
+    required DateTime date,
+    required AttendanceSession session,
   });
 
-  AttendanceRecord copyWith({
-    AttendanceStatus? status,
-  }) {
-    return AttendanceRecord(
-      studentId: studentId,
-      studentName: studentName,
-      classId: classId,
-      date: date,
-      session: session,
-      status: status ?? this.status,
-    );
-  }
+  Future<void> submitAttendance(
+      List<AttendanceRecord> records,
+      );
 }

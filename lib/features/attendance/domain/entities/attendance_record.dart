@@ -1,6 +1,13 @@
-enum AttendanceSession { morning, afternoon }
+enum AttendanceSession {
+  morning,
+  afternoon,
+}
 
-enum AttendanceStatus { present, absent, late }
+enum AttendanceStatus {
+  present,
+  absent,
+  late,
+}
 
 class AttendanceRecord {
   final String studentId;
@@ -9,7 +16,7 @@ class AttendanceRecord {
   final DateTime date;
   final AttendanceSession session;
   final AttendanceStatus status;
-
+  final String? studentImageUrl;
   const AttendanceRecord({
     required this.studentId,
     required this.studentName,
@@ -17,6 +24,7 @@ class AttendanceRecord {
     required this.date,
     required this.session,
     required this.status,
+    this.studentImageUrl,
   });
 
   AttendanceRecord copyWith({
@@ -29,6 +37,7 @@ class AttendanceRecord {
       date: date,
       session: session,
       status: status ?? this.status,
+      studentImageUrl: studentImageUrl,
     );
   }
 }

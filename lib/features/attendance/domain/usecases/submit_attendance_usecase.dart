@@ -1,4 +1,4 @@
-/*import '../entities/attendance_record.dart';
+import '../entities/attendance_record.dart';
 import '../repositories/attendance_repository.dart';
 
 class SubmitAttendanceUseCase {
@@ -6,7 +6,9 @@ class SubmitAttendanceUseCase {
 
   SubmitAttendanceUseCase(this.repository);
 
-  Future<void> call(List<AttendanceRecord> records) {
+  Future<void> call(
+      List<AttendanceRecord> records,
+      ) {
     return repository.submitAttendance(records);
   }
-}*/
+}

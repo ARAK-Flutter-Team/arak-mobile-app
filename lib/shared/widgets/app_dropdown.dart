@@ -75,7 +75,7 @@ class AppDropdown extends StatelessWidget {
   }
 }*/
 import 'package:flutter/material.dart';
-import '../../../../shared/theme/app_colors.dart';
+import '../theme/app_colors.dart';
 
 class AppDropdown extends StatelessWidget {
   final String selectedClass;
@@ -100,12 +100,10 @@ class AppDropdown extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "Select Class",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+
         SizedBox(
-          width: 120,
+          width: 114,
+          height: 50,
           child: DropdownButtonFormField<String>(
             value: selectedClass.isEmpty ? classes.first : selectedClass,
             items: classes
@@ -125,7 +123,7 @@ class AppDropdown extends StatelessWidget {
               fillColor: Theme.of(context).colorScheme.surface,
 
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(5),
                 borderSide: BorderSide(
                   color: hasError
                       ? Colors.red
