@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'features/auth/domain/entities/user.dart';
 import 'features/auth/presentation/providers/auth_notifier.dart';
+import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'core/router/main_shell.dart';
@@ -109,6 +110,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                 teacherId: teacherId,
               );
             },
+          ),
+          ///teacher schedule
+          GoRoute(
+            path: '/teacher-schedule',
+            builder: (context, state) =>
+            const TeacherSchedulePage(),
           ),
         ],
       ),

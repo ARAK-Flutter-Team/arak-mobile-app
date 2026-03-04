@@ -1,0 +1,4 @@
+enum AttendanceSession {
+  morning,
+  afternoon,
+}

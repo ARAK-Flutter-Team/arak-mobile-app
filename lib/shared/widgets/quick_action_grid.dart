@@ -57,8 +57,8 @@ class QuickActionsGrid extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/auth/presentation/providers/auth_notifier.dart';
 import '../../features/notification_indicator/presentation/providers/notification_indicator_notifier.dart';
-import '../models/quick_action_item.dart';
 import '../providers/quick_actions_provider.dart';
 import 'action_card.dart';
 
@@ -106,10 +106,39 @@ class QuickActionsGrid extends ConsumerWidget {
               await ref
                   .read(notificationProvider.notifier)
                   .markTasksAsSeen();
-            } else {
+            }
+
+            else if (item.route == '/teacher-schedule') {
+              final authState = ref.watch(authProvider);
+
+              if (authState.user == null) {
+                context.push('/login');
+                return;
+              }
+
+              final teacherId = authState.user!.id;
+
+              context.go(
+                '/teacher-schedule',
+                extra: teacherId,
+              );
+            }
+
+            else {
               context.push(item.route);
             }
           },
+         /* onTap: () async {
+            if (isTasks) {
+              await context.push('/teacher/tasks');
+
+              await ref
+                  .read(notificationProvider.notifier)
+                  .markTasksAsSeen();
+            } else {
+              context.push(item.route);
+            }
+          },*/
         );
       },
     );
