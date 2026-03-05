@@ -11,7 +11,7 @@ class AttendanceSaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 48, 
+      height: 48,
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,

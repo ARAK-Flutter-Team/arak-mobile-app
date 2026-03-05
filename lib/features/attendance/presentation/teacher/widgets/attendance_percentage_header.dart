@@ -17,19 +17,21 @@ class AttendancePercentageHeader extends StatelessWidget {
         children: [
 
           Text(
+            "Overall Attendance",
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurface
+            ),
+          ),
+          Text(
             "${percentage.toStringAsFixed(0)}%",
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
 
 
-          Text(
-            "Overall Attendance",
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
         ],
       ),
     );
