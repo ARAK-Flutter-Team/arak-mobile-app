@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
 import 'features/auth/domain/entities/user.dart';
 import 'features/auth/presentation/providers/auth_notifier.dart';
+import 'features/messages/presentation/screens/chat_screen.dart';
+import 'features/messages/presentation/screens/users_list_screen.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
@@ -125,6 +127,34 @@ final routerProvider = Provider<GoRouter>((ref) {
 
               return TeacherAttendanceScreen(
                 classId: classId,
+              );
+            },
+          ),
+          /// Chat Screen
+          GoRoute(
+            path: '/chat',
+            builder: (context, state) {
+
+              final data = state.extra as Map<String, dynamic>?;
+
+              return ChatScreen(
+                currentUserId: data?["currentUserId"] ?? "",
+                otherUserId: data?["otherUserId"] ?? "",
+                name: data?["name"] ?? "",
+                role: data?["role"] ?? "",
+                avatarUrl: data?["avatarUrl"] ?? "",
+              );
+            },
+          ),
+          GoRoute(
+            path: '/chat-users',
+            builder: (context, state) {
+
+              final extra = state.extra as Map;
+
+              return UsersListScreen(
+                currentUserId: extra["currentUserId"],
+                users: extra["users"],
               );
             },
           ),
