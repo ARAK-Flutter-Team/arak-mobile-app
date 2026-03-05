@@ -60,111 +60,115 @@ class _TeacherAttendanceScreenState
       appBar: const AppMainAppBar(
         title: "Attendance",
       ),
-      body:  Stack(
-          children: [
+      body: Stack(
+        children: [
 
-            /// المحتوى
-            state.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Column(
-              children: [
+          /// المحتوى
+          state.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+            children: [
 
-                const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-                /// Row للدروب داون
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
+              /// Row للدروب داون
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
 
-                      SizedBox(
-                        width: 150,
-                        child: AppDropdown(
-                          selectedClass: selectedClass,
-                          classes: classes,
-                          onChanged: (value) async {
-                            setState(() {
-                              selectedClass = value;
-                            });
+                    /// Dropdown الكلاس (أقصى اليسار)
+                    SizedBox(
+                      width: 150,
+                      child: AppDropdown(
+                        selectedClass: selectedClass,
+                        classes: classes,
+                        onChanged: (value) async {
+                          setState(() {
+                            selectedClass = value;
+                          });
 
-                            await notifier.load(
-                              selectedClass,
-                              selectedSession,
-                            );
-                          },
-                        ),
+                          await notifier.load(
+                            selectedClass,
+                            selectedSession,
+                          );
+                        },
                       ),
+                    ),
 
-                      const SizedBox(width: 12),
+                    /// المسافة الذكية
+                    const Spacer(),
 
-                      SizedBox(
-                        width: 150,
-                        child: AppDropdownSession(
-                          selectedSession: selectedSession,
-                          onChanged: (session) async {
-                            setState(() {
-                              selectedSession = session!;
-                            });
+                    /// Dropdown السيشن (أقصى اليمين)
+                    SizedBox(
+                      width: 150,
+                      child: AppDropdownSession(
+                        selectedSession: selectedSession,
+                        onChanged: (session) async {
+                          setState(() {
+                            selectedSession = session!;
+                          });
 
-                            await notifier.load(
-                              selectedClass,
-                              selectedSession,
-                            );
-                          },
-                        ),
+                          await notifier.load(
+                            selectedClass,
+                            selectedSession,
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-
-                const SizedBox(height: 16),
-
-                /// نسبة الحضور
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: AttendancePercentageHeader(
-                    percentage: state.attendancePercentage,
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                /// قائمة الطلاب
-                Expanded(
-                  child: AttendanceList(
-                    records: state.records,
-                    onToggle: notifier.toggleStatus,
-                  ),
-                ),
-
-                const SizedBox(height: 80),
-              ],
-            ),
-
-            Positioned(
-              bottom: 16,
-              left: 20,
-              right: 20,
-              child: AttendanceSaveButton(
-                onPressed: () async {
-                  final success = await notifier.save();
-
-                  if (context.mounted) {
-                    AppSnackBar.show(
-                      context,
-                      message: success
-                          ? "Attendance saved successfully"
-                          : "Failed to save attendance",
-                      type: success
-                          ? AppSnackBarType.success
-                          : AppSnackBarType.error,
-                    );
-                  }
-                },
               ),
+
+              const SizedBox(height: 16),
+
+              /// نسبة الحضور
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: AttendancePercentageHeader(
+                  percentage: state.attendancePercentage,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              /// قائمة الطلاب
+              Expanded(
+                child: AttendanceList(
+                  records: state.records,
+                  onToggle: notifier.toggleStatus,
+                ),
+              ),
+
+              const SizedBox(height: 80),
+            ],
+          ),
+
+          /// زر الحفظ
+          Positioned(
+            bottom: 16,
+            left: 20,
+            right: 20,
+            child: AttendanceSaveButton(
+              onPressed: () async {
+                final success = await notifier.save();
+
+                if (context.mounted) {
+                  AppSnackBar.show(
+                    context,
+                    message: success
+                        ? "Attendance saved successfully"
+                        : "Failed to save attendance",
+                    type: success
+                        ? AppSnackBarType.success
+                        : AppSnackBarType.error,
+                  );
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }
