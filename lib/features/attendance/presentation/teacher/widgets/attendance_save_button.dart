@@ -10,15 +10,12 @@ class AttendanceSaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: SizedBox(
-        width: double.infinity,
-        height: 56,
-        child: ElevatedButton(
-          onPressed: onPressed,
-          child: const Text("Save Attendance"),
-        ),
+    return SizedBox(
+      height: 48, 
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: const Text("Save Attendance"),
       ),
     );
   }
