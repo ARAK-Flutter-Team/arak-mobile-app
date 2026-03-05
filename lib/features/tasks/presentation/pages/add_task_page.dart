@@ -160,7 +160,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             left: 20,
             right: 20,
             child: SizedBox(
-              height: 52,
+              height: 48,
               child: ElevatedButton(
                 onPressed: state.isLoading
                     ? null

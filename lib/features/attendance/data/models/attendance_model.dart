@@ -24,8 +24,18 @@ class AttendanceModel extends AttendanceRecord {
           .firstWhere((e) => e.name == json['status']),
     );
   }
-
   Map<String, dynamic> toJson() {
+    return {
+      "studentId": studentId,
+      "studentName": studentName,
+      "student_image": studentImageUrl,
+      "classId": classId,
+      "date": date.toIso8601String(),
+      "session": session.name,
+      "status": status.name,
+    };
+  }
+ /* Map<String, dynamic> toJson() {
     return {
       "studentId": studentId,
       "studentName": studentName,
@@ -34,5 +44,5 @@ class AttendanceModel extends AttendanceRecord {
       "session": session.name,
       "status": status.name,
     };
-  }
+  }*/
 }

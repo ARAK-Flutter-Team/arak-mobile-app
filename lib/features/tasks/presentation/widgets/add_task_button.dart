@@ -10,7 +10,7 @@ class AddTaskButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: 48,
       child: ElevatedButton(
         onPressed: onPressed,
         child: const Text("Add New Task"),
