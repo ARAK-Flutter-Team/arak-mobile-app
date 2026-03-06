@@ -8,6 +8,8 @@ import 'features/auth/presentation/providers/auth_notifier.dart';
 import 'features/messages/presentation/screens/chat_screen.dart';
 import 'features/messages/presentation/screens/users_list_screen.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
+import 'features/settings/presentation/pages/privacy_policy_page.dart';
+import 'features/settings/presentation/pages/settings_page.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'core/router/main_shell.dart';
@@ -83,7 +85,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           /// Settings
           GoRoute(
             path: '/settings',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const SettingsPage(),
           ),
 
           ///teacher task
@@ -157,6 +159,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                 users: extra["users"],
               );
             },
+          ),
+
+
+          /// Privacy Policy Page
+
+          GoRoute(
+            path: "/privacy-policy",
+            builder: (context, state) => const PrivacyPolicyPage(),
           ),
         ],
       ),
