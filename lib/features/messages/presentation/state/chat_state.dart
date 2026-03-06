@@ -1,36 +1,29 @@
 import '../../domain/entities/message.dart';
 
 class ChatState {
-
   final List<Message> messages;
   final bool isLoading;
-  final String? error;
+  final bool isTyping;
+  final String? replyingToMessageId;
 
   const ChatState({
-    required this.messages,
+    this.messages = const [],
     this.isLoading = false,
-    this.error,
+    this.isTyping = false,
+    this.replyingToMessageId,
   });
 
   ChatState copyWith({
     List<Message>? messages,
     bool? isLoading,
-    String? error,
+    bool? isTyping,
+    String? replyingToMessageId,
   }) {
-
     return ChatState(
       messages: messages ?? this.messages,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
-    );
-  }
-
-  factory ChatState.initial() {
-
-    return const ChatState(
-      messages: [],
-      isLoading: false,
-      error: null,
+      isTyping: isTyping ?? this.isTyping,
+      replyingToMessageId: replyingToMessageId ?? this.replyingToMessageId,
     );
   }
 }
