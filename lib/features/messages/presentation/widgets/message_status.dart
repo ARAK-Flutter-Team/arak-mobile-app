@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../domain/enums/message_status.dart'; // استدعاء enum من الدومين
+import '../../domain/enums/message_status.dart';
 
 class MessageStatusWidget extends StatelessWidget {
   final MessageStatus status;
 
-  const MessageStatusWidget({super.key, required this.status});
+  const MessageStatusWidget({
+    super.key,
+    required this.status,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,21 +15,30 @@ class MessageStatusWidget extends StatelessWidget {
     Color color;
 
     switch (status) {
+
       case MessageStatus.sending:
         icon = Icons.schedule;
         color = Colors.grey;
         break;
+
       case MessageStatus.sent:
         icon = Icons.check;
         color = Colors.grey;
         break;
+
       case MessageStatus.delivered:
         icon = Icons.done_all;
         color = Colors.grey;
         break;
+
       case MessageStatus.seen:
         icon = Icons.done_all;
         color = Colors.blue;
+        break;
+
+      case MessageStatus.deleted:
+        icon = Icons.block;
+        color = Colors.grey;
         break;
     }
 

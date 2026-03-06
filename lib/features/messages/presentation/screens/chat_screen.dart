@@ -71,6 +71,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Expanded(
             child: MessageList(
               currentUserId: widget.currentUserId,
+              otherUserId: widget.otherUserId, // لازم يكون عندك ال id للشخص التاني
               scrollController: _scrollController,
             ),
           ),

@@ -9,4 +9,5 @@ abstract class ChatRepository {
   Future<void> deleteMessageForEveryone(String messageId);
   Future<void> markAsSeen(String messageId);
   Future<void> updateUserStatus(String userId, UserStatus status);
+  Future<String> uploadFile(String path);
 }
