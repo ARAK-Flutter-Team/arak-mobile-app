@@ -1,36 +1,36 @@
+import '../enums/message_type.dart';
+import '../enums/message_status.dart';
+
 class Message {
   final String id;
   final String senderId;
   final String receiverId;
-  final String text;
+
+  final String? text;
+  final String? fileUrl;
+
+  final MessageType type;
+  final MessageStatus status;
+
   final DateTime createdAt;
+
   final bool deletedForEveryone;
 
-  const Message({
+  final String? replyToMessageId;
+
+  final int? duration; // 👈 مهم للصوت
+
+  Message({
     required this.id,
     required this.senderId,
     required this.receiverId,
-    required this.text,
+    this.text,
+    this.fileUrl,
+    required this.type,
+    required this.status,
     required this.createdAt,
-    required this.deletedForEveryone,
+    this.deletedForEveryone = false,
+    this.replyToMessageId,
+    this.duration,
   });
-
-  Message copyWith({
-    String? id,
-    String? senderId,
-    String? receiverId,
-    String? text,
-    DateTime? createdAt,
-    bool? deletedForEveryone,
-  }) {
-    return Message(
-      id: id ?? this.id,
-      senderId: senderId ?? this.senderId,
-      receiverId: receiverId ?? this.receiverId,
-      text: text ?? this.text,
-      createdAt: createdAt ?? this.createdAt,
-      deletedForEveryone:
-      deletedForEveryone ?? this.deletedForEveryone,
-    );
-  }
 }

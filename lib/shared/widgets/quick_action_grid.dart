@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/providers/auth_notifier.dart';
 import '../../features/messages/domain/entities/chat_user.dart';
+import '../../features/messages/domain/entities/message.dart';
+import '../../features/messages/domain/enums/message_status.dart';
+import '../../features/messages/domain/enums/message_type.dart';
+import '../../features/messages/domain/enums/user_status.dart';
 import '../../features/notification_indicator/presentation/providers/notification_indicator_notifier.dart';
 import '../models/quick_action_item.dart';
 import 'action_card.dart';
@@ -71,55 +75,39 @@ class QuickActionsGrid extends ConsumerWidget {
 
               context.push('/teacher/attendance/$classId');
             }
-            /*else if (isMessages) {
-
-              final authState = ref.read(authProvider);
-
-              if (authState.user == null) {
-                context.push('/login');
-                return;
-              }
-
-              final currentUser = authState.user!;
-
-              final otherRole =
-              currentUser.role.name == "teacher"
-                  ? "parent"
-                  : "teacher";
-
-              context.push(
-                '/chat',
-                extra: {
-                  "currentUserId": currentUser.id.toString(),
-                  "otherUserId": "2",
-                  "name": "Ahmed Ali",
-                  "role": otherRole,
-                  "avatarUrl": "https://i.pravatar.cc/150?img=3",
-                },
-              );
-            }*/
             else if (isMessages) {
 
               final authState = ref.read(authProvider);
               final currentUser = authState.user!;
 
               final users = [
-
                 ChatUser(
                   id: "2",
                   name: "Ahmed Ali",
                   role: "parent",
                   avatarUrl: "https://i.pravatar.cc/150?img=3",
+                  status: UserStatus.online, // <-- صح هنا
                 ),
-
                 ChatUser(
                   id: "3",
                   name: "Sara Mohamed",
                   role: "parent",
                   avatarUrl: "https://i.pravatar.cc/150?img=5",
+                  status: UserStatus.offline, // <-- صح هنا
                 ),
-
               ];
+
+              final message = Message(
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                senderId: currentUser.id.toString(),
+                receiverId: users.first.id,
+                text: "Hello!",
+                fileUrl: null,
+                type: MessageType.text,
+                status: MessageStatus.sending, // لازم
+                createdAt: DateTime.now(),
+                deletedForEveryone: false,
+              );
 
               context.push(
                 '/chat-users',
@@ -128,7 +116,6 @@ class QuickActionsGrid extends ConsumerWidget {
                   "users": users,
                 },
               );
-
             }
             else if (item.route != null) {
               context.push(item.route!);

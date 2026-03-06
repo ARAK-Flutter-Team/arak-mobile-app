@@ -1,114 +1,14 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../../shared/theme/app_colors.dart';
-import '../providers/chat_provider.dart';
-
-class ChatInputBar extends ConsumerStatefulWidget {
-
-  final String senderId;
-  final String receiverId;
-
-  const ChatInputBar({
-    super.key,
-    required this.senderId,
-    required this.receiverId,
-  });
-
-  @override
-  ConsumerState<ChatInputBar> createState() =>
-      _ChatInputBarState();
-}
-
-class _ChatInputBarState extends ConsumerState<ChatInputBar> {
-
-  final TextEditingController controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-
-    final notifier =
-    ref.read(chatNotifierProvider.notifier);
-
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-
-        child: Row(
-          children: [
-
-            Expanded(
-              child: TextField(
-                controller: controller,
-
-                decoration: InputDecoration(
-                  hintText: "Type message...",
-
-                  contentPadding:
-                  const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 12),
-
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(29),
-                    borderSide: const BorderSide(
-                      color: AppColors.strokeColor,
-                    ),
-                  ),
-
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(29),
-                    borderSide: const BorderSide(
-                      color: AppColors.strokeColor,
-                    ),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(29),
-                    borderSide: const BorderSide(
-                      color: AppColors.strokeColor,
-                      width: 1.5,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(width: 8),
-
-            IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/Frame.svg",
-                width: 24,
-                height: 24,
-              ),
-
-              onPressed: () {
-
-                if (controller.text.trim().isEmpty) return;
-
-                notifier.sendMessage(
-                  senderId: widget.senderId,
-                  receiverId: widget.receiverId,
-                  text: controller.text.trim(),
-                );
-
-                controller.clear();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}*/
-import 'package:file_picker/file_picker.dart';
+import 'dart:async';
+import 'package:arak_app/features/messages/presentation/widgets/plus_button.dart';
+import 'package:arak_app/features/messages/presentation/widgets/send_or_mic_button.dart';
+import 'package:arak_app/features/messages/presentation/widgets/image_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:path_provider/path_provider.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../providers/chat_provider.dart';
 
@@ -129,251 +29,257 @@ class ChatInputBar extends ConsumerStatefulWidget {
 class _ChatInputBarState extends ConsumerState<ChatInputBar> {
   final TextEditingController controller = TextEditingController();
 
-  /// اختيار صورة
-  Future<void> _pickImage() async {
-    try {
-      final picker = ImagePicker();
+  bool hasText = false;
 
-      final XFile? image = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-      );
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  bool isRecording = false;
 
-      if (image != null) {
-        print("Image selected: ${image.path}");
-      } else {
-        print("User cancelled");
-      }
+  String? recordedFilePath;
 
-    } catch (e) {
-      print("Error picking image: $e");
-    }
+  Duration recordingDuration = Duration.zero;
+
+  Timer? _timer;
+
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(() {
+      setState(() {
+        hasText = controller.text.trim().isNotEmpty;
+      });
+    });
+
+    _openRecorder();
+    _player.openPlayer();
   }
 
-  /// اختيار ملف
-  Future<void> _pickFile() async {
+  Future<void> _openRecorder() async {
+    await _recorder.openRecorder();
+  }
 
-    print("FILE CLICKED");
+  @override
+  void dispose() {
+    controller.dispose();
+    _recorder.closeRecorder();
+    _player.closePlayer();
+    _timer?.cancel();
+    super.dispose();
+  }
 
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
+  //========================
+  // SEND TEXT
+  //========================
+
+  void _sendText() {
+    if (controller.text.trim().isEmpty) return;
+
+    ref.read(chatControllerProvider.notifier).sendTextMessage(
+      senderId: widget.senderId,
+      receiverId: widget.receiverId,
+      text: controller.text.trim(),
     );
 
-    if (result == null) {
-      print("No file selected");
-      return;
+    controller.clear();
+  }
+
+  //========================
+  // RECORD
+  //========================
+
+  Future<void> _toggleRecording() async {
+    final status = await Permission.microphone.request();
+
+    if (!status.isGranted) return;
+
+    if (!isRecording) {
+      final dir = await getTemporaryDirectory();
+
+      recordedFilePath =
+      '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.aac';
+
+      await _recorder.startRecorder(
+        toFile: recordedFilePath,
+        codec: Codec.aacADTS,
+      );
+
+      setState(() {
+        isRecording = true;
+        recordingDuration = Duration.zero;
+      });
+
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          recordingDuration += const Duration(seconds: 1);
+        });
+      });
+    } else {
+      await _recorder.stopRecorder();
+      _timer?.cancel();
+
+      setState(() {
+        isRecording = false;
+      });
+    }
+  }
+
+  //========================
+  // SEND VOICE
+  //========================
+
+  Future<void> _sendRecordedVoice() async {
+    if (isRecording) {
+      await _recorder.stopRecorder();
     }
 
-    final file = result.files.single;
+    _timer?.cancel();
 
-    print("File selected: ${file.name}");
+    setState(() {
+      isRecording = false;
+    });
+
+    if (recordedFilePath != null) {
+      ref.read(chatControllerProvider.notifier).sendVoiceMessage(
+        senderId: widget.senderId,
+        receiverId: widget.receiverId,
+        filePath: recordedFilePath!,
+        duration: recordingDuration.inSeconds,
+      );
+    }
+
+    recordedFilePath = null;
+    recordingDuration = Duration.zero;
   }
+
+  //========================
+  // CANCEL RECORD
+  //========================
+
+  Future<void> _cancelRecording() async {
+    await _recorder.stopRecorder();
+
+    _timer?.cancel();
+
+    setState(() {
+      isRecording = false;
+      recordedFilePath = null;
+      recordingDuration = Duration.zero;
+    });
+  }
+
+  //========================
+  // SEND BUTTON LOGIC
+  //========================
+
+  void _handleSend() {
+    if (hasText) {
+      _sendText();
+    } else if (isRecording || recordedFilePath != null) {
+      _sendRecordedVoice();
+    }
+  }
+
+  //========================
+  // IMAGE
+  //========================
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+
+    if (image != null) {
+      ref.read(chatControllerProvider.notifier).sendImageMessage(
+        senderId: widget.senderId,
+        receiverId: widget.receiverId,
+        filePath: image.path,
+      );
+    }
+  }
+
+  //========================
+  // FILE
+  //========================
+
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.any);
+
+    if (result != null && result.files.single.path != null) {
+      ref.read(chatControllerProvider.notifier).sendFileMessage(
+        senderId: widget.senderId,
+        receiverId: widget.receiverId,
+        filePath: result.files.single.path!,
+      );
+    }
+  }
+
+  //========================
+  // CAMERA
+  //========================
+
   Future<void> _openCamera() async {
-
-    print("CAMERA CLICKED");
-
     final status = await Permission.camera.request();
 
-    if (!status.isGranted) {
-      print("Camera permission denied");
-      return;
-    }
+    if (!status.isGranted) return;
 
     final picker = ImagePicker();
 
-    final image = await picker.pickImage(
-      source: ImageSource.camera,
-    );
+    final XFile? image =
+    await picker.pickImage(source: ImageSource.camera);
 
-    if (image == null) {
-      print("No photo taken");
-      return;
+    if (image != null) {
+      ref.read(chatControllerProvider.notifier).sendImageMessage(
+        senderId: widget.senderId,
+        receiverId: widget.receiverId,
+        filePath: image.path,
+      );
     }
-
-    print("Camera image: ${image.path}");
   }
-  void _showPlusOptions() {
 
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
+  //========================
+  // UI
+  //========================
 
-      builder: (context) {
-
-        return SafeArea(
-          child:
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle صغير أعلى الـ BottomSheet
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).dividerColor,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-
-              // زر الكاميرا
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: Material(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _openCamera();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(12),
-                            child: Icon(Icons.camera_alt, color: Theme.of(context).colorScheme.primary),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            "Camera",
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              // زر اختيار الملفات
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: Material(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _pickFile();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(12),
-                            child: Icon(Icons.insert_drive_file, color: Theme.of(context).colorScheme.primary),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            "File",
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-          /*Column(
-            mainAxisSize: MainAxisSize.min,
-
-            children: [
-
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text("Camera"),
-
-                onTap: () {
-                  Navigator.pop(context);
-                  _openCamera();
-                },
-              ),
-
-              ListTile(
-                leading: const Icon(Icons.insert_drive_file),
-                title: const Text("File"),
-
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickFile();
-                },
-              ),
-            ],
-          ),*/
-        );
-
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.read(chatNotifierProvider.notifier);
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-
-
-            /// زر البلص
-            IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/plus.svg",
-                width: 22,
-              ),
-              onPressed: _showPlusOptions,
+            PlusButton(
+              onPickImage: _pickImage,
+              onPickFile: _pickFile,
+              onOpenCamera: _openCamera,
             ),
 
-            /// زر الصورة
-            IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/Image fill.svg",
-                width: 22,
-              ),
-              onPressed: _pickImage,
-            ),
+            ImageButton(onPickImage: _pickImage),
 
-            /// حقل الكتابة
             Expanded(
               child: TextField(
                 controller: controller,
+                minLines: 1,
+                maxLines: 5,
                 decoration: InputDecoration(
                   hintText: "Type message...",
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
+                      horizontal: 16, vertical: 12),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(29),
                     borderSide: const BorderSide(
-                      color: AppColors.strokeColor, // هنا اللون الأزرق للـ border
-                      width: 1, // ممكن تغيري السماكة لو تحبي
+                      color: AppColors.strokeColor,
+                      width: 1,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(29),
                     borderSide: const BorderSide(
-                      color: AppColors.strokeColor, // نفس اللون لما الـ TextField يكون متفاعل
+                      color: AppColors.strokeColor,
                       width: 1,
                     ),
                   ),
@@ -383,24 +289,13 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
 
             const SizedBox(width: 8),
 
-            /// زر الارسال
-            IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/Frame.svg",
-                width: 24,
-                height: 24,
-              ),
-              onPressed: () {
-                if (controller.text.trim().isEmpty) return;
-
-                notifier.sendMessage(
-                  senderId: widget.senderId,
-                  receiverId: widget.receiverId,
-                  text: controller.text.trim(),
-                );
-
-                controller.clear();
-              },
+            SendOrMicButton(
+              hasText: hasText,
+              isRecording: isRecording,
+              recordingDuration: recordingDuration,
+              onSend: _handleSend,
+              onRecord: _toggleRecording,
+              onCancelRecording: _cancelRecording,
             ),
           ],
         ),
