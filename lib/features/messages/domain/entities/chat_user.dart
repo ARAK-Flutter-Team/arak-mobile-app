@@ -1,15 +1,19 @@
-class ChatUser {
+import '../enums/user_status.dart';
 
+class ChatUser {
   final String id;
   final String name;
-  final String role;
   final String avatarUrl;
+  final String role;
+  final UserStatus status;
+  final DateTime? lastSeen;
 
-  ChatUser({
+  const ChatUser({
     required this.id,
     required this.name,
-    required this.role,
     required this.avatarUrl,
+    required this.role,
+    required this.status,
+    this.lastSeen,
   });
-
 }

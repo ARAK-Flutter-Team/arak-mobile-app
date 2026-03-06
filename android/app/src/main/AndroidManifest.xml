@@ -2,13 +2,14 @@
 
     <!-- Camera -->
     <uses-permission android:name="android.permission.CAMERA"/>
-
-    <!-- Android 12 وما قبله -->
+    <!-- Audio recording -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- Read/Write Storage for Android 12 and below -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <!-- Android 13 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- Android 13+ for media access -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <application
         android:label="Arak"
         android:name="${applicationName}"

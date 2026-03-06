@@ -1,36 +1,34 @@
 import '../../domain/entities/message.dart';
 
 class ChatState {
-
-  final List<Message> messages;
+  final Map<String, List<Message>> messagesMap; // كل شات له قائمة
   final bool isLoading;
-  final String? error;
+  final bool isTyping;
+  final String? replyingToMessageId;
 
   const ChatState({
-    required this.messages,
+    this.messagesMap = const {},
     this.isLoading = false,
-    this.error,
+    this.isTyping = false,
+    this.replyingToMessageId,
   });
 
   ChatState copyWith({
-    List<Message>? messages,
+    Map<String, List<Message>>? messagesMap,
     bool? isLoading,
-    String? error,
+    bool? isTyping,
+    String? replyingToMessageId,
   }) {
-
     return ChatState(
-      messages: messages ?? this.messages,
+      messagesMap: messagesMap ?? this.messagesMap,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      isTyping: isTyping ?? this.isTyping,
+      replyingToMessageId: replyingToMessageId ?? this.replyingToMessageId,
     );
   }
 
-  factory ChatState.initial() {
-
-    return const ChatState(
-      messages: [],
-      isLoading: false,
-      error: null,
-    );
+  // احصل على الرسائل لشات معين
+  List<Message> messagesForChat(String chatId) {
+    return messagesMap[chatId] ?? [];
   }
 }
