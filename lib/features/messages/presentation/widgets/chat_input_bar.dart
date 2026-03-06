@@ -176,8 +176,12 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
   void _handleSend() {
     if (hasText) {
       _sendText();
-    } else if (isRecording || recordedFilePath != null) {
+      return;
+    }
+
+    if (recordedFilePath != null) {
       _sendRecordedVoice();
+      return;
     }
   }
 

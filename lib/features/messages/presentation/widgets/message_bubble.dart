@@ -31,6 +31,7 @@ class MessageBubble extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+
               ListTile(
                 leading: const Icon(Icons.delete_outline),
                 title: const Text("Delete for me"),
@@ -39,6 +40,7 @@ class MessageBubble extends StatelessWidget {
                   onDeleteForMe();
                 },
               ),
+
               if (isMe)
                 ListTile(
                   leading: const Icon(Icons.delete),
@@ -48,6 +50,7 @@ class MessageBubble extends StatelessWidget {
                     onDeleteForEveryone();
                   },
                 ),
+
             ],
           ),
         );
@@ -57,9 +60,33 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    /// لو الرسالة اتحذفت للجميع
+    if (message.deletedForEveryone == true) {
+      return Align(
+        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: const Text(
+            "This message was deleted",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.black54,
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget child;
 
     switch (message.type) {
+
       case MessageType.text:
         child = TextMessageBubble(
           message: message,
@@ -93,8 +120,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     return Align(
-      alignment:
-      isMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
         onLongPress: () => _showDeleteOptions(context),
         child: child,

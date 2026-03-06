@@ -52,4 +52,24 @@ class ChatRemoteDataSource {
     );
     if (response.statusCode != 200) throw Exception("Failed to update status");
   }
+  Future<String> uploadFile(String filePath) async {
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse("$baseUrl/upload"),
+    );
+
+    request.files.add(
+      await http.MultipartFile.fromPath("file", filePath),
+    );
+
+    var response = await request.send();
+    var res = await http.Response.fromStream(response);
+
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      return data["url"];
+    } else {
+      throw Exception("Upload failed");
+    }
+  }
 }

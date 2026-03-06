@@ -18,9 +18,9 @@ class Message {
 
   final String? replyToMessageId;
 
-  final int? duration; // 👈 مهم للصوت
+  final int? duration;
 
-  Message({
+  const Message({
     required this.id,
     required this.senderId,
     required this.receiverId,
@@ -33,4 +33,32 @@ class Message {
     this.replyToMessageId,
     this.duration,
   });
+
+  Message copyWith({
+    String? id,
+    String? senderId,
+    String? receiverId,
+    String? text,
+    String? fileUrl,
+    MessageType? type,
+    MessageStatus? status,
+    DateTime? createdAt,
+    bool? deletedForEveryone,
+    String? replyToMessageId,
+    int? duration,
+  }) {
+    return Message(
+      id: id ?? this.id,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      text: text ?? this.text,
+      fileUrl: fileUrl ?? this.fileUrl,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      deletedForEveryone: deletedForEveryone ?? this.deletedForEveryone,
+      replyToMessageId: replyToMessageId ?? this.replyToMessageId,
+      duration: duration ?? this.duration,
+    );
+  }
 }

@@ -95,4 +95,8 @@ class ChatRepositoryImpl implements ChatRepository {
       status.name,
     );
   }
+  @override
+  Future<String> uploadFile(String path) {
+    return remoteDataSource.uploadFile(path);
+  }
 }
