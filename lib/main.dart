@@ -1,3 +1,5 @@
+import 'package:arak_app/shared/theme/app_theme.dart';
+import 'package:arak_app/shared/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
@@ -103,10 +105,8 @@ class Student {
 enum DownloadStatus { idle, downloading, success }
 
 // --- 3. Riverpod Providers ---
-// Bottom Navigation Index
 final bottomNavIndexProvider = StateProvider<int>((ref) => 0);
 
-// Student Data Provider (mock for now, will be replaced by API)
 final studentProvider = Provider<Student>((ref) {
   return Student(
     name: 'Ahmed Abdullah',
@@ -125,7 +125,6 @@ final studentProvider = Provider<Student>((ref) {
   );
 });
 
-// Download Status Provider
 final downloadStatusProvider =
     StateProvider<DownloadStatus>((ref) => DownloadStatus.idle);
 
@@ -136,7 +135,6 @@ final _router = GoRouter(
       path: '/',
       builder: (context, state) => const StudentEvaluationPage(),
     ),
-    // هنا تقدر تضيف صفحات تانية لاحقاً
   ],
 );
 
@@ -146,25 +144,15 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: _router,
-      theme: ThemeData.light().copyWith(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors
-            .gray, // Default app scaffold background, overridden locally where needed
-        textTheme: ThemeData.light()
-            .textTheme
-            .apply(fontFamily: AppTextStyles.fontFamily),
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: Colors.black,
-        textTheme: ThemeData.dark()
-            .textTheme
-            .apply(fontFamily: AppTextStyles.fontFamily),
-      ),
-      themeMode: ThemeMode.system,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      routerConfig: router,
     );
   }
 }
@@ -182,7 +170,7 @@ class StudentEvaluationPage extends ConsumerWidget {
     String overallPercentage = student.overallScore.toStringAsFixed(0);
 
     return Scaffold(
-      backgroundColor: AppColors.white, // Changed background to white
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -226,7 +214,6 @@ class StudentEvaluationPage extends ConsumerWidget {
             Column(
               children: student.subjects
                   .map<Widget>((Subject subject) => Padding(
-                        // Explicit type argument
                         padding: const EdgeInsets.only(bottom: 12),
                         child: _buildSubjectItem(subject),
                       ))
@@ -238,12 +225,11 @@ class StudentEvaluationPage extends ConsumerWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: downloadStatus == DownloadStatus.downloading
-                        ? null // Disable button while downloading
+                        ? null
                         : () async {
                             ref.read(downloadStatusProvider.notifier).state =
                                 DownloadStatus.downloading;
-                            await Future.delayed(const Duration(
-                                seconds: 2)); // Simulate download time
+                            await Future.delayed(const Duration(seconds: 2));
                             ref.read(downloadStatusProvider.notifier).state =
                                 DownloadStatus.success;
 
@@ -264,9 +250,7 @@ class StudentEvaluationPage extends ConsumerWidget {
                               ),
                             );
 
-                            await Future.delayed(const Duration(
-                                seconds:
-                                    1)); // Keep success state visible briefly
+                            await Future.delayed(const Duration(seconds: 1));
                             ref.read(downloadStatusProvider.notifier).state =
                                 DownloadStatus.idle;
                           },
@@ -290,8 +274,8 @@ class StudentEvaluationPage extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
-                      disabledBackgroundColor: AppColors.primary
-                          .withOpacity(0.5), // Style for disabled state
+                      disabledBackgroundColor:
+                          AppColors.primary.withOpacity(0.5),
                     ),
                   ),
                 ),
@@ -322,8 +306,7 @@ class StudentEvaluationPage extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color:
-            AppColors.gray, // Changed student card background to AppColors.gray
+        color: AppColors.gray,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -382,8 +365,7 @@ class StudentEvaluationPage extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: AppColors
-            .lightSkyBlue, // Changed subject item frame color to sky blue
+        color: AppColors.lightSkyBlue,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -436,7 +418,6 @@ class StudentEvaluationPage extends ConsumerWidget {
 
   Widget _buildBottomNav(WidgetRef ref, int currentIndex) {
     final List<Map<String, Object>> items = <Map<String, Object>>[
-      // Explicit type argument
       {'icon': Icons.home_filled, 'label': 'Home'},
       {'icon': Icons.person_outline, 'label': 'Profile'},
       {'icon': Icons.notifications_none, 'label': 'Alerts', 'badge': true},
@@ -458,9 +439,7 @@ class StudentEvaluationPage extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List<Widget>.generate(items.length, (int index) {
-          // Explicit type argument
-          final Map<String, Object> item =
-              items[index]; // Explicit type argument
+          final Map<String, Object> item = items[index];
           bool isSelected = currentIndex == index;
           return GestureDetector(
             onTap: () =>

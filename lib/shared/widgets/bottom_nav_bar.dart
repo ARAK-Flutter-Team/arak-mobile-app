@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,8 +20,8 @@ class AppBottomNavBar extends StatelessWidget {
 
     return SvgPicture.asset(
       assetPath,
-      width: 24,
-      height: 24,
+      width: 24.w,
+      height: 24.h,
       colorFilter: ColorFilter.mode(
         isActive
             ? const Color(0xFF42B0FF)
