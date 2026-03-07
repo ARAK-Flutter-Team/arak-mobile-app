@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../shared/providers/current_user_provider.dart';
 import '../../../../shared/theme/theme_provider.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/app_snackbar.dart';
 import '../../../../shared/widgets/user_header_card.dart';
-import '../../../auth/presentation/providers/auth_notifier.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/settings_switch_tile.dart';
 import '../widgets/settings_tile.dart';
@@ -21,7 +21,7 @@ class SettingsPage extends ConsumerWidget {
 
     final state = ref.watch(settingsProvider);
     final controller = ref.read(settingsProvider.notifier);
-    final user = ref.watch(authProvider).user;
+    final user = ref.watch(currentUserProvider);
     if (user == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -54,9 +54,9 @@ class SettingsPage extends ConsumerWidget {
 
             /// User Header
             UserHeaderCard(
-              name: user.name,
-              subtitle: "Account Settings",
-              imageUrl: "",
+              name: user?.name ?? "",
+              subtitle: user?.subject ?? "", // المادة هنا كمان
+              imageUrl: user?.avatarUrl,
               showSearch: false,
             ),
 

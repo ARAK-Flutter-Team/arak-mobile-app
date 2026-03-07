@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../auth/presentation/providers/auth_notifier.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/models/teacher_home_model.dart';
 
 /// ================= Teacher Profile Model =================

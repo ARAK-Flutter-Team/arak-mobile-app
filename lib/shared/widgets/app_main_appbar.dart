@@ -37,12 +37,12 @@ class AppMainAppBar extends StatelessWidget
 
       automaticallyImplyLeading: false,
       centerTitle: centerTitle,
-      toolbarHeight: kToolbarHeight,
+      toolbarHeight: 60.h,
 
       title: Text(
         title,
         style: theme.textTheme.titleLarge?.copyWith(
-          fontSize: 25.sp,
+          fontSize: 22.sp,
           fontWeight: FontWeight.bold,
           fontFamily: 'Teachers',
         ),
@@ -77,6 +77,5 @@ class AppMainAppBar extends StatelessWidget
   }
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(60.h);
 }

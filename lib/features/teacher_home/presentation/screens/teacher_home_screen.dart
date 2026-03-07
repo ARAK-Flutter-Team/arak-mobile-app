@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../shared/providers/current_user_provider.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/performance_indicator.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
 import '../../../../shared/widgets/recent_activities_section.dart';
 import '../../../../shared/widgets/user_header_card.dart';
-import '../../../auth/presentation/providers/auth_notifier.dart';
 import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
 import '../providers/recent_activities_provider.dart';
 import '../providers/teacher_home_provider.dart';
@@ -19,7 +19,7 @@ class TeacherHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final performanceAsync = ref.watch(teacherPerformanceProvider);
     final notificationAsync = ref.watch(notificationProvider);
-    final user = ref.watch(authProvider).user;
+    final user = ref.watch(currentUserProvider);
 
     /// 👇 لو المستخدم لسه بيحمل
     if (user == null) {
@@ -53,9 +53,9 @@ class TeacherHomeScreen extends ConsumerWidget {
               children: [
                 /// 1️⃣ User Header
                 UserHeaderCard(
-                  name: user.name,
-                  subtitle: "Mathematics",
-                  imageUrl: "",
+                  name: user?.name ?? "",
+                  subtitle: user?.subject ?? "",
+                  imageUrl: user?.avatarUrl,
                   showSearch: true,
                   showVerifiedIcon: true,
                   searchRoute: '/teacher-search',

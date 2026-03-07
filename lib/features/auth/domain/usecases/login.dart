@@ -1,25 +1,10 @@
-/*import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../entities/user.dart';
-import '../repositories/auth_repository.dart';
-import '../params/login_params.dart';
-
-class Login {
-  final AuthRepository repository;
-
-  Login(this.repository);
-
-  Future<Either<Failure, User>> call(LoginParams params) {
-    return repository.login(params);
-  }
-}*/
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
-import '../entities/user.dart';
+import '../../../../core/entities/user.dart';
 import '../repositories/auth_repository.dart';
 import '../params/login_params.dart';
 
-class Login {
+/*class Login {
   final AuthRepository repository;
 
   Login(this.repository);
@@ -38,5 +23,14 @@ class Login {
     /*
     return await repository.login(params);
     */
+  }
+}*/
+class Login {
+  final AuthRepository repository;
+
+  Login(this.repository);
+
+  Future<Either<Failure, User>> call(LoginParams params) async {
+    return await repository.login(params);
   }
 }

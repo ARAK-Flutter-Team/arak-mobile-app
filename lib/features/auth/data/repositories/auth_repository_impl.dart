@@ -59,7 +59,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/user.dart';
+import '../../../../core/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/params/login_params.dart';
 import '../datasources/auth_remote_data_source.dart';
