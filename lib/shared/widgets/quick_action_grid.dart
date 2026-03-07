@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/providers/auth_notifier.dart';
+import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/messages/domain/entities/chat_user.dart';
 import '../../features/messages/domain/entities/message.dart';
 import '../../features/messages/domain/enums/message_status.dart';

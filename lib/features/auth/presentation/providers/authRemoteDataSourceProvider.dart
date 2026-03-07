@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import '../../../profile/domain/usecases/get_current_user.dart';
 import '../../data/datasources/fake_auth_remote_data_source.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
@@ -30,4 +31,6 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 final loginUseCaseProvider = Provider<Login>((ref) {
   return Login(ref.read(authRepositoryProvider));
 });
-
+final getCurrentUserUseCaseProvider = Provider<GetCurrentUser>((ref) {
+  return GetCurrentUser(ref.read(authRepositoryProvider));
+});

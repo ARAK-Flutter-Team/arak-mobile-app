@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
-import 'features/auth/domain/entities/user.dart';
+import 'core/entities/user.dart';
 import 'features/auth/presentation/providers/auth_notifier.dart';
+import 'features/auth/presentation/providers/auth_providers.dart';
 import 'features/messages/presentation/screens/chat_screen.dart';
 import 'features/messages/presentation/screens/users_list_screen.dart';
+import 'features/profile/presentation/screens/profile_screen.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
 import 'features/settings/presentation/pages/privacy_policy_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
@@ -47,7 +49,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
         routes: [
           /// Home
-          /// Home
           GoRoute(
             path: '/home',
             builder: (context, state) {
@@ -73,7 +74,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           /// Profile
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const ProfileScreen(),
           ),
 
           /// Notifications

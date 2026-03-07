@@ -33,7 +33,7 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
     );
   }
 }*/
-import '../../domain/entities/user.dart';
+import '../../../../core/entities/user.dart';
 import '../models/user_model.dart';
 import '../../domain/params/login_params.dart';
 import 'auth_remote_data_source.dart';
@@ -45,14 +45,52 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
 
     await Future.delayed(const Duration(seconds: 1));
 
-    return UserModel(
-      id: 1,
-      name: "Noha Mahmoud",
-      email: params.email,
-      role: UserRole.parent,
-      avatarUrl: "https://i.pravatar.cc/150?img=5",
-      classes: ["Class A", "Class B"],
-    );
+    // Admin
+    if (params.email == "admin@test.com" &&
+        params.password == "123456" &&
+        params.role == "Admin") {
+
+      return UserModel(
+        id: 1,
+        name: "Admin User",
+        email: params.email,
+        role: UserRole.admin,
+        avatarUrl: "https://i.pravatar.cc/150?img=1",
+        classes: [],
+      );
+    }
+
+    // Teacher
+    if (params.email == "teacher@test.com" &&
+        params.password == "123456" &&
+        params.role == "Teacher") {
+
+      return UserModel(
+        id: 2,
+        name: "Ahmed Abdullah",
+        email: params.email,
+        role: UserRole.teacher,
+        avatarUrl: "https://i.pravatar.cc/150?img=3",
+        classes: ["Math", "Physics"],
+      );
+    }
+
+    // Parent
+    if (params.email == "parent@test.com" &&
+        params.password == "123456" &&
+        params.role == "Parent") {
+
+      return UserModel(
+        id: 3,
+        name: "Noha Mahmoud",
+        email: params.email,
+        role: UserRole.parent,
+        avatarUrl: "https://i.pravatar.cc/150?img=5",
+        classes: ["Class A", "Class B"],
+      );
+    }
+
+    throw Exception("Invalid email or password");
   }
 
   @override
@@ -61,12 +99,12 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
     await Future.delayed(const Duration(seconds: 1));
 
     return UserModel(
-      id: 1,
-      name: "Noha Mahmoud",
-      email: "noha@example.com",
+      id: 2,
+      name: "Ahmed Abdullah",
+      email: "teacher@test.com",
       role: UserRole.teacher,
       avatarUrl: "https://i.pravatar.cc/150?img=3",
-      classes: ["Class A", "Class B", "Class C"],
+      classes: ["Math", "Physics"],
     );
   }
 }
