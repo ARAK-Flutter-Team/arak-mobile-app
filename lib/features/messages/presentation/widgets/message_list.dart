@@ -102,11 +102,8 @@ class MessageList extends ConsumerWidget {
     }
 
     if (messages.isEmpty) {
-      return const Center(
-        child: Text("No messages yet"),
-      );
+      return const SizedBox();
     }
-
     return ListView.builder(
       controller: scrollController,
       reverse: true,
