@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/providers/current_user_provider.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
@@ -61,7 +62,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                   searchRoute: '/teacher-search',
                 ),
 
-                const SizedBox(height: 30),
+                 SizedBox(height: 30.h),
 
                 /// 2️⃣ Performance
                 performanceAsync.when(
@@ -74,7 +75,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                //const SizedBox(height: 24),
 
                 /// 3️⃣ Quick Actions
                 QuickActionsGrid(
@@ -91,7 +92,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                   },
                 ),
 
-                const SizedBox(height: 24),
+                 SizedBox(height: 24.h),
 
                 /// 4️⃣ Recent Activities
                 const RecentActivitiesSection(),

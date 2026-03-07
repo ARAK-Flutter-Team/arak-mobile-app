@@ -35,14 +35,10 @@ class SettingsPage extends ConsumerWidget {
         disableDefaultLeading: true,
         leadingWidget: Padding(
           padding: const EdgeInsets.only(left: 16),
-          child: SvgPicture.asset(
-            'assets/icons/Group 17.svg',
-            width: 24.w,
-            height: 24.h,
-            colorFilter: ColorFilter.mode(
-              Theme.of(context).iconTheme.color ?? Colors.black,
-              BlendMode.srcIn,
-            ),
+          child: Icon(
+            Icons.settings,
+            size: 26.sp,
+            color: Theme.of(context).iconTheme.color ?? Colors.black,
           ),
         ),
       ),
