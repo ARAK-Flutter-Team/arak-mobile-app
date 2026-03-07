@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../auth/presentation/providers/auth_notifier.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/schedule_item.dart';
 import '../providers/schedule_providers.dart';
 import '../providers/schedule_state.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../../../core/network/network_info.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
@@ -34,4 +34,20 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 // --- UseCase ---
 final loginUseCaseProvider = Provider<Login>((ref) {
   return Login(ref.read(authRepositoryProvider));
+});*/
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'authRemoteDataSourceProvider.dart';
+import 'auth_notifier.dart';
+import 'auth_state.dart';
+
+final authProvider =
+StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+  final loginUseCase = ref.read(loginUseCaseProvider);
+  final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
+
+  return AuthNotifier(
+    ref,
+    loginUseCase,
+    getCurrentUserUseCase,
+  );
 });

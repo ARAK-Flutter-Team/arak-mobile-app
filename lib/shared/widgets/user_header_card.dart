@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,6 +35,18 @@ class UserHeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    ImageProvider imageProvider;
+
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      if (imageUrl!.startsWith('http')) {
+        imageProvider = NetworkImage(imageUrl!);
+      } else {
+        imageProvider = FileImage(File(imageUrl!));
+      }
+    } else {
+      imageProvider = const AssetImage('assets/images/download(1).jpg');
+    }
+
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
@@ -46,13 +59,11 @@ class UserHeaderCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+
           CircleAvatar(
             radius: 30.r,
             backgroundColor: theme.colorScheme.surfaceVariant,
-            backgroundImage: imageUrl != null
-                ? NetworkImage(imageUrl!)
-                : const AssetImage('assets/images/download(1).jpg')
-            as ImageProvider,
+            backgroundImage: imageProvider,
           ),
 
           SizedBox(width: 12.w),
@@ -61,6 +72,7 @@ class UserHeaderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Row(
                   children: [
                     Flexible(
@@ -73,7 +85,9 @@ class UserHeaderCard extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     SizedBox(width: 6.w),
+
                     if (showVerifiedIcon)
                       SvgPicture.asset(
                         'assets/icons/true sign.svg',
@@ -82,7 +96,9 @@ class UserHeaderCard extends StatelessWidget {
                       ),
                   ],
                 ),
+
                 SizedBox(height: 4.h),
+
                 if (subtitle != null)
                   Text(
                     subtitle!,
