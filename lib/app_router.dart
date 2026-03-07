@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/evaluation/presentation/pages/evaluation_page.dart';
+import 'package:arak_app/features/search-for-student/presentation/pages/attendance_page.dart';
 import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
 import 'core/entities/user.dart';
 import 'features/auth/presentation/providers/auth_notifier.dart';
@@ -71,6 +73,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           ),
 
+          /// Search For Student (Attendance)
+          GoRoute(
+            path: '/search-for-student',
+            builder: (context, state) => const AttendancePage(),
+          ),
+
           /// Profile
           GoRoute(
             path: '/profile',
@@ -81,6 +89,18 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/notifications',
             builder: (context, state) => const Placeholder(),
+          ),
+
+          /// Evaluation Page
+          GoRoute(
+            path: '/evaluation',
+            builder: (context, state) => const StudentEvaluationPage(),
+          ),
+
+          /// Search For Student Page
+          GoRoute(
+            path: '/search-for-student',
+            builder: (context, state) => const AttendancePage(),
           ),
 
           /// Settings
@@ -116,12 +136,13 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
+
           ///teacher schedule
           GoRoute(
             path: '/teacher-schedule',
-            builder: (context, state) =>
-            const TeacherSchedulePage(),
+            builder: (context, state) => const TeacherSchedulePage(),
           ),
+
           /// teacher attendance
           GoRoute(
             path: '/teacher/attendance/:classId',
@@ -133,11 +154,11 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
+
           /// Chat Screen
           GoRoute(
             path: '/chat',
             builder: (context, state) {
-
               final data = state.extra as Map<String, dynamic>?;
 
               return ChatScreen(
@@ -152,7 +173,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/chat-users',
             builder: (context, state) {
-
               final extra = state.extra as Map;
 
               return UsersListScreen(
@@ -161,7 +181,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
-
 
           /// Privacy Policy Page
 
