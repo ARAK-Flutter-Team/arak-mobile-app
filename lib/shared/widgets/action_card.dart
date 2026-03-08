@@ -85,8 +85,8 @@ class ActionCard extends StatelessWidget {
 
               if (showNewLabel)
                 Positioned(
-                  top: -10,
-                  right: -10,
+                  top: 5,
+                  right: -6,
                   child: Container(
                     padding:
                     EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
