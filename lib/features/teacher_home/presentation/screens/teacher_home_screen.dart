@@ -71,6 +71,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                   error: (_, __) => const SizedBox(),
                   data: (percentage) => AppPerformanceIndicator(
                     percentage: percentage,
+
                     title: "Teacher Performance",
                   ),
                 ),

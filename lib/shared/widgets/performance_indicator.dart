@@ -40,7 +40,7 @@ class AppPerformanceIndicator extends StatelessWidget {
           Text(
             title,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontSize: 20.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -50,26 +50,22 @@ class AppPerformanceIndicator extends StatelessWidget {
           // ================= Gauge =================
           CircularPercentIndicator(
             radius: 80.r,
-            lineWidth: 15.w,
+            lineWidth: 13.w,
             percent: normalizedPercent,
             animation: true,
             animationDuration: 1000,
             circularStrokeCap: CircularStrokeCap.round,
             progressColor: progressColor,
-            /*backgroundColor:
-            theme.colorScheme.outline.withOpacity(0.3),*/
             backgroundColor: theme.colorScheme.surfaceVariant,
             center: Text(
               "${percentage.toInt()}%",
               style: theme.textTheme.headlineMedium?.copyWith(
-                fontSize: 30.sp,
+                fontSize: 25.sp,
                 fontWeight: FontWeight.bold,
                 color: percentageTextColor,
               ),
             ),
             arcType: ArcType.HALF,
-            /*arcBackgroundColor:
-            theme.colorScheme.outline.withOpacity(0.15),*/
             arcBackgroundColor: theme.colorScheme.surfaceVariant.withOpacity(0.7),
           ),
 

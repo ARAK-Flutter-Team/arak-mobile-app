@@ -30,8 +30,8 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       automaticallyImplyLeading: false,
       centerTitle: false,
-      toolbarHeight: kToolbarHeight,
-      titleSpacing: 0,
+      toolbarHeight: 60.h,
+      titleSpacing: 10.w,
 
       leading: IconButton(
         onPressed: () {
@@ -88,5 +88,5 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(60.h);
 }

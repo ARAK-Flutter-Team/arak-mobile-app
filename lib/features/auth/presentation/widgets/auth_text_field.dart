@@ -25,6 +25,9 @@ class AuthTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       obscuringCharacter: '*',
+      style: const TextStyle(
+        color: Colors.black,
+      ),
       decoration: AppInputDecoration.build(
         label: label,
         errorText: errorText,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../features/auth/presentation/providers/auth_notifier.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/messages/domain/entities/chat_user.dart';
 import '../../features/messages/domain/entities/message.dart';
@@ -105,7 +103,7 @@ class QuickActionsGrid extends ConsumerWidget {
                 text: "Hello!",
                 fileUrl: null,
                 type: MessageType.text,
-                status: MessageStatus.sending, // لازم
+                status: MessageStatus.sending,
                 createdAt: DateTime.now(),
                 deletedForEveryone: false,
               );
