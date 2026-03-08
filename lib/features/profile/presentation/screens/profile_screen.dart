@@ -33,7 +33,7 @@ class ProfileScreen extends ConsumerWidget {
         showBackButton: false,
         disableDefaultLeading: true,
         leadingWidget: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: 8),
           child: Icon(
             Icons.person,
             size: 26.w,
