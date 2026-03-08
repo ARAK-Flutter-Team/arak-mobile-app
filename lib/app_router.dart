@@ -23,6 +23,10 @@ import 'features/tasks/presentation/pages/teacher_tasks_page.dart';
 import 'features/teacher_home/presentation/screens/teacher_home_screen.dart';
 import 'features/parent_home/presentation/screens/parent_home_screen.dart';
 
+import 'features/tasks/presentation/pages/parent_tasks_page.dart';
+import 'features/tasks/presentation/pages/parent_task_details_page.dart';
+import 'features/tasks/domain/entities/task.dart';
+
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -71,6 +75,44 @@ final routerProvider = Provider<GoRouter>((ref) {
                 },
               );
             },
+          ),
+
+          /// ── Parent Routes ──
+          GoRoute(
+            path: '/parent-home/tasks',
+            builder: (context, state) {
+              final studentId = state.extra as String? ?? '';
+              return ParentTasksPage(studentId: studentId);
+            },
+            routes: [
+              GoRoute(
+                path: 'details',
+                builder: (context, state) {
+                  final task = state.extra as Task;
+                  return ParentTaskDetailsPage(task: task);
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/parent-home/evaluation',
+            builder: (context, state) => const StudentEvaluationPage(),
+          ),
+          GoRoute(
+            path: '/parent-home/schedule',
+            builder: (context, state) => const Placeholder(),
+          ),
+          GoRoute(
+            path: '/parent-home/contact',
+            builder: (context, state) => const Placeholder(),
+          ),
+          GoRoute(
+            path: '/parent-home/attendance',
+            builder: (context, state) => const AttendancePage(),
+          ),
+          GoRoute(
+            path: '/parent-home/chatbot',
+            builder: (context, state) => const Placeholder(),
           ),
 
           /// Search For Student (Attendance)

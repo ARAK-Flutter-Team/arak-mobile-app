@@ -2,14 +2,13 @@ import 'package:arak_app/shared/domain/entities/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../shared/models/quick_action_item.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
 import '../../../../shared/widgets/user_header_card.dart';
 import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
-import '../providers/parent_home_provider.dart';
 import 'widgets/parent_recent_activities_section.dart';
+import '../providers/parent_home_provider.dart';
 
 class ParentHomeScreen extends ConsumerWidget {
   const ParentHomeScreen({super.key});
@@ -52,7 +51,6 @@ class ParentHomeScreen extends ConsumerWidget {
                     showSearch: true,
                     showVerifiedIcon: selectedStudent?.isVerified ?? false,
                     // ✅ بيمرر الـ students للـ dropdown
-                    // ❌ Syntax غلط — مش JavaScript
                     students: data.students
                         .map((s) => Student(
                               id: s.id,

@@ -1,15 +1,31 @@
+import 'package:arak_app/features/parent_home/data/datasources/parent_home_remote_data_source.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/di/injection_container.dart';
-import '../../domain/entities/parent_home_entity.dart';
-import '../../domain/entities/student_entity.dart';
-import '../../domain/usecases/get_parent_home_data_usecase.dart';
-import '../../domain/usecases/get_parent_recent_activities_usecase.dart';
-import '../../../../shared/models/activity_model.dart';
-import '../../../../core/usecase/no_params.dart';
+import 'package:arak_app/features/parent_home/data/repositories/parent_home_repository_impl.dart';
+import 'package:arak_app/features/parent_home/domain/entities/parent_home_entity.dart';
+import 'package:arak_app/features/parent_home/domain/entities/student_entity.dart';
+import 'package:arak_app/features/parent_home/domain/usecases/get_parent_home_data_usecase.dart';
+import 'package:arak_app/features/parent_home/domain/usecases/get_parent_recent_activities_usecase.dart';
+import 'package:arak_app/shared/models/activity_model.dart';
+import 'package:arak_app/core/usecase/no_params.dart';
 
-// ── 1. كل بيانات الـ parent (اسمه + الـ students + performance)
+final _dataSourceProvider = Provider<ParentHomeRemoteDataSource>(
+  (_) => ParentHomeRemoteDataSourceImpl(),
+);
+
+final _repositoryProvider = Provider<ParentHomeRepositoryImpl>(
+  (ref) => ParentHomeRepositoryImpl(ref.watch(_dataSourceProvider)),
+);
+
+final _useCaseProvider = Provider<GetParentHomeDataUseCase>(
+  (ref) => GetParentHomeDataUseCase(ref.watch(_repositoryProvider)),
+);
+
+final _activitiesUseCaseProvider = Provider<GetParentRecentActivitiesUseCase>(
+  (ref) => GetParentRecentActivitiesUseCase(ref.watch(_repositoryProvider)),
+);
+
 final parentHomeProvider = FutureProvider<ParentHomeEntity>((ref) async {
-  final usecase = sl<GetParentHomeDataUseCase>();
+  final usecase = ref.watch(_useCaseProvider);
   final result = await usecase(const NoParams());
   return result.fold(
     (failure) => throw Exception(failure.message),
@@ -17,22 +33,17 @@ final parentHomeProvider = FutureProvider<ParentHomeEntity>((ref) async {
   );
 });
 
-// ── 2. الـ selected student (للـ pagination بين الأبناء)
 final selectedStudentIndexProvider = StateProvider<int>((ref) => 0);
 
-// ── derived provider — الـ student الحالي بناءً على الـ index
 final selectedStudentProvider = Provider<StudentEntity?>((ref) {
   final homeAsync = ref.watch(parentHomeProvider);
   final index = ref.watch(selectedStudentIndexProvider);
   return homeAsync.whenData((data) => data.students[index]).value;
 });
 
-// ── 3. الـ recent activities منفصلة
-
 final parentRecentActivitiesProvider =
     FutureProvider<List<ActivityModel>>((ref) async {
-  // ✅
-  final usecase = sl<GetParentRecentActivitiesUseCase>();
+  final usecase = ref.watch(_activitiesUseCaseProvider);
   final result = await usecase(const NoParams());
   return result.fold(
     (failure) => throw Exception(failure.message),

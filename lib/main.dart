@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_router.dart'; // بيفتح ملف الراوتر اللي عندك
+import 'core/di/injection_container.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  init();
   runApp(ProviderScope(
     child: ScreenUtilInit(
       designSize: const Size(360, 690),
