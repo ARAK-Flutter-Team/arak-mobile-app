@@ -10,6 +10,9 @@ class TaskModel extends Task {
     required super.status,
     super.imageUrl,
     required super.assignedTo,
+    super.teacherName,
+    super.teacherFeedback,
+    super.progress,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
@@ -19,11 +22,16 @@ class TaskModel extends Task {
       description: json['description'],
       subject: json['subject'],
       dueDate: DateTime.parse(json['dueDate']),
-      status: json['status'] == 'completed'
-          ? TaskStatus.completed
-          : TaskStatus.pending,
+      status: switch (json['status']) {
+        'completed' => TaskStatus.completed,
+        'pending' => TaskStatus.pending,
+        _ => TaskStatus.notStarted,
+      },
       imageUrl: json['imageUrl'],
       assignedTo: json['assignedTo'],
+      teacherName: json['teacherName'],
+      teacherFeedback: json['teacherFeedback'],
+      progress: json['progress']?.toDouble(),
     );
   }
 
@@ -37,6 +45,9 @@ class TaskModel extends Task {
       'status': status.name,
       'imageUrl': imageUrl,
       'assignedTo': assignedTo,
+      'teacherName': teacherName,
+      'teacherFeedback': teacherFeedback,
+      'progress': progress,
     };
   }
 }

@@ -37,14 +37,10 @@ class UserHeaderCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-
     final user = ref.watch(currentUserProvider);
-
-    /// نأخذ الصورة من currentUser أولاً
     final avatar = user?.avatarUrl ?? imageUrl;
 
     ImageProvider imageProvider;
-
     if (avatar != null && avatar.isNotEmpty) {
       if (avatar.startsWith('http')) {
         imageProvider = NetworkImage(avatar);
@@ -55,13 +51,13 @@ class UserHeaderCard extends ConsumerWidget {
       imageProvider = const AssetImage('assets/images/download(1).jpg');
     }
 
+    final hasMultipleStudents = students != null && students!.length > 1;
+    final screenWidth = MediaQuery.of(context).size.width; // ✅ هنا
+
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.strokeColor,
-          width: 0.5,
-        ),
+        border: Border.all(color: AppColors.strokeColor, width: 0.5),
         borderRadius: BorderRadius.circular(12.r),
         color: theme.cardColor,
       ),
@@ -91,9 +87,7 @@ class UserHeaderCard extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(width: 6.w),
-
                     if (showVerifiedIcon)
                       SvgPicture.asset(
                         'assets/icons/true sign.svg',
@@ -102,9 +96,7 @@ class UserHeaderCard extends ConsumerWidget {
                       ),
                   ],
                 ),
-
                 SizedBox(height: 4.h),
-
                 if (subtitle != null)
                   Text(
                     subtitle!,
@@ -116,21 +108,20 @@ class UserHeaderCard extends ConsumerWidget {
             ),
           ),
 
-          if (showSearch && searchRoute != null)
+          // ── Search Button
+          if (showSearch)
             GestureDetector(
-              onTap: () {
-                context.push(searchRoute!);
-              },
+              onTap: () => context.push(searchRoute!),
               child: Container(
-                padding: EdgeInsets.all(6.w),
+                padding: EdgeInsets.all(4.w),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: theme.colorScheme.primary.withOpacity(0.1),
                 ),
                 child: SvgPicture.asset(
                   'assets/icons/search.svg',
-                  width: 22.w,
-                  height: 22.h,
+                  width: 15.w,
+                  height: 15.h,
                   colorFilter: ColorFilter.mode(
                     theme.colorScheme.primary,
                     BlendMode.srcIn,
@@ -138,8 +129,93 @@ class UserHeaderCard extends ConsumerWidget {
                 ),
               ),
             ),
+
+          // ✅ Dropdown Button
+          if (hasMultipleStudents) ...[
+            SizedBox(width: 8.w),
+            GestureDetector(
+              onTap: () =>
+                  _showStudentsDropdown(context, theme, screenWidth), // ✅
+              child: Container(
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: theme.colorScheme.primary.withOpacity(0.1),
+                ),
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: theme.colorScheme.primary,
+                  size: 18.w,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
+  }
+
+  void _showStudentsDropdown(
+      BuildContext context, ThemeData theme, double screenWidth) {
+    // ✅
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    showMenu(
+      context: context,
+      color: theme.cardColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: AppColors.strokeColor, width: 0.5),
+      ),
+      position: RelativeRect.fromLTRB(
+        screenWidth * 0.1,
+        offset.dy + size.height + 8,
+        screenWidth * 0.1,
+        0,
+      ),
+      items: students!.asMap().entries.map((entry) {
+        final index = entry.key;
+        final student = entry.value;
+        final isSelected = index == selectedStudentIndex;
+
+        return PopupMenuItem(
+          value: index,
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                backgroundImage: student.avatarUrl != null
+                    ? NetworkImage(student.avatarUrl!)
+                    : null,
+                child: student.avatarUrl == null
+                    ? Icon(Icons.person,
+                        size: 16, color: theme.colorScheme.primary)
+                    : null,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  student.name,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight:
+                        isSelected ? FontWeight.w700 : FontWeight.normal,
+                    color: isSelected ? theme.colorScheme.primary : null,
+                  ),
+                ),
+              ),
+              if (isSelected)
+                Icon(Icons.check, size: 16, color: theme.colorScheme.primary),
+            ],
+          ),
+        );
+      }).toList(),
+    ).then((selectedIndex) {
+      if (selectedIndex != null && onStudentSelected != null) {
+        onStudentSelected!(selectedIndex);
+      }
+    });
   }
 }

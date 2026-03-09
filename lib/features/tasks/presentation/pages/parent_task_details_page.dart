@@ -8,8 +8,22 @@ class ParentTaskDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
+    // ألوان بتتغير حسب الـ mode
+    final cardBg =
+        isDark ? colorScheme.surfaceContainerHigh : const Color(0xFFE8F3FF);
+
+    final noteBg =
+        isDark ? colorScheme.surfaceContainerHigh : const Color(0xFFFFF8F0);
+
+    final noteBorder = isDark ? colorScheme.outline : const Color(0xFFFFCC80);
+
+    final noteIconColor = isDark ? Colors.orangeAccent : Colors.orange;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -27,15 +41,17 @@ class ParentTaskDetailsPage extends StatelessWidget {
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black54),
+                        border: Border.all(color: colorScheme.outline),
                       ),
                       child: const Icon(Icons.arrow_back_ios_new, size: 16),
                     ),
                   ),
                   const Spacer(),
-                  const Text(
+                  Text(
                     'Task Details',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const Spacer(),
                   const SizedBox(width: 40),
@@ -50,12 +66,12 @@ class ParentTaskDetailsPage extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE8F3FF),
+                    color: cardBg,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.assignment_outlined,
-                    color: Colors.blue,
+                    color: colorScheme.primary,
                     size: 44,
                   ),
                 ),
@@ -67,8 +83,7 @@ class ParentTaskDetailsPage extends StatelessWidget {
               Center(
                 child: Text(
                   task.title,
-                  style: const TextStyle(
-                    fontSize: 24,
+                  style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -80,13 +95,15 @@ class ParentTaskDetailsPage extends StatelessWidget {
               Center(
                 child: Text(
                   '${task.subject} • ${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}',
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // ── Status (read-only للـ parent)
+              // ── Status
               Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -94,15 +111,19 @@ class ParentTaskDetailsPage extends StatelessWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: task.status == TaskStatus.completed
-                        ? Colors.green
-                        : Colors.orange,
+                    color: switch (task.status) {
+                      TaskStatus.completed => const Color(0xFF4CAF50),
+                      TaskStatus.pending => const Color(0xFFFF9800),
+                      TaskStatus.notStarted => const Color(0xFF5D5D5D),
+                    },
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    task.status == TaskStatus.completed
-                        ? 'Done'
-                        : 'In progress',
+                    switch (task.status) {
+                      TaskStatus.completed => 'Done',
+                      TaskStatus.pending => 'In progress',
+                      TaskStatus.notStarted => 'Not started',
+                    },
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.white,
@@ -119,27 +140,23 @@ class ParentTaskDetailsPage extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8F3FF),
+                  color: cardBg,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Description',
-                      style: TextStyle(
-                        fontSize: 16,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: Colors.blue,
+                        color: colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       task.description,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
+                      style: theme.textTheme.bodyMedium,
                     ),
                   ],
                 ),
@@ -152,18 +169,20 @@ class ParentTaskDetailsPage extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
+                  color: noteBg,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade200),
+                  border: Border.all(color: noteBorder),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: Colors.orange, size: 18),
-                    SizedBox(width: 8),
+                    Icon(Icons.info_outline, color: noteIconColor, size: 18),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'You can only view tasks. Contact the teacher to update status.',
-                        style: TextStyle(fontSize: 13, color: Colors.orange),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: noteIconColor,
+                        ),
                       ),
                     ),
                   ],

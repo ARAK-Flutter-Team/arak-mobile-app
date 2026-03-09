@@ -29,9 +29,10 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(parentTasksNotifierProvider);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,15 +50,17 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black54),
+                        border: Border.all(color: colorScheme.outline),
                       ),
                       child: const Icon(Icons.arrow_back_ios_new, size: 16),
                     ),
                   ),
                   const Spacer(),
-                  const Text(
+                  Text(
                     'Tasks',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const Spacer(),
                   const SizedBox(width: 40),
@@ -66,19 +69,23 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
             ),
 
             // ── Intro
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Tasks for your child',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
                     "Here you can track your child's daily tasks and progress",
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -91,9 +98,9 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
               child: state.isLoading
                   ? const LoadingView()
                   : state.error != null
-                      ? ErrorView(message: state.error!) // ✅ بدون onRetry
+                      ? ErrorView(message: state.error!)
                       : state.tasks.isEmpty
-                          ? const EmptyView() // ✅ بدون message
+                          ? const EmptyView()
                           : RefreshIndicator(
                               onRefresh: () => ref
                                   .read(parentTasksNotifierProvider.notifier)
@@ -106,7 +113,6 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                                     const SizedBox(height: 12),
                                 itemBuilder: (context, index) {
                                   final task = state.tasks[index];
-                                  // ✅ GestureDetector بدل onTap في TaskItemCard
                                   return GestureDetector(
                                     onTap: () => context.push(
                                       '/parent-home/tasks/details',
@@ -127,7 +133,8 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF007BFF),
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -138,7 +145,6 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
                     ),
                   ),
                 ),
