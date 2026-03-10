@@ -25,57 +25,57 @@ class ActionCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(14.r),
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          height: 60.h,
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
           decoration: BoxDecoration(
             color: theme.cardColor,
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(14.r),
             boxShadow: [
-                BoxShadow(
-                  color: theme.colorScheme.shadow.withOpacity(
-                    theme.brightness == Brightness.dark ? 0.4 : 0.08,
-                  ),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
+              BoxShadow(
+                color: theme.colorScheme.shadow.withOpacity(0.08),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
             ],
           ),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    iconPath,
-                    width: 18.w,
-                    height: 18.h,
-                    fit: BoxFit.contain,
-                    colorFilter: ColorFilter.mode(
-                      theme.colorScheme.primary,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Text(
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (iconPath.isNotEmpty)
+                      SvgPicture.asset(
+                        iconPath,
+                        width: 20.w,
+                        height: 20.w,
+                        colorFilter: ColorFilter.mode(
+                          theme.colorScheme.primary,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    SizedBox(width: 8.w),
+                    Text(
                       title,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 16.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               if (showDot)
                 Positioned(
-                  top: -6.h,
-                  right: -4.w,
+                  top: -4,
+                  right: -4,
                   child: Container(
-                    width: 10.w,
-                    height: 10.w,
+                    width: 8.w,
+                    height: 8.w,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.error,
                       shape: BoxShape.circle,
@@ -84,18 +84,19 @@ class ActionCard extends StatelessWidget {
                 ),
               if (showNewLabel)
                 Positioned(
-                  top: -10.h,
-                  right: -4.w,
+                  top: 5,
+                  right: -6,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
-                      borderRadius: BorderRadius.circular(8.r),
+                      borderRadius: BorderRadius.circular(6.r),
                     ),
                     child: Text(
                       "NEW",
                       style: TextStyle(
-                        fontSize: 9.sp,
+                        fontSize: 8.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),

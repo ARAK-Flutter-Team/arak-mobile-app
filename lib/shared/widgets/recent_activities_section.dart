@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/teacher_home/presentation/providers/recent_activities_provider.dart';
 import '../theme/app_colors.dart';
@@ -20,33 +21,37 @@ class RecentActivitiesSection extends ConsumerWidget {
         if (activities.isEmpty) return const SizedBox();
 
         return Container(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
             color: theme.cardColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14.r),
             border: Border.all(
               color: AppColors.strokeColor,
-              width: 0.5,
+              width: 0.7.w,
             ),
             boxShadow: [
               if (theme.brightness == Brightness.light)
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
+                  blurRadius: 8.r,
+                  offset: const Offset(0, 3),
                 ),
             ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              /// Title
               Text(
                 "Recent Activities",
                 style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15.sp,
                 ),
               ),
-              const SizedBox(height: 12),
+
+              SizedBox(height: 14.h),
 
               ...activities.map((activity) => Column(
                 children: [
@@ -60,7 +65,7 @@ class RecentActivitiesSection extends ConsumerWidget {
                         : null,
                   ),
                   if (activity != activities.last)
-                    const SizedBox(height: 8),
+                    SizedBox(height: 10.h),
                 ],
               )),
             ],

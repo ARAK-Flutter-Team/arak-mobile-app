@@ -1,4 +1,5 @@
-enum TaskStatus { pending, completed }
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+enum TaskStatus { pending, completed, notStarted }
 
 class Task {
   final String id;
@@ -9,6 +10,9 @@ class Task {
   final TaskStatus status;
   final String? imageUrl;
   final String assignedTo;
+  final String? teacherName;
+  final String? teacherFeedback;
+  final double? progress;
 
   Task({
     required this.id,
@@ -19,5 +23,8 @@ class Task {
     required this.status,
     this.imageUrl,
     required this.assignedTo,
+    this.teacherName,
+    this.teacherFeedback,
+    this.progress,
   });
 }

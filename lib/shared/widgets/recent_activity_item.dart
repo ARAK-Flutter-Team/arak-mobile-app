@@ -21,16 +21,16 @@ class RecentActivityItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return InkWell(
-      borderRadius: BorderRadius.circular(8.r),
+      borderRadius: BorderRadius.circular(10.r),
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 4.h),
+        padding: EdgeInsets.symmetric(vertical: 6.h),
         child: Row(
           children: [
             SvgPicture.asset(
               iconPath,
-              width: 24.w,
-              height: 24.h,
+              width: 18.w,
+              height: 18.w,
               colorFilter: keepOriginalIconColor
                   ? null
                   : ColorFilter.mode(
@@ -38,12 +38,16 @@ class RecentActivityItem extends StatelessWidget {
                 BlendMode.srcIn,
               ),
             ),
-            SizedBox(width: 10.w),
+
+            SizedBox(width: 12.w),
+
             Expanded(
               child: Text(
                 text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),

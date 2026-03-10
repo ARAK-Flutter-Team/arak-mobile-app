@@ -31,9 +31,9 @@ class ProfileImageNotifier extends StateNotifier<void> {
 
     if (user == null) return;
 
-    final updatedUser = user.copyWith(avatarUrl: path);
+    //final updatedUser = user.copyWith(avatarUrl: path);
 
-    ref.read(currentUserProvider.notifier).state = updatedUser;
+    ref.read(currentUserProvider.notifier).updateAvatar(path);
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("user_avatar", path);
@@ -41,6 +41,6 @@ class ProfileImageNotifier extends StateNotifier<void> {
 }
 
 final profileImageProvider =
-StateNotifierProvider<ProfileImageNotifier, void>((ref) {
+    StateNotifierProvider<ProfileImageNotifier, void>((ref) {
   return ProfileImageNotifier(ref);
 });

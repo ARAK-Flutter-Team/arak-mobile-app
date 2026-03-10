@@ -40,8 +40,7 @@ class TaskRepositoryImpl implements TaskRepository {
 
       return result;
     } catch (_) {
-      final cachedModels =
-      await local.getCachedTeacherTasks(classId);
+      final cachedModels = await local.getCachedTeacherTasks(classId);
 
       return TeacherTasksResult(
         tasks: cachedModels, // هنا غالبًا already Task
@@ -79,13 +78,18 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<void> updateTaskStatus(
-      String taskId,
-      TaskStatus status,
-      ) async {
+    String taskId,
+    TaskStatus status,
+  ) async {
     try {
       await remote.updateTaskStatus(taskId, status.name);
     } catch (_) {}
 
     await local.updateTaskStatusLocally(taskId, status.name);
+  }
+
+  @override
+  Future<List<Task>> getParentTasks({required String studentId}) {
+    return remote.getParentTasks(studentId: studentId);
   }
 }

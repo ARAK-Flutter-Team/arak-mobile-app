@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/entities/user.dart';
 import '../../../../shared/providers/current_user_provider.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 
@@ -32,10 +33,10 @@ class ProfileScreen extends ConsumerWidget {
         showBackButton: false,
         disableDefaultLeading: true,
         leadingWidget: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: 8),
           child: Icon(
             Icons.person,
-            size: 24.w,
+            size: 26.w,
             color: Theme.of(context).iconTheme.color,
           )
         ),
@@ -100,10 +101,10 @@ class ProfileScreen extends ConsumerWidget {
                   label: "Phone",
                   value: user.phone ?? "",
                   onEdit: (newPhone) {
-                    ref.read(currentUserProvider.notifier).state =
-                        ref.read(currentUserProvider.notifier).state?.copyWith(
-                          phone: newPhone,
-                        );
+                    if (user != null) {
+                      ref.read(currentUserProvider.notifier).state =
+                          user.copyWith(phone: newPhone);
+                    }
                   },
                 ),
 
@@ -113,7 +114,7 @@ class ProfileScreen extends ConsumerWidget {
                 InfoTile(
                   icon: Icons.person,
                   label: "Username",
-                  value: "Ahmed123",
+                  value: user.name,
                 ),
 
               ],
@@ -121,6 +122,7 @@ class ProfileScreen extends ConsumerWidget {
              SizedBox(height: 20.h),
 
             /// Teacher Info
+           if (user.role == UserRole.teacher)
             InfoSection(
               title: "Teacher Information",
               children: [
