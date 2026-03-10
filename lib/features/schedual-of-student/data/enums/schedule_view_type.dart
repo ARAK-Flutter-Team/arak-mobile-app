@@ -1,0 +1,1 @@
+enum ScheduleViewType { daily, weekly }

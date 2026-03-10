@@ -11,13 +11,17 @@ import 'features/auth/presentation/providers/auth_providers.dart';
 import 'features/messages/presentation/screens/chat_screen.dart';
 import 'features/messages/presentation/screens/users_list_screen.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
+import 'package:arak_app/features/contact_page/presentation/pages/contact_page.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
+
+import 'features/schedual-of-student/presentation/pages/schedule_screen.dart';
+import 'features/search-for-student/presentation/pages/attendance_page.dart';
 import 'features/settings/presentation/pages/privacy_policy_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'core/router/main_shell.dart';
-
+import 'features/search-page/presentation/pages/search_page.dart';
 import 'features/tasks/presentation/pages/add_task_page.dart';
 import 'features/tasks/presentation/pages/teacher_tasks_page.dart';
 import 'features/teacher_home/presentation/screens/teacher_home_screen.dart';
@@ -62,7 +66,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   if (role == UserRole.teacher) {
                     return const TeacherHomeScreen();
                   } else if (role == UserRole.parent) {
-                    return const ParentHomeScreen(); // ✅ شغّلها
+                    return const ParentHomeScreen();
                   }
 
                   return const Scaffold(
@@ -73,10 +77,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           ),
 
-          /// Search For Student (Attendance)
+          ///  (Attendance)
           GoRoute(
             path: '/search-for-student',
             builder: (context, state) => const AttendancePage(),
+          ),
+
+          /// Search Page
+          GoRoute(
+            path: '/search',
+            builder: (context, state) => const SearchPage(),
+          ),
+
+          GoRoute(
+            path: '/contact',
+            builder: (context, state) => const ContactPage(),
           ),
 
           /// Profile
@@ -97,26 +112,19 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const StudentEvaluationPage(),
           ),
 
-          /// Search For Student Page
-          GoRoute(
-            path: '/search-for-student',
-            builder: (context, state) => const AttendancePage(),
-          ),
-
           /// Settings
           GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsPage(),
           ),
 
-          ///teacher task
+          /// Teacher Task
           GoRoute(
             path: '/teacher/tasks',
             builder: (context, state) {
               return Consumer(
                 builder: (context, ref, _) {
                   final user = ref.watch(authProvider).user;
-
                   return TeacherTasksScreen(
                     teacherId: user?.id.toString() ?? '',
                   );
@@ -125,33 +133,33 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           ),
 
-          ///teacher add task
+          /// Teacher Add Task
           GoRoute(
             path: '/teacher/add-task',
             builder: (context, state) {
               final teacherId = state.extra as String;
-
-              return AddTaskPage(
-                teacherId: teacherId,
-              );
+              return AddTaskPage(teacherId: teacherId);
             },
           ),
 
-          ///teacher schedule
+          // ✅ مسار جدول المدرس (بتاع صاحبتك)
           GoRoute(
             path: '/teacher-schedule',
             builder: (context, state) => const TeacherSchedulePage(),
           ),
 
-          /// teacher attendance
+          // ✅ مسار جدول الطالب (بتاعك - الجديد)
+          GoRoute(
+            path: '/student-schedule', // غيرت المسار هنا
+            builder: (context, state) => const ScheduleScreen(),
+          ),
+
+          /// Teacher Attendance
           GoRoute(
             path: '/teacher/attendance/:classId',
             builder: (context, state) {
               final classId = state.pathParameters['classId']!;
-
-              return TeacherAttendanceScreen(
-                classId: classId,
-              );
+              return TeacherAttendanceScreen(classId: classId);
             },
           ),
 
@@ -160,7 +168,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/chat',
             builder: (context, state) {
               final data = state.extra as Map<String, dynamic>?;
-
               return ChatScreen(
                 currentUserId: data?["currentUserId"] ?? "",
                 otherUserId: data?["otherUserId"] ?? "",
@@ -170,11 +177,12 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
+
+          /// Chat Users
           GoRoute(
             path: '/chat-users',
             builder: (context, state) {
               final extra = state.extra as Map;
-
               return UsersListScreen(
                 currentUserId: extra["currentUserId"],
                 users: extra["users"],
@@ -183,7 +191,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
 
           /// Privacy Policy Page
-
           GoRoute(
             path: "/privacy-policy",
             builder: (context, state) => const PrivacyPolicyPage(),
