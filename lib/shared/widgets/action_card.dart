@@ -48,15 +48,16 @@ class ActionCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset(
-                      iconPath,
-                      width: 20.w,
-                      height: 20.w,
-                      colorFilter: ColorFilter.mode(
-                        theme.colorScheme.primary,
-                        BlendMode.srcIn,
+                    if (iconPath.isNotEmpty)
+                      SvgPicture.asset(
+                        iconPath,
+                        width: 20.w,
+                        height: 20.w,
+                        colorFilter: ColorFilter.mode(
+                          theme.colorScheme.primary,
+                          BlendMode.srcIn,
+                        ),
                       ),
-                    ),
                     SizedBox(width: 8.w),
                     Text(
                       title,
@@ -68,7 +69,6 @@ class ActionCard extends StatelessWidget {
                   ],
                 ),
               ),
-
               if (showDot)
                 Positioned(
                   top: -4,
@@ -82,14 +82,13 @@ class ActionCard extends StatelessWidget {
                     ),
                   ),
                 ),
-
               if (showNewLabel)
                 Positioned(
                   top: 5,
                   right: -6,
                   child: Container(
                     padding:
-                    EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(6.r),

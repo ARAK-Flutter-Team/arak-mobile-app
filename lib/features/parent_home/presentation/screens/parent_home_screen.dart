@@ -1,6 +1,7 @@
 import 'package:arak_app/shared/domain/entities/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/models/quick_action_item.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
@@ -37,10 +38,9 @@ class ParentHomeScreen extends ConsumerWidget {
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w), // ✅
             child: Column(
               children: [
-                /// 1️⃣ User Header + Dropdown
                 homeAsync.when(
                   loading: () => const SizedBox(),
                   error: (_, __) => const SizedBox(),
@@ -50,7 +50,6 @@ class ParentHomeScreen extends ConsumerWidget {
                     imageUrl: selectedStudent?.profileImage,
                     showSearch: true,
                     showVerifiedIcon: selectedStudent?.isVerified ?? false,
-                    // ✅ بيمرر الـ students للـ dropdown
                     students: data.students
                         .map((s) => Student(
                               id: s.id,
@@ -58,7 +57,6 @@ class ParentHomeScreen extends ConsumerWidget {
                               avatarUrl: s.profileImage,
                             ))
                         .toList(),
-
                     selectedStudentIndex: selectedIndex,
                     onStudentSelected: (i) => ref
                         .read(selectedStudentIndexProvider.notifier)
@@ -66,9 +64,8 @@ class ParentHomeScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h), // ✅
 
-                /// 2️⃣ Dots + Swipeable Student Info Card
                 homeAsync.when(
                   loading: () => const CircularProgressIndicator(),
                   error: (_, __) => const SizedBox(),
@@ -81,9 +78,8 @@ class ParentHomeScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h), // ✅
 
-                /// 4️⃣ Quick Actions
                 notificationAsync.when(
                   loading: () => const SizedBox(),
                   error: (_, __) => const SizedBox(),
@@ -103,9 +99,8 @@ class ParentHomeScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h), // ✅
 
-                /// 5️⃣ Recent Activities
                 const ParentRecentActivitiesSection(),
               ],
             ),
@@ -119,27 +114,27 @@ class ParentHomeScreen extends ConsumerWidget {
         QuickActionItem(
           title: "Tasks",
           route: '/parent-home/tasks',
-          iconPath: '',
+          iconPath: 'assets/icons/tasks.svg',
         ),
         QuickActionItem(
           title: "Evaluation",
           route: '/parent-home/evaluation',
-          iconPath: '',
+          iconPath: 'assets/icons/star.svg',
         ),
         QuickActionItem(
           title: "Schedule",
           route: '/parent-home/schedule',
-          iconPath: '',
+          iconPath: 'assets/icons/schedule.svg',
         ),
         QuickActionItem(
           title: "Contact us",
           route: '/parent-home/contact',
-          iconPath: '',
+          iconPath: 'assets/icons/contact.svg',
         ),
         QuickActionItem(
           title: "Attendance",
           route: '/parent-home/attendance',
-          iconPath: '',
+          iconPath: 'assets/icons/attendance.svg',
         ),
         QuickActionItem(
           title: "Fox chatbot",
@@ -177,7 +172,6 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
   @override
   void didUpdateWidget(_SwipeableStudentCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // ✅ لو الـ dropdown غيّر الـ index يتحرك الـ card تلقائياً
     if (oldWidget.selectedIndex != widget.selectedIndex) {
       _pageController.animateToPage(
         widget.selectedIndex,
@@ -207,24 +201,24 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
               final isSelected = i == widget.selectedIndex;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: isSelected ? 16 : 8,
-                height: 8,
+                margin: EdgeInsets.symmetric(horizontal: 4.w), // ✅
+                width: isSelected ? 16.w : 8.w, // ✅
+                height: 8.h, // ✅
                 decoration: BoxDecoration(
                   color: isSelected
                       ? theme.colorScheme.primary
                       : Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(4.r), // ✅
                 ),
               );
             }),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h), // ✅
         ],
 
         // Swipeable Cards
         SizedBox(
-          height: 160,
+          height: 160.h, // ✅ الأهم
           child: PageView.builder(
             controller: _pageController,
             itemCount: widget.students.length,
@@ -232,11 +226,11 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
             itemBuilder: (context, i) {
               final student = widget.students[i];
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                padding: const EdgeInsets.all(16),
+                margin: EdgeInsets.symmetric(horizontal: 4.w), // ✅
+                padding: EdgeInsets.all(16.w), // ✅
                 decoration: BoxDecoration(
                   color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r), // ✅
                   border: Border.all(
                     color: theme.colorScheme.outline.withValues(alpha: 0.3),
                   ),
@@ -251,7 +245,7 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h), // ✅
                     Text(
                       "Name: ${student.name}",
                       style: theme.textTheme.bodyLarge
@@ -261,7 +255,7 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                         style: theme.textTheme.bodyMedium),
                     Text("Class: ${student.classNumber}",
                         style: theme.textTheme.bodyMedium),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h), // ✅
                     GestureDetector(
                       onTap: () => context.push(
                         '/parent-home/student/${student.id}',
@@ -273,13 +267,14 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                             Text(
                               "more",
                               style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                  fontSize: 12),
+                                color: theme.colorScheme.primary,
+                                fontSize: 12.sp, // ✅
+                              ),
                             ),
-                            const SizedBox(width: 2),
+                            SizedBox(width: 2.w), // ✅
                             Icon(
                               Icons.arrow_forward,
-                              size: 14,
+                              size: 14.sp, // ✅
                               color: theme.colorScheme.primary,
                             ),
                           ],

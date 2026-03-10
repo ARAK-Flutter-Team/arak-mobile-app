@@ -41,6 +41,6 @@ class ProfileImageNotifier extends StateNotifier<void> {
 }
 
 final profileImageProvider =
-StateNotifierProvider<ProfileImageNotifier, void>((ref) {
+    StateNotifierProvider<ProfileImageNotifier, void>((ref) {
   return ProfileImageNotifier(ref);
 });
