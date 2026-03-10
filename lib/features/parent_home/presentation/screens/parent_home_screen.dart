@@ -49,6 +49,7 @@ class ParentHomeScreen extends ConsumerWidget {
                     subtitle: selectedStudent?.parentUsername,
                     imageUrl: selectedStudent?.profileImage,
                     showSearch: true,
+                    searchRoute: "/search",
                     showVerifiedIcon: selectedStudent?.isVerified ?? false,
                     students: data.students
                         .map((s) => Student(
