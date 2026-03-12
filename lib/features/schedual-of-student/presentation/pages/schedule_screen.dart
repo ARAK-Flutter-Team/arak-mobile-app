@@ -189,7 +189,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../providers/schedule_provider.dart';
 import '../../domain/entities/schedule_item.dart';
-import '../../domain/entities/day_schedule.dart';
 
 class ScheduleScreen extends ConsumerWidget {
   const ScheduleScreen({super.key});
@@ -206,7 +205,7 @@ class ScheduleScreen extends ConsumerWidget {
 
       appBar: const AppMainAppBar(
         title: "Schedule",
-        centerTitle: true,
+        centerTitle: false,
       ),
 
       body: SafeArea(

@@ -399,7 +399,7 @@ class AttendancePage extends ConsumerWidget {
 
       appBar: const AppMainAppBar(
         title: "Attendance Details",
-        centerTitle: true,
+        centerTitle: false,
       ),
 
       body: attendanceAsync.when(
