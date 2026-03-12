@@ -280,7 +280,7 @@ class DetailsPage extends ConsumerWidget {
 
           appBar: AppMainAppBar(
             title: student.name,
-            centerTitle: true,
+            centerTitle: false,
           ),
 
           body: SingleChildScrollView(

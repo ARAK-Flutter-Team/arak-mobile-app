@@ -367,7 +367,7 @@ class StudentEvaluationPage extends ConsumerWidget {
 
       appBar: const AppMainAppBar(
         title: "Evaluation",
-        centerTitle: true,
+        centerTitle: false,
       ),
 
       body: studentAsync.when(
