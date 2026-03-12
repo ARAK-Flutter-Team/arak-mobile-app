@@ -39,17 +39,14 @@ import '../../domain/params/login_params.dart';
 import 'auth_remote_data_source.dart';
 
 class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
-
   @override
   Future<UserModel> login(LoginParams params) async {
-
     await Future.delayed(const Duration(seconds: 1));
 
     // Admin
     if (params.email == "admin@test.com" &&
         params.password == "123456" &&
         params.role == "Admin") {
-
       return UserModel(
         id: 1,
         name: "Admin User",
@@ -64,7 +61,6 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
     if (params.email == "teacher@test.com" &&
         params.password == "123456" &&
         params.role == "Teacher") {
-
       return UserModel(
         id: 2,
         name: "Ahmed Abdullah",
@@ -79,10 +75,9 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
     if (params.email == "parent@test.com" &&
         params.password == "123456" &&
         params.role == "Parent") {
-
       return UserModel(
         id: 3,
-        name: "Noha Mahmoud",
+        name: "shenouda romany",
         email: params.email,
         role: UserRole.parent,
         avatarUrl: "https://i.pravatar.cc/150?img=5",
@@ -95,7 +90,6 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> getCurrentUser() async {
-
     await Future.delayed(const Duration(seconds: 1));
 
     return UserModel(

@@ -96,7 +96,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/parent-home/contact',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const ContactPage(),
           ),
           GoRoute(
             path: '/parent-home/attendance',

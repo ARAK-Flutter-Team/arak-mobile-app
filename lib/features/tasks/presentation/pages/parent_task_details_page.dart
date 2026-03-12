@@ -1,5 +1,5 @@
+import 'package:arak_app/shared/widgets/app_main_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../domain/entities/task.dart';
 
 class ParentTaskDetailsPage extends StatelessWidget {
@@ -12,53 +12,25 @@ class ParentTaskDetailsPage extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
 
-    // ألوان بتتغير حسب الـ mode
     final cardBg =
         isDark ? colorScheme.surfaceContainerHigh : const Color(0xFFE8F3FF);
-
     final noteBg =
         isDark ? colorScheme.surfaceContainerHigh : const Color(0xFFFFF8F0);
-
     final noteBorder = isDark ? colorScheme.outline : const Color(0xFFFFCC80);
-
     final noteIconColor = isDark ? Colors.orangeAccent : Colors.orange;
 
     return Scaffold(
+      appBar: AppMainAppBar(
+        title: 'Task Details',
+        showBackButton: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Header
-              Row(
-                children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () => context.pop(),
-                    icon: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: colorScheme.outline),
-                      ),
-                      child: const Icon(Icons.arrow_back_ios_new, size: 16),
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'Task Details',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Spacer(),
-                  const SizedBox(width: 40),
-                ],
-              ),
-
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
 
               // ── Icon
               Center(
@@ -106,10 +78,8 @@ class ParentTaskDetailsPage extends StatelessWidget {
               // ── Status
               Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 10,
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                   decoration: BoxDecoration(
                     color: switch (task.status) {
                       TaskStatus.completed => const Color(0xFF4CAF50),

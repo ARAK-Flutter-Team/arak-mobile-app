@@ -10,6 +10,7 @@ import '../../../../shared/widgets/user_header_card.dart';
 import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
 import 'widgets/parent_recent_activities_section.dart';
 import '../providers/parent_home_provider.dart';
+import 'package:arak_app/shared/providers/current_user_provider.dart';
 
 class ParentHomeScreen extends ConsumerWidget {
   const ParentHomeScreen({super.key});
@@ -26,8 +27,7 @@ class ParentHomeScreen extends ConsumerWidget {
           ? Colors.black
           : Colors.white,
       appBar: AppMainAppBar(
-        title: homeAsync.whenData((d) => "Welcome ${d.parentName}!").value ??
-            "Welcome!",
+        title: "Welcome ${ref.watch(currentUserProvider)?.name ?? ''}!",
         showBackButton: false,
       ),
       body: SafeArea(

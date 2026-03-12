@@ -1,3 +1,4 @@
+import 'package:arak_app/shared/widgets/app_main_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,44 +34,17 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      appBar: AppMainAppBar(
+        title: 'Tasks',
+        showBackButton: true,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Header
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () => context.pop(),
-                    icon: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: colorScheme.outline),
-                      ),
-                      child: const Icon(Icons.arrow_back_ios_new, size: 16),
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'Tasks',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Spacer(),
-                  const SizedBox(width: 40),
-                ],
-              ),
-            ),
-
             // ── Intro
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

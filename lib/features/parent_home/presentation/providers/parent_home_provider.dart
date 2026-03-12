@@ -50,3 +50,9 @@ final parentRecentActivitiesProvider =
     (activities) => activities,
   );
 });
+
+// في نهاية الملف بعد باقي الـ providers
+final parentNameProvider = Provider<String>((ref) {
+  final homeAsync = ref.watch(parentHomeProvider);
+  return homeAsync.whenData((d) => d.parentName).value ?? '';
+});

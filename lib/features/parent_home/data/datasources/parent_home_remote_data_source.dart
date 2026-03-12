@@ -52,7 +52,7 @@ class ParentHomeRemoteDataSourceImpl implements ParentHomeRemoteDataSource {
         id: '1',
         title: 'Ahmed submitted drawing shapes task',
         iconPath: 'assets/icons/tasks.svg',
-        keepOriginalIconColor: true,
+        keepOriginalIconColor: false,
         route: null,
       ),
       ActivityModel(

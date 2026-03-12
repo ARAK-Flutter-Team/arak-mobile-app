@@ -3,7 +3,7 @@ import 'package:arak_app/shared/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'app_router.dart'; // بيفتح ملف الراوتر اللي عندك
+import 'app_router.dart';
 import 'core/di/injection_container.dart';
 
 void main() {

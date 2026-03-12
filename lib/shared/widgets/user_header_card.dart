@@ -52,7 +52,7 @@ class UserHeaderCard extends ConsumerWidget {
     }
 
     final hasMultipleStudents = students != null && students!.length > 1;
-    final screenWidth = MediaQuery.of(context).size.width; // ✅ هنا
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       padding: EdgeInsets.all(12.w),
@@ -74,6 +74,10 @@ class UserHeaderCard extends ConsumerWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              // ✅ التغيير هنا
+              mainAxisAlignment: subtitle != null && subtitle!.isNotEmpty
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -96,14 +100,16 @@ class UserHeaderCard extends ConsumerWidget {
                       ),
                   ],
                 ),
-                SizedBox(height: 4.h),
-                if (subtitle != null)
+                // ✅ التغيير هنا
+                if (subtitle != null && subtitle!.isNotEmpty) ...[
+                  SizedBox(height: 4.h),
                   Text(
                     subtitle!,
                     style: theme.textTheme.bodySmall?.copyWith(
                       fontSize: 14.sp,
                     ),
                   ),
+                ],
               ],
             ),
           ),
@@ -130,12 +136,11 @@ class UserHeaderCard extends ConsumerWidget {
               ),
             ),
 
-          // ✅ Dropdown Button
+          // ── Dropdown Button
           if (hasMultipleStudents) ...[
             SizedBox(width: 8.w),
             GestureDetector(
-              onTap: () =>
-                  _showStudentsDropdown(context, theme, screenWidth), // ✅
+              onTap: () => _showStudentsDropdown(context, theme, screenWidth),
               child: Container(
                 padding: EdgeInsets.all(4.w),
                 decoration: BoxDecoration(
@@ -157,7 +162,6 @@ class UserHeaderCard extends ConsumerWidget {
 
   void _showStudentsDropdown(
       BuildContext context, ThemeData theme, double screenWidth) {
-    // ✅
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final offset = renderBox.localToGlobal(Offset.zero);
     final size = renderBox.size;
