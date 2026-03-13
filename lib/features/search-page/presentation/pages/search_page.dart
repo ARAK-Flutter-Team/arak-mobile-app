@@ -65,7 +65,6 @@ class SearchPage extends ConsumerWidget {
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../providers/student_provider.dart';
 import '../widgets/student_card.dart';
@@ -86,9 +85,9 @@ class SearchPage extends ConsumerWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(
+            icon:  Icon(
               Icons.refresh,
-              size: 29,
+              size: 20.sp,
             ),
             onPressed: () =>
                 ref.read(studentListProvider.notifier).refresh(),

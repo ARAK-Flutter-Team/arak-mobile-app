@@ -117,7 +117,12 @@ class UserHeaderCard extends ConsumerWidget {
           // ── Search Button
           if (showSearch)
             GestureDetector(
-              onTap: () => context.push(searchRoute!),
+             // onTap: () => context.push(searchRoute!),
+              onTap: () {
+                if (searchRoute != null) {
+                  context.push(searchRoute!);
+                }
+              },
               child: Container(
                 padding: EdgeInsets.all(4.w),
                 decoration: BoxDecoration(

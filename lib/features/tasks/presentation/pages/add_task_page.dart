@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -184,6 +184,206 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                     : const Text("Assign Task"),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}*/
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../shared/widgets/app_main_appbar.dart';
+import '../../../../shared/widgets/app_snackbar.dart';
+import '../providers/add_task_notifier.dart';
+import '../providers/teacher_classes_provider.dart';
+import '../providers/teacher_tasks_notifier.dart';
+import '../widgets/deadline_picker.dart';
+import '../widgets/subject_dropdown.dart';
+import '../widgets/task_text_field.dart';
+import '../../../../shared/widgets/app_dropdown.dart';
+
+class AddTaskPage extends ConsumerStatefulWidget {
+  final String teacherId;
+  const AddTaskPage({Key? key, required this.teacherId}) : super(key: key);
+
+  @override
+  ConsumerState<AddTaskPage> createState() => _AddTaskPageState();
+}
+
+class _AddTaskPageState extends ConsumerState<AddTaskPage> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _assignTask() async {
+    final notifier = ref.read(addTaskNotifierProvider.notifier);
+
+    final isValid = notifier.validate(
+      title: _titleController.text.trim(),
+      description: _descController.text.trim(),
+    );
+
+    if (!isValid) return;
+
+    await notifier.submitTask(
+      teacherId: widget.teacherId,
+      title: _titleController.text.trim(),
+      description: _descController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    AppSnackBar.show(
+      context,
+      message: "Task added successfully",
+      type: AppSnackBarType.success,
+    );
+
+    // هنا بنعمل ريفريش للتاسكات
+    ref.read(teacherTasksNotifierProvider.notifier)
+        .loadSavedTasks();
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (mounted) context.pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(addTaskNotifierProvider);
+    final classesAsync = ref.watch(teacherClassesProvider(widget.teacherId));
+
+    return Scaffold(
+      appBar: AppMainAppBar(
+        title: "Add New Task",
+        showBackButton: true,
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: SvgPicture.asset(
+              'assets/icons/file-search-alt.svg',
+              width: 25.w,
+              height: 25.h,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).iconTheme.color ??
+                    Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+        ],
+      ),
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 10),
+                const Text("Assign a new activity or homework to your students."),
+                const SizedBox(height: 24),
+
+                // Class Dropdown
+                classesAsync.when(
+                  loading: () => const CircularProgressIndicator(),
+                  error: (e, _) => const Text("Error loading classes"),
+                  data: (classes) {
+                    if (classes.isEmpty) return const Text("No classes available");
+
+                    if (state.selectedClassId == null) {
+                      Future.microtask(() =>
+                          ref.read(addTaskNotifierProvider.notifier).setClass(classes.first));
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Select Class"),
+                        const SizedBox(height: 8),
+                        AppDropdown(
+                          selectedClass: state.selectedClassId ?? classes.first,
+                          classes: classes,
+                          onChanged:
+                          ref.read(addTaskNotifierProvider.notifier).setClass,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                TaskTextField(
+                  title: "Task Title",
+                  controller: _titleController,
+                  hint: "Enter task title",
+                  errorText: state.titleError,
+                  onChanged: (_) =>
+                      ref.read(addTaskNotifierProvider.notifier).clearTitleError(),
+                ),
+                const SizedBox(height: 20),
+
+                TaskTextField(
+                  title: "Description",
+                  controller: _descController,
+                  hint: "Write task description",
+                  maxLines: 3,
+                  errorText: state.descriptionError,
+                  onChanged: (_) =>
+                      ref.read(addTaskNotifierProvider.notifier).clearDescriptionError(),
+                ),
+                const SizedBox(height: 30),
+
+                SubjectDropdown(
+                  selectedSubject: state.selectedSubject,
+                  subjects: const ["Math", "Science", "English"],
+                  onChanged: ref.read(addTaskNotifierProvider.notifier).setSubject,
+                  errorText: state.subjectError,
+                ),
+                const SizedBox(height: 20),
+
+                DeadlinePicker(
+                  selectedDate: state.deadline,
+                  onDateSelected:
+                  ref.read(addTaskNotifierProvider.notifier).setDeadline,
+                ),
+                const SizedBox(height: 120),
+              ],
+            ),
+          ),
+
+          Positioned(
+            bottom: 16,
+            left: 20,
+            right: 20,
+            child: SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: state.isLoading ? null : _assignTask,
+                child: state.isLoading
+                    ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+                    : const Text("Assign Task"),
+              ),
+            )
           ),
         ],
       ),
