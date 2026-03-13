@@ -169,6 +169,7 @@ class ContactPage extends ConsumerWidget {
 
   Future<void> _launchUrl(String url, BuildContext context) async {
     final Uri uri = Uri.parse(url);
+
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
@@ -182,12 +183,14 @@ class ContactPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final theme = Theme.of(context);
 
     final contactMethodsAsync = ref.watch(contactMethodsProvider);
     final socialLinksAsync = ref.watch(socialLinksProvider);
 
     return Scaffold(
+
       backgroundColor: theme.scaffoldBackgroundColor,
 
       appBar: const AppMainAppBar(
@@ -197,18 +200,23 @@ class ContactPage extends ConsumerWidget {
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0.w),
+          padding: EdgeInsets.all(16.w),
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
 
-              /// Contact Methods
+              /// CONTACT METHODS
               contactMethodsAsync.when(
+
                 data: (methods) {
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
+
                     itemCount: methods.length,
+
                     itemBuilder: (context, index) {
                       return ContactCard(
                         method: methods[index] as ContactMethodModel,
@@ -216,47 +224,58 @@ class ContactPage extends ConsumerWidget {
                     },
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(child: Text("Error: $err")),
+
+                loading: () =>
+                const Center(child: CircularProgressIndicator()),
+
+                error: (err, stack) =>
+                    Center(child: Text("Error: $err")),
               ),
 
               SizedBox(height: 20.h),
 
-              /// Title
+              /// TITLE
               Text(
                 "Write your message below:",
-                style: TextStyle(
-                  fontSize: 16.sp,
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: theme.textTheme.bodyLarge?.color,
                 ),
               ),
 
               SizedBox(height: 10.h),
 
-              /// Message Field
+              /// MESSAGE FIELD
               TextField(
                 maxLines: 5,
-                style: TextStyle(
-                  color: theme.textTheme.bodyLarge?.color,
-                ),
+
+                style: theme.textTheme.bodyMedium,
+
                 decoration: InputDecoration(
+
                   hintText: "Type your message here...",
-                  hintStyle: TextStyle(
-                    color: theme.textTheme.bodyMedium?.color,
+
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.hintColor,
                   ),
+
                   filled: true,
+
                   fillColor: theme.cardColor,
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    borderSide: BorderSide(color: theme.dividerColor),
                   ),
+
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    borderSide: BorderSide(color: theme.dividerColor),
+                    borderSide: BorderSide(
+                      color: theme.dividerColor,
+                    ),
                   ),
+
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
+
                     borderSide: BorderSide(
                       color: theme.colorScheme.primary,
                       width: 1.5,
@@ -267,24 +286,25 @@ class ContactPage extends ConsumerWidget {
 
               SizedBox(height: 30.h),
 
-              /// Social Media
+              /// SOCIAL MEDIA
               Center(
                 child: Column(
                   children: [
+
                     Text(
-                      "our social media",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: theme.textTheme.bodyMedium?.color,
-                      ),
+                      "Our Social Media",
+                      style: theme.textTheme.bodyMedium,
                     ),
 
                     SizedBox(height: 15.h),
 
                     socialLinksAsync.when(
+
                       data: (links) {
+
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+
                           children: links.map((link) {
 
                             final socialModel = link as SocialLinkModel;
@@ -293,21 +313,31 @@ class ContactPage extends ConsumerWidget {
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
 
                               child: InkWell(
-                                onTap: () => _launchUrl(link.url, context),
+
+                                onTap: () =>
+                                    _launchUrl(link.url, context),
 
                                 child: Container(
+
                                   padding: EdgeInsets.all(12.w),
 
                                   decoration: BoxDecoration(
+
                                     color: theme.cardColor,
+
                                     shape: BoxShape.circle,
+
                                     boxShadow: [
+
                                       BoxShadow(
-                                        color: theme.brightness == Brightness.dark
-                                            ? Colors.black.withAlpha(120)
-                                            : Colors.grey.withAlpha(50),
+
+                                        color: theme.brightness ==
+                                            Brightness.dark
+                                            ? Colors.black.withAlpha(150)
+                                            : Colors.grey.withAlpha(60),
+
                                         spreadRadius: 2,
-                                        blurRadius: 5,
+                                        blurRadius: 6,
                                       ),
                                     ],
                                   ),
@@ -324,7 +354,8 @@ class ContactPage extends ConsumerWidget {
                         );
                       },
 
-                      loading: () => const CircularProgressIndicator(),
+                      loading: () =>
+                      const CircularProgressIndicator(),
 
                       error: (err, stack) =>
                       const Text("Error loading links"),
