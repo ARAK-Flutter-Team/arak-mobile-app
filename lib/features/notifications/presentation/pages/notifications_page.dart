@@ -77,6 +77,18 @@ class _NotificationsPageState
         ),
       ),
 
+      ///للتجربة
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref
+              .read(notificationsControllerProvider.notifier)
+              .addFakeNotification();
+        },
+
+        ////
+        child: const Icon(Icons.add),
+      ),
+
       body: notifications.isEmpty
           ? const Center(
         child: Text("No Notifications"),
@@ -178,10 +190,18 @@ class _NotificationsPageState
         ),
 
         ...notifications.map(
-              (n) => NotificationTile(
-            notification: n,
+              (n) => AnimatedContainer(
+
+            duration: const Duration(milliseconds: 300),
+
+            curve: Curves.easeInOut,
+
+            child: NotificationTile(
+              notification: n,
+            ),
           ),
         ),
+
 
         SizedBox(height: 12.h),
       ],
