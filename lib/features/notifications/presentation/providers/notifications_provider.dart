@@ -84,6 +84,31 @@ class NotificationsController
 
     await repo.saveNotifications([]);
   }
+///لتجربة فقط
+  void addFakeNotification() async {
+
+    final fake = AppNotification(
+
+      id: DateTime.now().millisecondsSinceEpoch,
+
+
+      title: "New Message",
+
+      body: "Teacher sent you a new task",
+
+      type: NotificationType.message,
+
+      isRead: false,
+
+      createdAt: DateTime.now(),
+    );
+
+    state = [fake, ...state];
+
+    final repo = NotificationsRepositoryImpl();
+
+    await repo.saveNotifications(state);
+  }
 
 }
 
