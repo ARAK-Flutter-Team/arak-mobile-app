@@ -85,7 +85,7 @@ class ParentHomeScreen extends ConsumerWidget {
                   loading: () => const SizedBox(),
                   error: (_, __) => const SizedBox(),
                   data: (state) => QuickActionsGrid(
-                    items: _buildQuickActions(),
+                    items: _buildQuickActions(selectedStudent?.id ?? ""),
                     hasNewTasks: state.hasNewTasks,
                     hasNewMessages: state.hasNewMessages,
                     onTasksOpened: () async {
@@ -111,11 +111,12 @@ class ParentHomeScreen extends ConsumerWidget {
     );
   }
 
-  List<QuickActionItem> _buildQuickActions() => [
+  List<QuickActionItem> _buildQuickActions(String studentId) => [
         QuickActionItem(
           title: "Tasks",
           route: '/parent-home/tasks',
           iconPath: 'assets/icons/tasks.svg',
+          extra: studentId,
         ),
         QuickActionItem(
           title: "Evaluation",
@@ -139,8 +140,8 @@ class ParentHomeScreen extends ConsumerWidget {
         ),
         QuickActionItem(
           title: "Fox chatbot",
-          iconPath: 'assets/icons/chatbot.svg',
           route: '/parent-home/chatbot',
+          iconPath: 'assets/icons/chatbot.svg',
         ),
       ];
 }

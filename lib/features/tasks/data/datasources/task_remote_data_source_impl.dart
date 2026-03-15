@@ -192,7 +192,8 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
           description: task.description,
           subject: task.subject,
           dueDate: task.dueDate,
-          status: status == 'completed' ? TaskStatus.completed : TaskStatus.pending,
+          status:
+              status == 'completed' ? TaskStatus.completed : TaskStatus.pending,
           imageUrl: task.imageUrl,
           assignedTo: task.assignedTo,
         );
@@ -205,6 +206,8 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   /// ==============================
   @override
   Future<List<Task>> getParentTasks({required String studentId}) async {
-    return [];
+    await Future.delayed(const Duration(milliseconds: 400));
+    final allTasks = _tasksByClass.values.expand((list) => list).toList();
+    return allTasks.where((task) => task.assignedTo == studentId).toList();
   }
 }

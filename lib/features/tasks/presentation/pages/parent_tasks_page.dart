@@ -20,6 +20,8 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
   @override
   void initState() {
     super.initState();
+
+    print('🔥 studentId = ${widget.studentId}');
     Future.microtask(
       () => ref
           .read(parentTasksNotifierProvider.notifier)

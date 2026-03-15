@@ -175,14 +175,11 @@ class QuickActionsGrid extends ConsumerWidget {
           showDot: isTasks && hasNewTasks,
           showNewLabel: isMessages && hasNewMessages,
           onTap: () async {
-
             /// ===== TASKS =====
             if (isTasks) {
               await context.push('/teacher/tasks');
 
-              await ref
-                  .read(notificationProvider.notifier)
-                  .markTasksAsSeen();
+              await ref.read(notificationProvider.notifier).markTasksAsSeen();
             }
 
             /// ===== SCHEDULE =====
@@ -210,7 +207,6 @@ class QuickActionsGrid extends ConsumerWidget {
 
             /// ===== MESSAGES =====
             else if (isMessages) {
-
               /// إزالة NEW عند فتح الرسائل
               await ref
                   .read(notificationProvider.notifier)
@@ -247,7 +243,7 @@ class QuickActionsGrid extends ConsumerWidget {
 
             /// ===== OTHER ROUTES =====
             else if (item.route != null) {
-              context.push(item.route!);
+              context.push(item.route!, extra: item.extra);
             }
           },
         );

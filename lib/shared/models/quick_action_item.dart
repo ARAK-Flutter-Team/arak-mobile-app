@@ -5,12 +5,14 @@ class QuickActionItem extends Equatable {
   final String iconPath;
   final String? route;
   final bool keepOriginalIconColor;
+  final Object? extra;
 
   const QuickActionItem({
     required this.title,
     required this.iconPath,
     this.route,
     this.keepOriginalIconColor = false,
+    this.extra,
   });
 
   @override
