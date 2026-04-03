@@ -85,7 +85,7 @@ class SettingsPage extends ConsumerWidget {
             ),
 
             /// Attendance Alerts
-            SettingsSwitchTile(
+           /* SettingsSwitchTile(
               title: "Attendance Alerts",
               value: state.attendanceAlert,
               onChanged: (value) {
@@ -99,8 +99,23 @@ class SettingsPage extends ConsumerWidget {
                   type: AppSnackBarType.info,
                 );
               },
-            ),
+            ),*/
+            if (user.role == UserRole.parent)
+              SettingsSwitchTile(
+                title: "Attendance Alerts",
+                value: state.attendanceAlert,
+                onChanged: (value) {
+                  controller.toggleAttendanceAlert(value);
 
+                  AppSnackBar.show(
+                    context,
+                    message: value
+                        ? "Attendance alerts enabled"
+                        : "Attendance alerts disabled",
+                    type: AppSnackBarType.info,
+                  );
+                },
+              ),
             /// Dark Mode
             SettingsSwitchTile(
               title: "Dark Mode",
