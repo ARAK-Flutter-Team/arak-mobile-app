@@ -122,9 +122,9 @@ class TaskItemCard extends StatelessWidget {
 
     /// أيقونات PNG لكل مادة
     final subjectIcons = {
-      "Math": 'assets/icons/tools.png',
-      "Science": 'assets/icons/chemistry.png',
-      "English": 'assets/icons/english.png',
+      "Math": 'assets/icons/calculator_14116967.png',
+      "Science": 'assets/icons/microscope.png',
+      "English": 'assets/icons/alphabet (1).png',
     };
 
     return Card(

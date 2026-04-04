@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "welcome": "Welcome {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "teacherPerformance": "Teacher Performance",
+  "tasks": "Tasks",
+  "messages": "Messages",
+  "attendance": "Attendance",
+  "schedule": "Schedule",
+  "recentActivities": "Recent Activities",
+"noActivities": "No activities yet",
+"homeworkAdded": "You assigned a new task",
+"messageFromAdmin": "New message from admin",
+"studentPresent": "Your child was marked present"
+
+
+}
