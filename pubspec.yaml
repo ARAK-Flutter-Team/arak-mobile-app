@@ -63,6 +63,8 @@ dependencies:
   path_provider: ^2.1.5
   just_audio: ^0.10.5
   audio_waveforms: ^2.0.2
+  flutter_localizations:
+    sdk: flutter
 
 
 dev_dependencies:
@@ -90,6 +92,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:

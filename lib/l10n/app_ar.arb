@@ -1,0 +1,19 @@
+{
+  "@@locale": "ar",
+  "welcome": "مرحباً {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "teacherPerformance": "أداء المعلم",
+  "tasks": "المهام",
+  "messages": "الرسائل",
+  "attendance": "الحضور",
+  "schedule": "الجدول",
+  "recentActivities": "النشاطات الأخيرة",
+  "noActivities": "لا يوجد نشاطات حالياً",
+ "homeworkAdded": "تم تعيين واجب جديد",
+ "messageFromAdmin": "رسالة جديدة من الإدارة",
+ "studentPresent": "تم تسجيل حضور ابنك"
+}

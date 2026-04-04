@@ -221,7 +221,10 @@ class _TeacherTasksScreenState extends ConsumerState<TeacherTasksScreen> {
     final notifier = ref.read(teacherTasksNotifierProvider.notifier);
 
     return Scaffold(
-      appBar: AppMainAppBar(
+      appBar: const AppMainAppBar(
+        title: "Tasks",
+      ),
+      /*appBar: AppMainAppBar(
         title: "Tasks",
         showBackButton: true,
         centerTitle: true,
@@ -240,7 +243,7 @@ class _TeacherTasksScreenState extends ConsumerState<TeacherTasksScreen> {
             ),
           ),
         ],
-      ),
+      ),*/
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),

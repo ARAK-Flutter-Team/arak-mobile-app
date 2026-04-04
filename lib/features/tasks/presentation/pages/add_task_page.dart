@@ -263,7 +263,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
     final classesAsync = ref.watch(teacherClassesProvider(widget.teacherId));
 
     return Scaffold(
-      appBar: AppMainAppBar(
+      /*appBar: AppMainAppBar(
         title: "Add New Task",
         showBackButton: true,
         centerTitle: true,
@@ -282,6 +282,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             ),
           ),
         ],
+      ),*/
+      appBar: const AppMainAppBar(
+        title: "Add New Task",
       ),
       resizeToAvoidBottomInset: false,
       body: Stack(

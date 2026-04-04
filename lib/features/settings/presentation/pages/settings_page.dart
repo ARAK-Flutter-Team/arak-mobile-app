@@ -10,6 +10,7 @@ import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/app_snackbar.dart';
 import '../../../../shared/widgets/user_header_card.dart';
 import '../providers/settings_provider.dart';
+import '../widgets/language_tile.dart';
 import '../widgets/settings_switch_tile.dart';
 import '../widgets/settings_tile.dart';
 
@@ -132,6 +133,8 @@ class SettingsPage extends ConsumerWidget {
                 );
               },
             ),
+            ///Choose Language
+            const SettingsLanguageTile(),
           ],
         ),
       ),

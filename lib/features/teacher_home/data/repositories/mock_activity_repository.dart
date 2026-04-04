@@ -11,13 +11,13 @@ class MockActivityRepository implements ActivityRepository {
         ActivityModel(
           id: "1",
           iconPath: 'assets/icons/tasks.svg',
-          title: "You assigned a new task",
+          title: "homeworkAdded",
           route: "/teacher/tasks",
         ),
         ActivityModel(
           id: "2",
           iconPath: 'assets/icons/messages.svg',
-          title: "New message from admin",
+          title: "messageFromAdmin",
           route: "/teacher/messages",
         ),
       ];
