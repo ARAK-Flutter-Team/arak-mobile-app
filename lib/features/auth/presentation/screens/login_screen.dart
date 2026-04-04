@@ -62,7 +62,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(authProvider);
     final notifier = ref.read(authProvider.notifier);
 
-    return Scaffold(
+    return Directionality(
+        textDirection: TextDirection.ltr,
+        child: Localizations.override(
+          context: context,
+          locale: const Locale('en'), 
+          child: Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -181,6 +186,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
-    );
+    ),
+    ));
   }
 }
