@@ -66,7 +66,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         textDirection: TextDirection.ltr,
         child: Localizations.override(
           context: context,
-          locale: const Locale('en'), 
+          locale: const Locale('en'),
           child: Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

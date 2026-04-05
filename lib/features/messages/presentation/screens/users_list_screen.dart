@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../domain/entities/chat_user.dart';
 import '../widgets/user_tile.dart';
@@ -17,8 +18,8 @@ class UsersListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppMainAppBar(
-        title: "Messages",
+      appBar:  AppMainAppBar(
+        title: AppLocalizations.of(context)!.messages,
         showBackButton: true,
       ),
 

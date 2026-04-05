@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/app_localizations.dart';
+
 class AttendanceSaveButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -15,7 +17,7 @@ class AttendanceSaveButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: const Text("Save Attendance"),
+        child: Text(AppLocalizations.of(context)!.saveAttendance,),
       ),
     );
   }

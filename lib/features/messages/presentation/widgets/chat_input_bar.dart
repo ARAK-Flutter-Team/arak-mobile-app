@@ -386,6 +386,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../providers/chat_provider.dart';
 
@@ -625,8 +626,8 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
                     const Icon(Icons.mic, color: Colors.red),
                     const SizedBox(width: 8),
 
-                    const Text(
-                      "Recording...",
+                     Text(
+                      AppLocalizations.of(context)!.recording,
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
 
@@ -640,7 +641,7 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
                 minLines: 1,
                 maxLines: 5,
                 decoration: InputDecoration(
-                  hintText: "Type message...",
+                  hintText: AppLocalizations.of(context)!.typeMessage,
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 12),
                   enabledBorder: OutlineInputBorder(

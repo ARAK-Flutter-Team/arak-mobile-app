@@ -14,18 +14,7 @@ class AttendanceListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      /*leading: CircleAvatar(
-        radius: 22,
-        backgroundColor: Colors.grey.shade200,
-        backgroundImage: record.studentImageUrl != null &&
-            record.studentImageUrl!.isNotEmpty
-            ? NetworkImage(record.studentImageUrl!)
-            : null,
-        child: (record.studentImageUrl == null ||
-            record.studentImageUrl!.isEmpty)
-            ? const Icon(Icons.person, color: Colors.grey)
-            : null,
-      ),*/
+
       leading: CircleAvatar(
         radius: 22,
         backgroundColor: Colors.grey.shade200,

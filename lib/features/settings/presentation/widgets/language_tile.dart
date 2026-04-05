@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/providers/locale_provider.dart';
 
 class SettingsLanguageTile extends ConsumerWidget {
@@ -24,7 +25,7 @@ class SettingsLanguageTile extends ConsumerWidget {
           /// النص
           Expanded(
             child: Text(
-              "Language",
+      AppLocalizations.of(context)!.language,
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontFamily: 'Teachers',
                 fontSize: 16.sp,

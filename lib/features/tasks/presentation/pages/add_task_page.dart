@@ -195,6 +195,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/app_snackbar.dart';
 import '../providers/add_task_notifier.dart';
@@ -283,8 +284,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           ),
         ],
       ),*/
-      appBar: const AppMainAppBar(
-        title: "Add New Task",
+      appBar:  AppMainAppBar(
+        title: AppLocalizations.of(context)!.addNewTask,
       ),
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -295,15 +296,15 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 10),
-                const Text("Assign a new activity or homework to your students."),
+                Text(AppLocalizations.of(context)!.assignANewActivityOrHomeworkToYourStudents),
                 const SizedBox(height: 24),
 
                 // Class Dropdown
                 classesAsync.when(
                   loading: () => const CircularProgressIndicator(),
-                  error: (e, _) => const Text("Error loading classes"),
+                  error: (e, _) => Text(AppLocalizations.of(context)!.errorLoadingClasses),
                   data: (classes) {
-                    if (classes.isEmpty) return const Text("No classes available");
+                    if (classes.isEmpty) return  Text(AppLocalizations.of(context)!.noClassesAvailable);
 
                     if (state.selectedClassId == null) {
                       Future.microtask(() =>
@@ -313,7 +314,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Select Class"),
+                         Text(AppLocalizations.of(context)!.selectClass),
                         const SizedBox(height: 8),
                         AppDropdown(
                           selectedClass: state.selectedClassId ?? classes.first,
@@ -329,9 +330,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 const SizedBox(height: 20),
 
                 TaskTextField(
-                  title: "Task Title",
+                  title: AppLocalizations.of(context)!.taskTitle,
                   controller: _titleController,
-                  hint: "Enter task title",
+                  hint: AppLocalizations.of(context)!.enterTaskTitle,
                   errorText: state.titleError,
                   onChanged: (_) =>
                       ref.read(addTaskNotifierProvider.notifier).clearTitleError(),
@@ -339,9 +340,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 const SizedBox(height: 20),
 
                 TaskTextField(
-                  title: "Description",
+                  title: AppLocalizations.of(context)!.description,
                   controller: _descController,
-                  hint: "Write task description",
+                  hint: AppLocalizations.of(context)!.writeTaskDescription,
                   maxLines: 3,
                   errorText: state.descriptionError,
                   onChanged: (_) =>
@@ -351,7 +352,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
 
                 SubjectDropdown(
                   selectedSubject: state.selectedSubject,
-                  subjects: const ["Math", "Science", "English"],
+                  subjects:  [AppLocalizations.of(context)!.math, AppLocalizations.of(context)!.science, AppLocalizations.of(context)!.english],
                   onChanged: ref.read(addTaskNotifierProvider.notifier).setSubject,
                   errorText: state.subjectError,
                 ),
@@ -384,7 +385,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                     color: Colors.white,
                   ),
                 )
-                    : const Text("Assign Task"),
+                    :  Text(AppLocalizations.of(context)!.assignTask),
               ),
             )
           ),
