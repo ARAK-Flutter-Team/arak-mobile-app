@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class AddTaskButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -13,7 +15,7 @@ class AddTaskButton extends StatelessWidget {
       height: 48,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: const Text("Add New Task"),
+        child: Text(AppLocalizations.of(context)!.addNewTask,),
       ),
     );
   }

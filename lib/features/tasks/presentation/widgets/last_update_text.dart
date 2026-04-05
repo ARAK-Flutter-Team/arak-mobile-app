@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../providers/teacher_tasks_notifier.dart';
 
 class LastUpdateText extends ConsumerWidget {
@@ -21,7 +22,7 @@ class LastUpdateText extends ConsumerWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        'Last update: $formattedTime',
+        '${AppLocalizations.of(context)!.lastUpdate}: $formattedTime',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
           fontWeight: FontWeight.bold,
         ),

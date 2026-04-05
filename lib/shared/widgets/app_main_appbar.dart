@@ -59,7 +59,22 @@ class AppMainAppBar extends StatelessWidget
             context.go('/home'); // fallback لو مفيش صفحة ترجع لها
           }
         },
-        icon: SvgPicture.asset(
+        icon: Transform(
+          alignment: Alignment.center,
+          transform: Directionality.of(context) == TextDirection.rtl
+              ? Matrix4.rotationY(3.1416)
+              : Matrix4.identity(),
+          child: SvgPicture.asset(
+            'assets/icons/arrow.svg',
+            width: 24.w,
+            height: 24.h,
+            colorFilter: ColorFilter.mode(
+              theme.iconTheme.color ?? theme.colorScheme.onSurface,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+        /*icon: SvgPicture.asset(
           'assets/icons/arrow.svg',
           width: 24.w,
           height: 24.h,
@@ -67,7 +82,7 @@ class AppMainAppBar extends StatelessWidget
             theme.iconTheme.color ?? theme.colorScheme.onSurface,
             BlendMode.srcIn,
           ),
-        ),
+        ),*/
       )
           : null,
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -64,6 +64,75 @@ class LogoutButton extends ConsumerWidget {
           foregroundColor: colorScheme.onError,
         ),
         child: const Text("Logout"),
+      ),
+    );
+  }
+}*/
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/providers/current_user_provider.dart';
+
+class LogoutButton extends ConsumerWidget {
+  const LogoutButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final loc = AppLocalizations.of(context)!;
+
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () async {
+          final confirm = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: theme.dialogBackgroundColor,
+              title: Text(
+                loc.confirmLogout,
+                style: TextStyle(color: theme.colorScheme.onBackground),
+              ),
+              content: Text(
+                loc.logoutMessage,
+                style: TextStyle(color: theme.colorScheme.onBackground),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(
+                    loc.cancel,
+                    style: TextStyle(color: colorScheme.primary),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(
+                    loc.logout,
+                    style: TextStyle(color: colorScheme.error),
+                  ),
+                ),
+              ],
+            ),
+          );
+
+          if (confirm == true) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+
+            ref.read(currentUserProvider.notifier).state = null;
+
+            context.go('/login');
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.error,
+          foregroundColor: colorScheme.onError,
+        ),
+        child: Text(loc.logout),
       ),
     );
   }
