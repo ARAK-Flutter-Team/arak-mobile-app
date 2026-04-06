@@ -685,6 +685,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose Language'**
   String get chooseLanguage;
+
+  /// No description provided for @taskDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This task has been cancelled'**
+  String get taskDeleted;
+
+  /// No description provided for @taskAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Task added successfully'**
+  String get taskAddedSuccessfully;
 }
 
 class _AppLocalizationsDelegate

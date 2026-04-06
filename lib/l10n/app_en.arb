@@ -114,7 +114,11 @@
    "search": "Search",
    "searchHint": "Search students, tasks...",
    "noResultsFound": "No results found",
-     "chooseLanguage": "Choose Language"
+   "chooseLanguage": "Choose Language",
+   "taskDeleted": "This task has been cancelled",
+   "taskAddedSuccessfully": "Task added successfully"
+
+
 
 
 }

@@ -356,6 +356,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
                             child: Column(
                               children: [
+                                /*Center(
+                                  child: Container(
+                                    width: 90,
+                                    height: 90,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 15,
+                                          offset: Offset(0, 6),
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                        color: Color(0xFFEAF4FF),
+                                        width: 3,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: SvgPicture.asset(
+                                        "assets/icons/avatar-user-svgrepo-com.svg",
+                                        fit: BoxFit.contain,
+                                        colorFilter: const ColorFilter.mode(
+                                          Color(0xFF1B4D89), // نفس لون الـ button
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),*/
 
                                 AuthTextField(
                                   label: "Email Address",

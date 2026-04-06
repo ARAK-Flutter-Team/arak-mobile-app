@@ -114,7 +114,11 @@
    "search": "بحث",
    "searchHint": "ابحث عن الطلاب أو المهام...",
    "noResultsFound": "لا توجد نتائج",
-     "chooseLanguage": "اختر اللغة"
+   "chooseLanguage": "اختر اللغة",
+   "taskDeleted": "تم إلغاء هذا الواجب",
+   "taskAddedSuccessfully": "تم إضافة الواجب بنجاح"
+
+
 
 
 
