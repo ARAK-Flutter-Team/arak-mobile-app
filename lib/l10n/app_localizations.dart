@@ -679,6 +679,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No results found'**
   String get noResultsFound;
+
+  /// No description provided for @chooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Language'**
+  String get chooseLanguage;
 }
 
 class _AppLocalizationsDelegate

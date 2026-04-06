@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 enum AppSnackBarType { success, error, warning, info }
 
@@ -102,6 +102,92 @@ class AppSnackBar {
             ),
           ],
         ),
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+}*/
+import 'package:flutter/material.dart';
+
+enum AppSnackBarType { success, error, warning, info }
+
+class AppSnackBar {
+  static void show(
+      BuildContext context, {
+        required String message,
+        AppSnackBarType type = AppSnackBarType.info,
+      }) {
+    final theme = Theme.of(context);
+
+    Color color;
+
+    switch (type) {
+      case AppSnackBarType.success:
+        color = Colors.green;
+        break;
+      case AppSnackBarType.error:
+        color = theme.colorScheme.error;
+        break;
+      case AppSnackBarType.warning:
+        color = Colors.orange;
+        break;
+      case AppSnackBarType.info:
+        color = theme.colorScheme.primary;
+        break;
+    }
+
+    final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      elevation: 0,
+      backgroundColor: theme.colorScheme.surface,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+      ),
+
+      content: Row(
+        children: [
+
+          /// 🔥 Soft Dot بدل الأيقونة
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          /// 🔥 النص
+          Expanded(
+            child: Text(
+              message,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+
+          /// 🔥 زرار القفل
+          InkWell(
+            onTap: () =>
+                ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+            borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Icon(
+                Icons.close,
+                size: 18,
+                color: theme.iconTheme.color?.withOpacity(.6),
+              ),
+            ),
+          ),
+        ],
       ),
     );
 

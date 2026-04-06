@@ -16,7 +16,7 @@ class AccountTypeDropdown extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  /*Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       value: value,
       decoration: AppInputDecoration.build(
@@ -32,6 +32,40 @@ class AccountTypeDropdown extends StatelessWidget {
       )
           .toList(),
       onChanged: onChanged,
+    );
+  }*/
+  @override
+  Widget build(BuildContext context) {
+    return  DropdownButtonFormField<String>(
+        isExpanded: true,
+        value: value,
+        decoration: AppInputDecoration.build(
+          label: "Account Type",
+          errorText: errorText,
+        ),
+        items: items
+            .map(
+              (type) => DropdownMenuItem(
+            value: type,
+            child: Align(
+              alignment: Alignment.centerLeft, // 🔥 من الشمال
+              child: Text(
+                type,
+                textDirection: TextDirection.ltr, // 🔥 أهم سطر
+              ),
+            ),
+          ),
+        )
+            .toList(),
+        /*items: items
+            .map(
+              (type) => DropdownMenuItem(
+            value: type,
+            child: Text(type),
+          ),
+        )
+            .toList(),*/
+        onChanged: onChanged,
     );
   }
 }

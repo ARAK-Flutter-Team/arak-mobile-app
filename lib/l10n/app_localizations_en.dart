@@ -307,4 +307,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noResultsFound => 'No results found';
+
+  @override
+  String get chooseLanguage => 'Choose Language';
 }

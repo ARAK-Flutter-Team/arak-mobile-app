@@ -30,7 +30,6 @@ class SettingsTile extends StatelessWidget {
               child: Text(
                 title,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  fontFamily: 'Teachers',
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                 ),

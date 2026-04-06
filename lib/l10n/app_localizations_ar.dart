@@ -307,4 +307,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noResultsFound => 'لا توجد نتائج';
+
+  @override
+  String get chooseLanguage => 'اختر اللغة';
 }

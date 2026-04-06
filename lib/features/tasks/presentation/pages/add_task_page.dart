@@ -192,8 +192,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
 }*/
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
@@ -262,7 +260,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(addTaskNotifierProvider);
     final classesAsync = ref.watch(teacherClassesProvider(widget.teacherId));
-
+//  Fix old Arabic values (VERY IMPORTANT)
+    if (state.selectedSubject != null &&
+        !["math", "science", "english"].contains(state.selectedSubject)) {
+      Future.microtask(() {
+        ref.read(addTaskNotifierProvider.notifier).setSubject("math");
+      });
+    }
     return Scaffold(
       /*appBar: AppMainAppBar(
         title: "Add New Task",
@@ -352,7 +356,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
 
                 SubjectDropdown(
                   selectedSubject: state.selectedSubject,
-                  subjects:  [AppLocalizations.of(context)!.math, AppLocalizations.of(context)!.science, AppLocalizations.of(context)!.english],
+                  subjects: const ["math", "science", "english"],
+                 // subjects:  [AppLocalizations.of(context)!.math, AppLocalizations.of(context)!.science, AppLocalizations.of(context)!.english],
                   onChanged: ref.read(addTaskNotifierProvider.notifier).setSubject,
                   errorText: state.subjectError,
                 ),
