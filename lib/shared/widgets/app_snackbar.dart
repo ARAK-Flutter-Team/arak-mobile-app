@@ -151,7 +151,7 @@ class AppSnackBar {
       content: Row(
         children: [
 
-          /// 🔥 Soft Dot بدل الأيقونة
+          ///  Soft Dot بدل الأيقونة
           Container(
             width: 8,
             height: 8,
@@ -163,7 +163,7 @@ class AppSnackBar {
 
           const SizedBox(width: 10),
 
-          /// 🔥 النص
+          ///  النص
           Expanded(
             child: Text(
               message,
@@ -173,7 +173,7 @@ class AppSnackBar {
             ),
           ),
 
-          /// 🔥 زرار القفل
+          ///  زرار القفل
           InkWell(
             onTap: () =>
                 ScaffoldMessenger.of(context).hideCurrentSnackBar(),

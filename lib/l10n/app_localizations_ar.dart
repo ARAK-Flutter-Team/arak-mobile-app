@@ -310,4 +310,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chooseLanguage => 'اختر اللغة';
+
+  @override
+  String get taskDeleted => 'تم إلغاء هذا الواجب';
+
+  @override
+  String get taskAddedSuccessfully => 'تم إضافة الواجب بنجاح';
 }

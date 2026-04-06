@@ -310,4 +310,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chooseLanguage => 'Choose Language';
+
+  @override
+  String get taskDeleted => 'This task has been cancelled';
+
+  @override
+  String get taskAddedSuccessfully => 'Task added successfully';
 }

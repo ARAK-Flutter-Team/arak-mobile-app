@@ -51,7 +51,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
 
     AppSnackBar.show(
       context,
-      message: "Task added successfully",
+      message:AppLocalizations.of(context)!.taskAddedSuccessfully,
       type: AppSnackBarType.success,
     );
 
