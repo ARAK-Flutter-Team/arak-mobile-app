@@ -27,7 +27,6 @@ class SettingsLanguageTile extends ConsumerWidget {
             child: Text(
       AppLocalizations.of(context)!.language,
               style: theme.textTheme.bodyLarge?.copyWith(
-                fontFamily: 'Teachers',
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
               ),
@@ -71,7 +70,7 @@ class SettingsLanguageTile extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text("Choose Language"),
+          title: Text(AppLocalizations.of(context)!.chooseLanguage),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

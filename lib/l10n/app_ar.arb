@@ -113,7 +113,9 @@
    "assignTask": "تعيين مهمة",
    "search": "بحث",
    "searchHint": "ابحث عن الطلاب أو المهام...",
-   "noResultsFound": "لا توجد نتائج"
+   "noResultsFound": "لا توجد نتائج",
+     "chooseLanguage": "اختر اللغة"
+
 
 
 }
