@@ -778,7 +778,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final notifier = ref.read(authProvider.notifier);
 
     return Directionality(
-        textDirection: TextDirection.ltr, // 👈 هنا المهم
+        textDirection: TextDirection.ltr, 
         child: Scaffold(
           backgroundColor: const Color(0xFFF5F7FB),
           body: Stack(
