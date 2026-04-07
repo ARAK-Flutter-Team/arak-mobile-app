@@ -44,7 +44,7 @@ class AppMainAppBar extends StatelessWidget
         style: theme.textTheme.titleLarge?.copyWith(
           fontSize: 22.sp,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Teachers',
+          //fontFamily: 'Teachers',
         ),
       ),
 

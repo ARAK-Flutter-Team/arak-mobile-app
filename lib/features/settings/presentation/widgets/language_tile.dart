@@ -93,7 +93,7 @@ class SettingsLanguageTile extends ConsumerWidget {
       trailing:
       selected ? const Icon(Icons.check, color: Colors.green) : null,
       onTap: () {
-        ref.read(localeProvider.notifier).state = Locale(code);
+        ref.read(localeProvider.notifier).changeLocale(code);
         Navigator.pop(context);
       },
     );
