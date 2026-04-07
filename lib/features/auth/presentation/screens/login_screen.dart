@@ -777,9 +777,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(authProvider);
     final notifier = ref.read(authProvider.notifier);
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FB),
-      body: Stack(
+    return Directionality(
+        textDirection: TextDirection.ltr, // 👈 هنا المهم
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF5F7FB),
+          body: Stack(
         children: [
 
           /// 🔷 HEADER
@@ -944,6 +946,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ],
       ),
+        )
     );
   }
 }
