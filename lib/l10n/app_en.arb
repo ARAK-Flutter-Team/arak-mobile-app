@@ -116,7 +116,9 @@
    "noResultsFound": "No results found",
    "chooseLanguage": "Choose Language",
    "taskDeleted": "This task has been cancelled",
-   "taskAddedSuccessfully": "Task added successfully"
+   "taskAddedSuccessfully": "Task added successfully",
+   "chooseFromGallery": "Choose from Gallery",
+     "takePhoto": "Take Photo"
 
 
 

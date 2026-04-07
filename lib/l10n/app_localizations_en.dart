@@ -316,4 +316,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taskAddedSuccessfully => 'Task added successfully';
+
+  @override
+  String get chooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get takePhoto => 'Take Photo';
 }
