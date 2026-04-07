@@ -116,7 +116,9 @@
    "noResultsFound": "لا توجد نتائج",
    "chooseLanguage": "اختر اللغة",
    "taskDeleted": "تم إلغاء هذا الواجب",
-   "taskAddedSuccessfully": "تم إضافة الواجب بنجاح"
+   "taskAddedSuccessfully": "تم إضافة الواجب بنجاح",
+   "chooseFromGallery": "اختر من المعرض",
+     "takePhoto": "التقط صورة"
 
 
 

@@ -84,6 +84,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/providers/current_user_provider.dart';
 import '../../../../shared/providers/profile_image_provider.dart';
 
@@ -142,7 +143,7 @@ class ProfileImage extends ConsumerWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text("Choose from Gallery"),
+              title: Text(AppLocalizations.of(context)!.chooseFromGallery),
               onTap: () {
                 ref.read(profileImageProvider.notifier).pickFromGallery();
                 Navigator.pop(context);
@@ -150,7 +151,7 @@ class ProfileImage extends ConsumerWidget {
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera),
-              title: const Text("Take Photo"),
+              title:Text(AppLocalizations.of(context)!.takePhoto),
               onTap: () {
                 ref.read(profileImageProvider.notifier).pickFromCamera();
                 Navigator.pop(context);
@@ -158,7 +159,7 @@ class ProfileImage extends ConsumerWidget {
             ),
             ListTile(
               leading: const Icon(Icons.close),
-              title: const Text("Cancel"),
+              title: Text(AppLocalizations.of(context)!.cancel),
               onTap: () => Navigator.pop(context),
             ),
           ],

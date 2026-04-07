@@ -316,4 +316,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get taskAddedSuccessfully => 'تم إضافة الواجب بنجاح';
+
+  @override
+  String get chooseFromGallery => 'اختر من المعرض';
+
+  @override
+  String get takePhoto => 'التقط صورة';
 }
