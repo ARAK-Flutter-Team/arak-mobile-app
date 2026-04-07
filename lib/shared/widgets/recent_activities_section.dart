@@ -153,15 +153,13 @@ class RecentActivitiesSection extends ConsumerWidget {
                   RecentActivityItem(
                     iconPath: activity.iconPath,
 
-                    /// 👇 هنا الترجمة
+                    ///  هنا الترجمة
                     text: loc!.getString(activity.title),
 
                     keepOriginalIconColor:
                     activity.keepOriginalIconColor,
 
-                    onTap: activity.route != null
-                        ? () => context.push(activity.route!)
-                        : null,
+                    onTap: null,
                   ),
 
                   if (activity != activities.last)
