@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/message.dart';
 import '../../domain/enums/message_type.dart';
 
@@ -34,7 +35,7 @@ class MessageBubble extends StatelessWidget {
 
               ListTile(
                 leading: const Icon(Icons.delete_outline),
-                title: const Text("Delete for me"),
+                title:  Text(AppLocalizations.of(context)!.deleteForMe),
                 onTap: () {
                   Navigator.pop(context);
                   onDeleteForMe();
@@ -44,7 +45,7 @@ class MessageBubble extends StatelessWidget {
               if (isMe)
                 ListTile(
                   leading: const Icon(Icons.delete),
-                  title: const Text("Delete for everyone"),
+                  title: Text(AppLocalizations.of(context)!.deleteForEveryone),
                   onTap: () {
                     Navigator.pop(context);
                     onDeleteForEveryone();

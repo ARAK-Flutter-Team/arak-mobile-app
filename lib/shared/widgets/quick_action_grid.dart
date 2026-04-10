@@ -220,9 +220,9 @@ class QuickActionsGrid extends ConsumerWidget {
               final users = [
                 ChatUser(
                   id: "2",
-                  name: "Ahmed Ali",
+                  name: "Ahmed Mohammed",
                   role: "parent",
-                  avatarUrl: "https://i.pravatar.cc/150?img=3",
+                  avatarUrl: "https://i.pravatar.cc/150?img=12",
                   status: UserStatus.online,
                 ),
                 ChatUser(

@@ -328,4 +328,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get camera => 'الكاميرا';
+
+  @override
+  String get deleteForMe => 'حذف لدي';
+
+  @override
+  String get deleteForEveryone => 'حذف لدى الجميع';
 }

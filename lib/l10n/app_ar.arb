@@ -120,7 +120,9 @@
    "chooseFromGallery": "اختر من المعرض",
     "takePhoto": "التقط صورة",
     "file": "ملف",
-    "camera": "الكاميرا"
+    "camera": "الكاميرا",
+    "deleteForMe": "حذف لدي",
+      "deleteForEveryone": "حذف لدى الجميع"
 
 
 
