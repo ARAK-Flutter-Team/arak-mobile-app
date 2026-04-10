@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SendOrMicButton extends StatelessWidget {
@@ -30,11 +31,21 @@ class SendOrMicButton extends StatelessWidget {
 
     /// TEXT MESSAGE
     if (hasText && !isRecording) {
-      return IconButton(
+      return   IconButton(
         icon: SvgPicture.asset(
-          "assets/icons/Frame.svg",
-          width: 24,
-          height: 24,
+          "assets/icons/send-svgrepo-com.svg",
+          width: 24.w,
+          height: 24.h,
+          matchTextDirection: true,
+          colorFilter: const ColorFilter.mode(
+            Color(0xFF007AFF),
+            BlendMode.srcIn,
+          ),
+          /*colorFilter: ColorFilter.mode(
+                Theme.of(context).iconTheme.color ??
+                    Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),*/
         ),
         onPressed: onSend,
       );
@@ -67,14 +78,32 @@ class SendOrMicButton extends StatelessWidget {
           ),
 
           /// SEND RECORDING
-          IconButton(
+          /*IconButton(
             icon: SvgPicture.asset(
               "assets/icons/Frame.svg",
               width: 24,
               height: 24,
             ),
             onPressed: onSend,
-          ),
+          ),*/
+          IconButton(
+            icon: SvgPicture.asset(
+              "assets/icons/send-svgrepo-com.svg",
+              width: 24.w,
+              height: 24.h,
+              matchTextDirection: true,
+              colorFilter: const ColorFilter.mode(
+                Color(0xFF007AFF),
+                BlendMode.srcIn,
+              ),
+              /*colorFilter: ColorFilter.mode(
+                Theme.of(context).iconTheme.color ??
+                    Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),*/
+            ),
+            onPressed: onSend,
+          )
         ],
       );
     }
