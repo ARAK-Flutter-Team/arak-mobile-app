@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class PlusButton extends ConsumerWidget {
   final VoidCallback onPickImage;
   final VoidCallback onPickFile;
@@ -37,7 +39,7 @@ class PlusButton extends ConsumerWidget {
               _option(
                 context,
                 icon: Icons.camera_alt,
-                label: "Camera",
+                label: AppLocalizations.of(context)!.camera,
                 onTap: onOpenCamera,
                 // اختياري: تغيير لون النص أو الأيقونات حسب الوضع
               ),
@@ -45,7 +47,7 @@ class PlusButton extends ConsumerWidget {
               _option(
                 context,
                 icon: Icons.insert_drive_file,
-                label: "File",
+                label:AppLocalizations.of(context)!.file,
                 onTap: onPickFile,
                 // اختياري: تغيير لون النص أو الأيقونات حسب الوضع
               ),
