@@ -118,7 +118,9 @@
    "taskDeleted": "This task has been cancelled",
    "taskAddedSuccessfully": "Task added successfully",
    "chooseFromGallery": "Choose from Gallery",
-     "takePhoto": "Take Photo"
+     "takePhoto": "Take Photo",
+     "file": "File",
+       "camera": "Camera"
 
 
 

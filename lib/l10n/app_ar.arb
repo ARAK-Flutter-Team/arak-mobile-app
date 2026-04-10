@@ -118,7 +118,9 @@
    "taskDeleted": "تم إلغاء هذا الواجب",
    "taskAddedSuccessfully": "تم إضافة الواجب بنجاح",
    "chooseFromGallery": "اختر من المعرض",
-     "takePhoto": "التقط صورة"
+    "takePhoto": "التقط صورة",
+    "file": "ملف",
+    "camera": "الكاميرا"
 
 
 

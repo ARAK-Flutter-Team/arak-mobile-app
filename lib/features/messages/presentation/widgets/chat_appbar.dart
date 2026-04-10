@@ -148,7 +148,22 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             context.go('/home');
           }
         },
-        icon: SvgPicture.asset(
+        icon: Transform(
+          alignment: Alignment.center,
+          transform: Directionality.of(context) == TextDirection.rtl
+              ? Matrix4.rotationY(3.1416)
+              : Matrix4.identity(),
+          child: SvgPicture.asset(
+            'assets/icons/arrow.svg',
+            width: 24.w,
+            height: 24.h,
+            colorFilter: ColorFilter.mode(
+              theme.iconTheme.color ?? theme.colorScheme.onSurface,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+        /*icon: SvgPicture.asset(
           'assets/icons/arrow.svg',
           width: 24.w,
           height: 24.h,
@@ -156,7 +171,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             theme.iconTheme.color ?? theme.colorScheme.onSurface,
             BlendMode.srcIn,
           ),
-        ),
+        ),*/
       ),
 
       title: Row(

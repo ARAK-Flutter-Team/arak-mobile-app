@@ -322,4 +322,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get takePhoto => 'التقط صورة';
+
+  @override
+  String get file => 'ملف';
+
+  @override
+  String get camera => 'الكاميرا';
 }
