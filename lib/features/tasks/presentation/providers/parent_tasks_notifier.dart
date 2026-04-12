@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/task.dart';
 import '../../domain/usecases/get_parent_tasks.dart';
-import 'teacher_tasks_notifier.dart'; // عشان نستخدم نفس الـ repository providers
+import 'teacher_tasks_notifier.dart'; // عشان نستخدم نفس الـ repositories providers
 
 // ── State
 class ParentTasksState {

@@ -118,12 +118,19 @@
    "taskDeleted": "This task has been cancelled",
    "taskAddedSuccessfully": "Task added successfully",
    "chooseFromGallery": "Choose from Gallery",
-     "takePhoto": "Take Photo",
-     "file": "File",
-       "camera": "Camera",
-        "deleteForMe": "Delete for me",
-         "deleteForEveryone": "Delete for everyone"
-
+   "takePhoto": "Take Photo",
+   "file": "File",
+   "camera": "Camera",
+   "deleteForMe": "Delete for me",
+   "deleteForEveryone": "Delete for everyone",
+   "checkStatus": "Check Status",
+   "confirmDelete": "Delete Task?",
+   "deleteTaskMessage": "This action cannot be undone.",
+   "delete": "Delete",
+   "done": "Done",
+   "pending": "Pending",
+   "save": "Save",
+   "savedSuccessfully": "Saved successfully"
 
 
 

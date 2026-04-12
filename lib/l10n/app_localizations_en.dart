@@ -334,4 +334,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteForEveryone => 'Delete for everyone';
+
+  @override
+  String get checkStatus => 'Check Status';
+
+  @override
+  String get confirmDelete => 'Delete Task?';
+
+  @override
+  String get deleteTaskMessage => 'This action cannot be undone.';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get savedSuccessfully => 'Saved successfully';
 }

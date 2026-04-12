@@ -208,7 +208,8 @@ class SettingsPage extends ConsumerWidget {
             SettingsTile(
               title: loc.privacyPolicy,
               onTap: () {
-                context.push('/privacy-policy');
+                //context.push('/privacy-policy');
+                context.push('/settings/privacy-policy');
               },
             ),
 

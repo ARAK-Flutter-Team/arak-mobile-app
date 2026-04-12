@@ -174,7 +174,7 @@ class QuickActionsGrid extends ConsumerWidget {
         final isMessages = item.route == '/chat';
 
         return ActionCard(
-          title: loc.getString(item.title), // ✅ الترجمة شغالة هنا
+          title: loc.getString(item.title),
           iconPath: item.iconPath,
           showDot: isTasks && hasNewTasks,
           showNewLabel: isMessages && hasNewMessages,
