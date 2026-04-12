@@ -23,7 +23,7 @@ class TeacherHomeScreen extends ConsumerWidget {
     final notificationAsync = ref.watch(notificationProvider);
     final user = ref.watch(currentUserProvider);
 
-    /// 👇 لو المستخدم لسه بيحمل
+    ///  لو المستخدم لسه بيحمل
     if (user == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -33,9 +33,7 @@ class TeacherHomeScreen extends ConsumerWidget {
     final quickActions = ref.watch(quickActionsProvider);
     final notificationState = notificationAsync.asData?.value;
     return Scaffold(
-     /* backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.black
-          : Colors.white,*/
+
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppMainAppBar(
         title: AppLocalizations.of(context)!.welcome(user.name),

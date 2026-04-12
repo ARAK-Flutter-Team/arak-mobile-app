@@ -5,9 +5,9 @@ import '../repositories/auth_repository.dart';
 import '../params/login_params.dart';
 
 /*class Login {
-  final AuthRepository repository;
+  final AuthRepository repositories;
 
-  Login(this.repository);
+  Login(this.repositories);
 
   Future<Either<Failure, User>> call(LoginParams params) async {
     // ======= Fake Data حاليا =======
@@ -21,7 +21,7 @@ import '../params/login_params.dart';
 
     // ======= الكود الحقيقي للباك لما يجهز =======
     /*
-    return await repository.login(params);
+    return await repositories.login(params);
     */
   }
 }*/

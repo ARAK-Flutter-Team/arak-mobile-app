@@ -733,6 +733,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete for everyone'**
   String get deleteForEveryone;
+
+  /// No description provided for @checkStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Status'**
+  String get checkStatus;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Task?'**
+  String get confirmDelete;
+
+  /// No description provided for @deleteTaskMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone.'**
+  String get deleteTaskMessage;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @savedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved successfully'**
+  String get savedSuccessfully;
 }
 
 class _AppLocalizationsDelegate

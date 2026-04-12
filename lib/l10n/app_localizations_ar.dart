@@ -334,4 +334,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deleteForEveryone => 'حذف لدى الجميع';
+
+  @override
+  String get checkStatus => 'حالة التسليم';
+
+  @override
+  String get confirmDelete => 'حذف المهمة؟';
+
+  @override
+  String get deleteTaskMessage => 'لا يمكن التراجع عن هذا الإجراء';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get done => 'تم';
+
+  @override
+  String get pending => 'لم يتم';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get savedSuccessfully => 'تم الحفظ بنجاح';
 }

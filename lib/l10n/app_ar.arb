@@ -122,9 +122,15 @@
     "file": "ملف",
     "camera": "الكاميرا",
     "deleteForMe": "حذف لدي",
-      "deleteForEveryone": "حذف لدى الجميع"
-
-
+    "deleteForEveryone": "حذف لدى الجميع",
+    "checkStatus": "حالة التسليم",
+    "confirmDelete": "حذف المهمة؟",
+    "deleteTaskMessage": "لا يمكن التراجع عن هذا الإجراء",
+    "delete": "حذف",
+    "done": "تم",
+    "pending": "لم يتم",
+    "save": "حفظ",
+    "savedSuccessfully": "تم الحفظ بنجاح"
 
 
 
