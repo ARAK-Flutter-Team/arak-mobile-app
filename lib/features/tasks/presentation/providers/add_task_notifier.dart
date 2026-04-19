@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/datasources/task_remote_data_source_impl.dart';
 import '../../data/models/task_model.dart';
 import '../../domain/entities/task.dart';
@@ -161,4 +161,147 @@ StateNotifierProvider<AddTaskNotifier, AddTaskState>(
 /// Remote DataSource Provider
 /// =============================
 final taskRemoteDataSourceProvider =
-Provider((ref) => TaskRemoteDataSourceImpl());
+Provider((ref) => TaskRemoteDataSourceImpl());*/
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/models/task_model.dart';
+import '../../domain/entities/task.dart';
+import 'teacher_tasks_notifier.dart';
+
+class AddTaskState {
+  final String? selectedClassId;
+  final String? selectedSubject;
+  final DateTime? deadline;
+  final String? titleError;
+  final String? descriptionError;
+  final String? classError;
+  final String? subjectError;
+  final bool isLoading;
+
+  const AddTaskState({
+    this.selectedClassId,
+    this.selectedSubject,
+    this.deadline,
+    this.titleError,
+    this.descriptionError,
+    this.classError,
+    this.subjectError,
+    this.isLoading = false,
+  });
+
+  AddTaskState copyWith({
+    String? selectedClassId,
+    String? selectedSubject,
+    DateTime? deadline,
+    String? titleError,
+    String? descriptionError,
+    String? classError,
+    String? subjectError,
+    bool? isLoading,
+  }) {
+    return AddTaskState(
+      selectedClassId: selectedClassId ?? this.selectedClassId,
+      selectedSubject: selectedSubject ?? this.selectedSubject,
+      deadline: deadline ?? this.deadline,
+      titleError: titleError,
+      descriptionError: descriptionError,
+      classError: classError,
+      subjectError: subjectError,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
+}
+
+class AddTaskNotifier extends StateNotifier<AddTaskState> {
+  final Ref ref;
+
+  AddTaskNotifier(this.ref) : super(const AddTaskState());
+
+  void setClass(String classId) {
+    state = state.copyWith(selectedClassId: classId, classError: null);
+  }
+
+  void setSubject(String subject) {
+    state = state.copyWith(selectedSubject: subject, subjectError: null);
+  }
+
+  void setDeadline(DateTime date) {
+    state = state.copyWith(deadline: date);
+  }
+
+  void clearTitleError() {
+    state = state.copyWith(titleError: null);
+  }
+
+  void clearDescriptionError() {
+    state = state.copyWith(descriptionError: null);
+  }
+
+  bool validate({
+    required String title,
+    required String description,
+  }) {
+    if (state.selectedClassId == null) {
+      state = state.copyWith(classError: "Please select class");
+      return false;
+    }
+
+    if (state.selectedSubject == null) {
+      state = state.copyWith(subjectError: "Please select subject");
+      return false;
+    }
+
+    if (title.isEmpty) {
+      state = state.copyWith(titleError: "Title is required");
+      return false;
+    }
+
+    if (description.isEmpty) {
+      state = state.copyWith(descriptionError: "Description is required");
+      return false;
+    }
+
+    return true;
+  }
+
+  ///  (POST API)
+  Future<void> submitTask({
+    required String teacherId,
+    required String title,
+    required String description,
+  }) async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final task = TaskModel(
+        id: "0", // السيرفر بيعمل ID
+        title: title,
+        description: description,
+        subject: state.selectedSubject!,
+        dueDate: state.deadline ?? DateTime.now(),
+        status: TaskStatus.pending,
+        assignedTo: state.selectedClassId!,
+        teacherName: teacherId,
+        imageUrl: "",
+      );
+
+      ///  call repository (real API)
+      await ref.read(taskRepositoryProvider).addTask(task);
+
+      ///  refresh list بعد الإضافة
+      await ref.read(teacherTasksNotifierProvider.notifier).fetchTasks(
+        teacherId: teacherId,
+        classId: state.selectedClassId!,
+      );
+
+    } catch (e) {
+      print("Add Task Error: $e");
+    } finally {
+      state = state.copyWith(isLoading: false);
+    }
+  }
+}
+
+final addTaskNotifierProvider =
+StateNotifierProvider<AddTaskNotifier, AddTaskState>(
+      (ref) => AddTaskNotifier(ref),
+);

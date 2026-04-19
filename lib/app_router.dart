@@ -7,8 +7,6 @@ import 'package:arak_app/features/search-for-student/presentation/pages/attendan
 import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
 import 'core/entities/user.dart';
 import 'features/auth/presentation/providers/auth_providers.dart';
-import 'features/evaluation_for_teacher/presentation/screens/evaluation_details_screen.dart';
-import 'features/evaluation_for_teacher/presentation/screens/evaluation_filters_screen.dart';
 import 'features/messages/presentation/screens/chat_screen.dart';
 import 'features/messages/presentation/screens/users_list_screen.dart';
 import 'features/notifications/presentation/pages/notifications_page.dart';
@@ -205,23 +203,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
-          GoRoute(
-            path: '/teacher-evaluation',
-            builder: (context, state) => const EvaluationFiltersScreen(),
-          ),
-
-          GoRoute(
-            path: '/teacher-evaluation-details',
-            builder: (context, state) {
-              final data = state.extra as Map;
-
-              return EvaluationDetailsScreen(
-                classId: data['classId'],
-                subjectId: data['subjectId'],
-                type: data['type'],
-              );
-            },
-          ),
+      
           GoRoute(
             path: '/settings/privacy-policy',
             builder: (context, state) => const PrivacyPolicyPage(),

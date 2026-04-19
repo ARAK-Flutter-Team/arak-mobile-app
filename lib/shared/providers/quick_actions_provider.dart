@@ -20,13 +20,5 @@ final quickActionsProvider = StateProvider<List<QuickActionItem>>((ref) {
     QuickActionItem(title: 'messages', iconPath: 'assets/icons/messages.svg', route: '/chat'),
     QuickActionItem(title: 'schedule', iconPath: 'assets/icons/schedule.svg', route: '/teacher-schedule'),
     QuickActionItem(title: 'attendance', iconPath: 'assets/icons/attendance.svg', route: '/teacher/attendance'),
-
-    ///  NEW
-    QuickActionItem(
-      title: 'evaluation',
-      iconPath: 'assets/icons/shape.svg',
-      route: '/teacher-evaluation',
-    ),
-
   ];
 });

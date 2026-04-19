@@ -2,63 +2,6 @@
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../../domain/params/login_params.dart';
-import '../datasources/auth_remote_data_source.dart';
-
-class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
-  final NetworkInfo networkInfo;
-
-  AuthRepositoryImpl({
-    required this.remoteDataSource,
-    required this.networkInfo,
-  });
-
-  @override
-  Future<Either<Failure, User>> login(LoginParams params) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final userModel = await remoteDataSource.login(params);
-        return Right(userModel);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.toString()));
-      } catch (e) {
-        return Left(ServerFailure("Unexpected error: $e"));
-      }
-    } else {
-      return const Left(NetworkFailure("No Internet Connection"));
-    }
-  }
-
-  @override
-  Future<Either<Failure, User>> socialLogin({
-    required String idToken,
-    required String provider,
-  }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final userModel = await remoteDataSource.socialLogin(
-          idToken: idToken,
-          provider: provider,
-        );
-
-        return Right(userModel);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.toString()));
-      } catch (e) {
-        return Left(ServerFailure("Unexpected error: $e"));
-      }
-    } else {
-      return const Left(NetworkFailure("No Internet Connection"));
-    }
-  }
-}*/
-import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/network/network_info.dart';
 import '../../../../core/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/params/login_params.dart';
@@ -156,4 +99,196 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
   */
+}*/
+/*import 'package:dartz/dartz.dart';
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/error/failures.dart';
+//import '../../../../core/network/network_info.dart';
+import '../../../../core/entities/user.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../../domain/params/login_params.dart';
+import '../datasources/auth_remote_data_source.dart';
+
+class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource remoteDataSource;
+  //final NetworkInfo networkInfo;
+
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+    //required this.networkInfo,
+  });
+
+  // ===============================
+  // LOGIN
+  // ===============================
+  @override
+  Future<Either<Failure, User>> login(LoginParams params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final userModel = await remoteDataSource.login(params);
+        return Right(userModel);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } catch (e) {
+        return Left(ServerFailure("Unexpected error: $e"));
+      }
+    } else {
+      return const Left(NetworkFailure("No Internet Connection"));
+    }
+  }
+/*@override
+Future<Either<Failure, User>> login(LoginParams params) async {
+  try {
+    final userModel = await remoteDataSource.login(params);
+    return Right(userModel);
+  } on ServerException catch (e) {
+    return Left(ServerFailure(e.message));
+  } catch (e) {
+    return Left(ServerFailure("Unexpected error: $e"));
+  }
+}*/
+  // ===============================
+  // GET CURRENT USER
+  // ===============================
+  @override
+  Future<Either<Failure, User>> getCurrentUser() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final userModel = await remoteDataSource.getCurrentUser();
+        return Right(userModel);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } catch (e) {
+        return Left(ServerFailure("Unexpected error: $e"));
+      }
+    } else {
+      return const Left(NetworkFailure("No Internet Connection"));
+    }
+  }
+}*/
+/*@override
+Future<Either<Failure, User>> getCurrentUser() async {
+  try {
+    final userModel = await remoteDataSource.getCurrentUser();
+    return Right(userModel);
+  } on ServerException catch (e) {
+    return Left(ServerFailure(e.message));
+  } catch (e) {
+    return Left(ServerFailure("Unexpected error: $e"));
+  }
 }
+}*/
+
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/error/failures.dart';
+import '../../../../core/entities/user.dart';
+
+import '../../domain/repositories/auth_repository.dart';
+import '../../domain/params/login_params.dart';
+import '../datasources/auth_remote_data_source.dart';
+class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource remoteDataSource;
+
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+  });
+
+  @override
+  Future<Either<Failure, User>> login(LoginParams params) async {
+    try {
+      final userModel = await remoteDataSource.login(params);
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Unexpected error: $e"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getCurrentUser() async {
+    try {
+      final userModel = await remoteDataSource.getCurrentUser();
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Unexpected error: $e"));
+    }
+  }
+}
+/*class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource remoteDataSource;
+
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+  });
+
+  @override
+  Future<Either<Failure, User>> login(LoginParams params) async {
+    try {
+      final userModel = await remoteDataSource.login(params);
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Unexpected error: $e"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getCurrentUser() async {
+    try {
+      final userModel = await remoteDataSource.getCurrentUser();
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Unexpected error: $e"));
+    }
+  }
+}*/
+
+/*import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/error/failures.dart';
+import '../../../../core/entities/user.dart';
+
+import '../../domain/repositories/auth_repository.dart';
+import '../../domain/params/login_params.dart';
+import '../datasources/auth_remote_data_source.dart';
+
+class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource remoteDataSource;
+
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+  });
+
+  @override
+  Future<Either<Failure, User>> login(LoginParams params) async {
+    try {
+      final userModel = await remoteDataSource.login(params);
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Unexpected error: $e"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getCurrentUser() async {
+    try {
+      final userModel = await remoteDataSource.getCurrentUser();
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Unexpected error: $e"));
+    }
+  }
+}*/

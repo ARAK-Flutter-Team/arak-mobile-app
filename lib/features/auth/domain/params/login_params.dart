@@ -11,22 +11,6 @@ class LoginParams extends Equatable {
     required this.role,
   });
 
-  @override
-  List<Object> get props => [email, password, role];
-}*/
-import 'package:equatable/equatable.dart';
-
-class LoginParams extends Equatable {
-  final String email;
-  final String password;
-  final String role;
-
-  const LoginParams({
-    required this.email,
-    required this.password,
-    required this.role,
-  });
-
   /// --- جاهز للباك لاحقًا ---
   /*
   factory LoginParams.fromJson(Map<String, dynamic> json) {
@@ -48,4 +32,18 @@ class LoginParams extends Equatable {
 
   @override
   List<Object> get props => [email, password, role];
+}*/
+import 'package:equatable/equatable.dart';
+
+class LoginParams extends Equatable {
+  final String email;
+  final String password;
+
+  const LoginParams({
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 }
