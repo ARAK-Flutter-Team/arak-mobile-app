@@ -24,7 +24,7 @@ final teacherProfileProvider = Provider<TeacherHomeModel?>((ref) {
   if (user == null) return null;
 
   return TeacherHomeModel(
-    teacherName: user.name, // 👈 الاسم الموحد
+    teacherName: user.name, //  الاسم الموحد
     subjectName: "Mathematics",
     performance: 0.85,
     assignedClasses: [],
@@ -60,3 +60,31 @@ final teacherPerformanceProvider = FutureProvider<double>((ref) async {
   return response.data['performance'].toDouble();
   */
 });
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:arak_app/core/network/api_provider.dart';
+
+import '../../data/datasources/teacher_home_remote_data_source.dart';
+import '../../data/datasources/teacher_home_remote_data_source_impl.dart';
+import '../../data/repositories/teacher_home_repository_impl.dart';
+import '../../domain/usecases/get_teacher_home_data.dart';
+
+final teacherHomeRepositoryProvider = Provider((ref) {
+  final api = ref.read(apiClientProvider);
+
+  final remote = TeacherHomeRemoteDataSourceImpl(api.dio);
+
+  return TeacherHomeRepositoryImpl(remote);
+});
+
+final teacherHomeProvider =
+FutureProvider((ref) async {
+  final repo = ref.read(teacherHomeRepositoryProvider);
+  final usecase = GetTeacherHomeData(repo);
+
+  final result = await usecase();
+
+  return result.fold(
+        (l) => throw Exception(l.message),
+        (r) => r,
+  );
+});*/

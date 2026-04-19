@@ -65,6 +65,7 @@ dependencies:
   audio_waveforms: ^2.0.2
   flutter_localizations:
     sdk: flutter
+  dio: ^5.9.2
 
 
 dev_dependencies:
