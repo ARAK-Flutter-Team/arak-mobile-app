@@ -333,18 +333,18 @@ import 'auth_remote_data_source.dart';
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio dio;
 
-  final String baseUrl = "http://192.168.1.9:5000/api/Auth";
-
+  //final String baseUrl = "http://192.168.1.9:5000/api/Auth";
+  //final String baseUrl = "/Auth";
   AuthRemoteDataSourceImpl({required this.dio});
 
   @override
   Future<UserModel> login(LoginParams params) async {
     try {
       print(" LOGIN REQUEST START");
-      print(" URL: $baseUrl/login");
+     // print(" URL: $baseUrl/login");
       print(" Email: ${params.email}");
 
-      final response = await dio.post(
+      /*final response = await dio.post(
         "$baseUrl/login",
         data: {
           "email": params.email,
@@ -355,8 +355,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             "Content-Type": "application/json",
           },
         ),
+      );*/
+      final response = await dio.post(
+        "/Auth/login",
+        data: {
+          "email": params.email,
+          "password": params.password,
+        },
       );
-
       print(" STATUS: ${response.statusCode}");
       print(" DATA: ${response.data}");
 
@@ -381,10 +387,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       print(" Dio Status Code: ${e.response?.statusCode}");
       print(" Dio Data: ${e.response?.data}");
       //throw ServerException("Login error");
-      throw ServerException(
+      /*throw ServerException(
         e.response?.data?['message'] ?? e.message ?? "Login error",
-      );
-      
+      );*/
+      final errorData = e.response?.data;
+
+      String message;
+
+      if (errorData is Map && errorData['message'] != null) {
+        message = errorData['message'];
+      } else {
+        message = e.message ?? "Login error";
+      }
+
+      throw ServerException(message);
     } catch (e) {
       print(" Unknown Error: $e");
       rethrow;
@@ -401,15 +417,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerException("No token found");
       }
 
-      final response = await dio.get(
+      /*final response = await dio.get(
         "$baseUrl/me",
         options: Options(
-          headers: {
+          /*headers: {
             "Authorization": "Bearer $token",
-          },
+          },*/
         ),
-      );
-
+      );*/
+      final response = await dio.get("/Auth/me");
       final data = response.data;
 
       if (response.statusCode == 200) {

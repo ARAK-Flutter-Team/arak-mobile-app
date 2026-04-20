@@ -129,7 +129,7 @@ class UserModel extends User {
     );
   }
 
-  static UserRole _mapRole(String? role) {
+  /*static UserRole _mapRole(String? role) {
     switch (role?.toLowerCase()) {
       case 'admin':
       case 'super admin':
@@ -146,6 +146,27 @@ class UserModel extends User {
 
       default:
         throw Exception('Invalid role: $role');
+    }
+  }*/
+  static UserRole _mapRole(String? role) {
+    final r = role?.trim().toLowerCase();
+
+    switch (r) {
+      case 'admin':
+      case 'super admin':
+      case 'academic admin':
+      case 'fees admin':
+      case 'users admin':
+        return UserRole.admin;
+
+      case 'teacher':
+        return UserRole.teacher;
+
+      case 'parent':
+        return UserRole.parent;
+
+      default:
+        return UserRole.parent; // fallback بدل crash
     }
   }
 }
