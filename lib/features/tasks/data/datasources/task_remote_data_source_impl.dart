@@ -127,31 +127,16 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   TaskRemoteDataSourceImpl(this.dio);
 
-  final String baseUrl = "http://192.168.1.9:5000/api/Tasks";
-
-  /// ============================
-  /// GET TOKEN
-  /// ============================
-  Future<String?> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
-  }
-
-  /// ============================
-  /// GET Teacher Tasks
-  /// ============================
   @override
   Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
     required String classId,
   }) async {
-    final token = await _getToken();
-
-    print(" GET TASKS");
-    print("TOKEN: $token");
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
     final response = await dio.get(
-      baseUrl,
+      "/api/tasks",
       queryParameters: {
         "teacherId": int.parse(teacherId),
         "classId": int.parse(classId),
@@ -163,9 +148,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
       ),
     );
 
-    print(" RESPONSE: ${response.data}");
-
-    final data = response.data as List;
+    final List data = response.data;
 
     final tasks = data.map((e) => TaskModel.fromJson(e)).toList();
 
@@ -175,18 +158,13 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     );
   }
 
-  /// ============================
-  /// ADD Task
-  /// ============================
   @override
   Future<void> addTask(TaskModel task) async {
-    final token = await _getToken();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
-    print(" ADD TASK");
-    print(task.toJson());
-
-    final response = await dio.post(
-      baseUrl,
+    await dio.post(
+      "/api/tasks",
       data: task.toJson(),
       options: Options(
         headers: {
@@ -194,19 +172,15 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
         },
       ),
     );
-
-    print(" ADD RESPONSE: ${response.data}");
   }
 
-  /// ============================
-  /// DELETE Task
-  /// ============================
   @override
   Future<void> deleteTask(String taskId) async {
-    final token = await _getToken();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
     await dio.delete(
-      "$baseUrl/$taskId",
+      "/api/tasks/$taskId",
       options: Options(
         headers: {
           "Authorization": "Bearer $token",
@@ -215,16 +189,21 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     );
   }
 
-  /// ============================
-  /// UPDATE STATUS
-  /// ============================
   @override
   Future<void> updateTaskStatus(String taskId, String status) async {
-    final token = await _getToken();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
     await dio.put(
-      "$baseUrl/$taskId",
+      "/api/tasks/$taskId",
       data: {
+        "id": int.parse(taskId),
+        "title": "temp",
+        "description": "temp",
+        "subject": "math",
+        "dueDate": DateTime.now().toIso8601String(),
+        "classId": 1,
+        "teacherId": 1,
         "state": status,
       },
       options: Options(

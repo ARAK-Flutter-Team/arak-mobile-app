@@ -16,7 +16,7 @@ class SubjectDropdown extends StatelessWidget {
     this.errorText,
   });
 
-  /// 🔥 ترجمة اسم المادة
+  ///  ترجمة اسم المادة
   String getSubjectLabel(BuildContext context, String subject) {
     switch (subject) {
       case "math":
@@ -41,7 +41,7 @@ class SubjectDropdown extends StatelessWidget {
       items: subjects.map((subject) {
         return DropdownMenuItem(
           value: subject,
-          child: Text(getSubjectLabel(context, subject)), // 🔥 هنا الترجمة
+          child: Text(getSubjectLabel(context, subject)), //  هنا الترجمة
         );
       }).toList(),
       onChanged: (value) {

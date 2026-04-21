@@ -163,10 +163,12 @@ StateNotifierProvider<AddTaskNotifier, AddTaskState>(
 final taskRemoteDataSourceProvider =
 Provider((ref) => TaskRemoteDataSourceImpl());*/
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/task_model.dart';
 import '../../domain/entities/task.dart';
 import 'teacher_tasks_notifier.dart';
 
+/// =============================
+/// State
+/// =============================
 class AddTaskState {
   final String? selectedClassId;
   final String? selectedSubject;
@@ -211,11 +213,15 @@ class AddTaskState {
   }
 }
 
+/// =============================
+/// Notifier
+/// =============================
 class AddTaskNotifier extends StateNotifier<AddTaskState> {
   final Ref ref;
 
   AddTaskNotifier(this.ref) : super(const AddTaskState());
 
+  /// Setters
   void setClass(String classId) {
     state = state.copyWith(selectedClassId: classId, classError: null);
   }
@@ -236,6 +242,7 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
     state = state.copyWith(descriptionError: null);
   }
 
+  /// Validation
   bool validate({
     required String title,
     required String description,
@@ -263,45 +270,46 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
     return true;
   }
 
-  ///  (POST API)
+  ///  Submit Task
   Future<void> submitTask({
     required String teacherId,
     required String title,
     required String description,
   }) async {
     try {
+      if (!validate(title: title, description: description)) return;
+
       state = state.copyWith(isLoading: true);
 
-      final task = TaskModel(
-        id: "0", // السيرفر بيعمل ID
+      final task = Task(
+        id: "0",
         title: title,
         description: description,
         subject: state.selectedSubject!,
-        dueDate: state.deadline ?? DateTime.now(),
+        dueDate: state.deadline ?? DateTime.now().add(const Duration(days: 7)),
         status: TaskStatus.pending,
         assignedTo: state.selectedClassId!,
         teacherName: teacherId,
-        imageUrl: "",
       );
 
-      ///  call repository (real API)
       await ref.read(taskRepositoryProvider).addTask(task);
 
-      ///  refresh list بعد الإضافة
+      /// refresh
       await ref.read(teacherTasksNotifierProvider.notifier).fetchTasks(
         teacherId: teacherId,
         classId: state.selectedClassId!,
       );
 
     } catch (e) {
-      print("Add Task Error: $e");
+      print("ERROR = $e");
     } finally {
       state = state.copyWith(isLoading: false);
     }
   }
 }
 
+/// Provider
 final addTaskNotifierProvider =
-StateNotifierProvider<AddTaskNotifier, AddTaskState>(
-      (ref) => AddTaskNotifier(ref),
-);
+StateNotifierProvider<AddTaskNotifier, AddTaskState>((ref) {
+  return AddTaskNotifier(ref);
+});

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Provider لجلب الكلاسات الخاصة بالمدرس
 /// ===========================
 
-final teacherClassesProvider =
+/*final teacherClassesProvider =
 FutureProvider.family<List<String>, String>((ref, teacherId) async {
 
   /// 🔹 لو السيرفر جاهز استخدمي الريبو أو الـ API هنا
@@ -25,4 +25,10 @@ FutureProvider.family<List<String>, String>((ref, teacherId) async {
   ///   final String name;
   ///   ClassModel({required this.id, required this.name});
   /// }
+});*/
+final teacherClassesProvider =
+FutureProvider.family<List<String>, String>((ref, teacherId) async {
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  return ["1", "2", "3"];
 });
