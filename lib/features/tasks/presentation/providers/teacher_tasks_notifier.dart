@@ -17,7 +17,7 @@ import '../../domain/usecases/get_teacher_stats.dart';
 /// ===============================
 /*final taskRemoteDataSourceProvider =
 Provider((ref) => TaskRemoteDataSourceImpl());*/
-final dioProvider = Provider((ref) {
+/*final dioProvider = Provider((ref) {
   return Dio(
     BaseOptions(
       baseUrl: "http://192.168.1.9:5000",//   اللينك بتاع الباك
@@ -31,8 +31,23 @@ final dioProvider = Provider((ref) {
 final taskRemoteDataSourceProvider =
 Provider((ref) => TaskRemoteDataSourceImpl(ref.watch(dioProvider)));
 final taskLocalDataSourceProvider =
-Provider((ref) => TaskLocalDataSourceImpl());
+Provider((ref) => TaskLocalDataSourceImpl());*/
+final dioProvider = Provider((ref) {
+  return Dio(
+    BaseOptions(
+      baseUrl: "http://192.168.1.9:5000",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    ),
+  );
+});
 
+final taskRemoteDataSourceProvider =
+Provider((ref) => TaskRemoteDataSourceImpl(ref.watch(dioProvider)));
+
+final taskLocalDataSourceProvider =
+Provider((ref) => TaskLocalDataSourceImpl());
 /// ===============================
 /// Provider for Repository
 /// ===============================

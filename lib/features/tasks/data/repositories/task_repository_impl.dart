@@ -22,7 +22,7 @@ class TaskRepositoryImpl implements TaskRepository {
         classId: classId,
       );
 
-      // ✅ نحول Task → TaskModel قبل التخزين
+      //  نحول Task → TaskModel قبل التخزين
       final models = result.tasks.map((task) {
         return TaskModel(
           id: task.id,
@@ -111,9 +111,6 @@ class TaskRepositoryImpl implements TaskRepository {
 
   TaskRepositoryImpl(this.remote, this.local);
 
-  /// ===============================
-  /// Get Teacher Tasks (FROM API)
-  /// ===============================
   @override
   Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
@@ -125,21 +122,32 @@ class TaskRepositoryImpl implements TaskRepository {
         classId: classId,
       );
 
+      final models = result.tasks.map((task) {
+        return TaskModel(
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          subject: task.subject,
+          dueDate: task.dueDate,
+          status: task.status,
+          assignedTo: task.assignedTo,
+          teacherName: task.teacherName,
+        );
+      }).toList();
+
+      await local.cacheTeacherTasks(models, classId);
+
       return result;
-    } catch (e) {
-      // fallback local لو حصل error
-      final cachedModels = await local.getCachedTeacherTasks(classId);
+    } catch (_) {
+      final cached = await local.getCachedTeacherTasks(classId);
 
       return TeacherTasksResult(
-        tasks: cachedModels,
+        tasks: cached,
         lastUpdated: DateTime.now(),
       );
     }
   }
 
-  /// ===============================
-  /// Add Task (API)
-  /// ===============================
   @override
   Future<void> addTask(Task task) async {
     final model = TaskModel(
@@ -149,59 +157,35 @@ class TaskRepositoryImpl implements TaskRepository {
       subject: task.subject,
       dueDate: task.dueDate,
       status: task.status,
-      imageUrl: task.imageUrl,
       assignedTo: task.assignedTo,
       teacherName: task.teacherName,
     );
 
     await remote.addTask(model);
-
-    // ممكن تمسحي الكاش عشان يعمل reload من السيرفر
     await local.clearTeacherTasks(task.assignedTo);
   }
 
-  /// ===============================
-  /// Delete Task (API)
-  /// ===============================
   @override
   Future<void> deleteTask(String taskId) async {
     await remote.deleteTask(taskId);
   }
 
-  /// ===============================
-  /// Update Task Status (API + Local Sync)
-  /// ===============================
   @override
-  Future<void> updateTaskStatus(
-      String taskId,
-      TaskStatus status,
-      ) async {
-    try {
-      await remote.updateTaskStatus(taskId, status.name);
-    } catch (_) {}
-
+  Future<void> updateTaskStatus(String taskId, TaskStatus status) async {
+    await remote.updateTaskStatus(taskId, status.name);
     await local.updateTaskStatusLocally(taskId, status.name);
   }
 
-  /// ===============================
-  /// Teacher Stats
-  /// ===============================
   @override
   Future<double> getTeacherCompletedPercentage(String teacherId) {
     return remote.getTeacherCompletedPercentage(teacherId);
   }
 
-  /// ===============================
-  /// Student Tasks
-  /// ===============================
   @override
   Future<List<Task>> getStudentTasks(String studentId) {
     return remote.getStudentTasks(studentId);
   }
 
-  /// ===============================
-  /// Parent Tasks
-  /// ===============================
   @override
   Future<List<Task>> getParentTasks({required String studentId}) {
     return remote.getParentTasks(studentId: studentId);

@@ -11,7 +11,7 @@ class AttendanceStatusBadge extends StatelessWidget {
     required this.status,
   });
 
-  /// ✅ تحديد اللون
+  ///  تحديد اللون
   Color getStatusColor() {
     switch (status) {
       case AttendanceStatus.present:
@@ -23,7 +23,7 @@ class AttendanceStatusBadge extends StatelessWidget {
     }
   }
 
-  /// ✅ ترجمة الحالة
+  ///  ترجمة الحالة
   String getStatusText(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
@@ -51,7 +51,7 @@ class AttendanceStatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        getStatusText(context), // ✅ بدل status.name
+        getStatusText(context), //  بدل status.name
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w600,

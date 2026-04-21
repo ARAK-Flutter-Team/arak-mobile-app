@@ -1,4 +1,4 @@
-import '../../domain/entities/attendance_record.dart';
+/*import '../../domain/entities/attendance_record.dart';
 
 class AttendanceModel extends AttendanceRecord {
   const AttendanceModel({
@@ -45,4 +45,55 @@ class AttendanceModel extends AttendanceRecord {
       "status": status.name,
     };
   }*/
+}*/
+import '../../domain/entities/attendance_record.dart';
+
+class AttendanceModel extends AttendanceRecord {
+  const AttendanceModel({
+    required super.studentId,
+    required super.studentName,
+    required super.classId,
+    required super.date,
+    required super.session,
+    super.studentImageUrl,
+    required super.status,
+  });
+
+  factory AttendanceModel.fromJson(Map<String, dynamic> json) {
+    return AttendanceModel(
+      studentId: json['studentId'].toString(),
+      studentName: json['studentName'] ?? "",
+      classId: json['classId'].toString(),
+      date: DateTime.parse(json['date']),
+      session: json['session'] == "Morning"
+          ? AttendanceSession.morning
+          : AttendanceSession.afternoon,
+      status: _mapStatus(json['status']),
+    );
+  }
+
+  static AttendanceStatus _mapStatus(String status) {
+    switch (status.toLowerCase()) {
+      case "present":
+        return AttendanceStatus.present;
+      case "late":
+        return AttendanceStatus.late;
+      case "absent":
+        return AttendanceStatus.absent;
+      default:
+        return AttendanceStatus.present;
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "studentId": int.parse(studentId),
+      "studentName": studentName,
+      "classId": int.parse(classId),
+      "date": date.toIso8601String().split('T').first,
+      "status": status.name,
+      "session":
+      session == AttendanceSession.morning ? "Morning" : "Afternoon",
+    };
+  }
 }
