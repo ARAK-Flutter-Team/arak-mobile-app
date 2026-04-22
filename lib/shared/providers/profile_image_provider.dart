@@ -28,15 +28,13 @@ class ProfileImageNotifier extends StateNotifier<void> {
 
   Future<void> _saveImage(String path) async {
     final user = ref.read(currentUserProvider);
-
     if (user == null) return;
-
-    //final updatedUser = user.copyWith(avatarUrl: path);
 
     ref.read(currentUserProvider.notifier).updateAvatar(path);
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("user_avatar", path);
+    await prefs.setString(
+        "user_avatar_${user.id}", path); // ✅ مفتاح خاص لكل user
   }
 }
 

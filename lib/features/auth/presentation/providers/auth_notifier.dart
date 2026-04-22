@@ -376,10 +376,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final Ref ref;
 
   AuthNotifier(
-      this.ref,
-      this.loginUseCase,
-      this.getCurrentUserUseCase,
-      ) : super(AuthState.initial());
+    this.ref,
+    this.loginUseCase,
+    this.getCurrentUserUseCase,
+  ) : super(AuthState.initial());
 
   // ===============================
   // Email Validation
@@ -485,13 +485,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
 
     result.fold(
-          (failure) {
+      (failure) {
         state = state.copyWith(
           isLoadingLogin: false,
           generalError: failure.message,
         );
       },
-          (user) {
+      (user) {
         // Success
         state = state.copyWith(
           isLoadingLogin: false,
@@ -516,13 +516,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final result = await getCurrentUserUseCase();
 
     result.fold(
-          (failure) {
+      (failure) {
         state = state.copyWith(
           isLoadingLogin: false,
           generalError: failure.message,
         );
       },
-          (user) {
+      (user) {
         state = state.copyWith(
           isLoadingLogin: false,
           isSuccess: true,
@@ -549,8 +549,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   // Email Regex
   // ===============================
   bool _isValidEmail(String email) {
-    final emailRegex =
-    RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+");
+    final emailRegex = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+");
     return emailRegex.hasMatch(email);
   }
 

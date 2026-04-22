@@ -7,21 +7,20 @@ final currentUserProvider = StateNotifierProvider<CurrentUserNotifier, User?>(
 );
 
 class CurrentUserNotifier extends StateNotifier<User?> {
-  CurrentUserNotifier() : super(null) {
-    _loadSavedAvatar();
+  CurrentUserNotifier() : super(null);
+
+  // ✅ الفانكشن الوحيدة اللي لازم تتنادى لما يتسجل اليوزر
+  Future<void> setUser(User user) async {
+    state = user;
+    await _loadSavedAvatar(user.id);
   }
 
-  Future<void> _loadSavedAvatar() async {
+  Future<void> _loadSavedAvatar(int userId) async {
     final prefs = await SharedPreferences.getInstance();
-    final avatar = prefs.getString("user_avatar");
-
+    final avatar = prefs.getString("user_avatar_$userId");
     if (avatar != null && state != null) {
       state = state!.copyWith(avatarUrl: avatar);
     }
-  }
-
-  void setUser(User user) {
-    state = user;
   }
 
   void updateAvatar(String path) {
