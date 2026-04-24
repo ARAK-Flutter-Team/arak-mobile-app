@@ -304,7 +304,7 @@ class TaskModel extends Task {
       id: json['id']?.toString() ?? "0",
       title: json['title'] ?? "",
       description: json['description'] ?? "",
-      subject: "", // الباك مش بيرجع Subject فبنخليه فاضي للعرض
+      subject: json['subject'] ?? "",
       dueDate: json['deadLine'] != null
           ? DateTime.parse(json['deadLine'])
           : DateTime.now(),
@@ -335,7 +335,7 @@ class TaskModel extends Task {
       "classId": int.tryParse(assignedTo) ?? 0,
 
       // الـ Teacher ID (هيبقى 0 لو الفرونت مسكاه، والباك هيشوفه من التوكن)
-      "teacherId": int.tryParse(teacherName ?? "0") ?? 0,
+      "teacherId": int.tryParse(teacherName ?? "") ?? 0,
 
       // ✅ تم حذف subject و semesterId عشان الباك مش محتاجهم
     };

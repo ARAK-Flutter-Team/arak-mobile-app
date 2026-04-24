@@ -1,52 +1,37 @@
-/*import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/network/dio_provider.dart';
-/// ===========================
-/// Provider لجلب الكلاسات الخاصة بالمدرس
-/// ===========================
 
-/*final teacherClassesProvider =
-FutureProvider.family<List<String>, String>((ref, teacherId) async {
-
-  /// 🔹 لو السيرفر جاهز استخدمي الريبو أو الـ API هنا
-  // final repo = ref.read(taskRepositoryProvider);
-  // return await repo.getTeacherClasses(teacherId);
-
-  /// 🔹 مؤقتًا محاكاة داتا ثابتة
-  await Future.delayed(const Duration(milliseconds: 500));
-  return [
-    "Class A",
-    "Class B",
-    "Class C",
-  ];
-
-  /// 🔹 لاحقًا ممكن ترجعي List<ClassModel> بدل List<String>
-  /// class ClassModel {
-  ///   final String id;
-  ///   final String name;
-  ///   ClassModel({required this.id, required this.name});
-  /// }
-});*/
-/*final teacherClassesProvider =
-FutureProvider.family<List<String>, String>((ref, teacherId) async {
-  await Future.delayed(const Duration(milliseconds: 500));
-
-  return ["1", "2", "3"];
-});*/
 final teacherClassesProvider =
-FutureProvider.family<List<String>, String>((ref, teacherId) async {
-  final dio = ref.read(dioProvider);
+    FutureProvider.family<List<Map<String, dynamic>>, String>(
+  (ref, teacherId) async {
+    final dio = ref.read(dioProvider);
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
-  final response = await dio.get("/api/Classes");
+    final response = await dio.get(
+      "/api/classes",
+      queryParameters: {"teacherId": int.tryParse(teacherId) ?? 0},
+      options: Options(
+        headers: {
+          if (token != null && token.isNotEmpty)
+            "Authorization": "Bearer $token",
+        },
+      ),
+    );
 
-  final data = response.data;
+    if (response.data is! List) return [];
 
-  print("CLASSES RESPONSE = $data");
-
-  if (data is! List) return [];
-
-  return data
-      .where((e) => e is Map && e["id"] != null)
-      .map<String>((e) => e["id"].toString())
-      .toList();
-});*/
+    return (response.data as List)
+        .where((e) => e is Map && e["id"] != null)
+        .map<Map<String, dynamic>>((e) {
+          final c = Map<String, dynamic>.from(e as Map);
+          return {
+            "id": c["id"],
+            "name": c["name"]?.toString() ?? c["id"].toString(),
+          };
+        })
+        .toList();
+  },
+);

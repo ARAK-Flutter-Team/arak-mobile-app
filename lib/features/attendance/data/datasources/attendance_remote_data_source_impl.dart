@@ -88,7 +88,7 @@ class AttendanceRemoteDataSourceImpl
     print(" DATE = ${date.toIso8601String()}");
 
     final response = await dio.get(
-      "/Attendance/class/${int.parse(classId)}",
+      "/api/Attendance/class/${int.parse(classId)}",
       queryParameters: {
         "date": date.toIso8601String().split('T').first,
       },
@@ -124,7 +124,7 @@ class AttendanceRemoteDataSourceImpl
     };
 
     await dio.post(
-      "/Attendance/bulk",
+      "/api/Attendance/bulk",
       data: body,
       options: Options(
         headers: {
@@ -157,7 +157,7 @@ class AttendanceRemoteDataSourceImpl
 
     try {
       /*final response = await dio.get(
-        "/Attendance/class/${int.parse(classId)}",*/
+        "/api/Attendance/class/${int.parse(classId)}",*/
       final response = await dio.get(
         "/api/Attendance/class/${int.parse(classId)}",
         queryParameters: {
@@ -226,7 +226,7 @@ class AttendanceRemoteDataSourceImpl
       print(" Body: $body");
 
       /*await dio.post(
-        "/Attendance/bulk",*/
+        "/api/Attendance/bulk",*/
       await dio.post(
         "/api/Attendance/bulk",
         data: body,

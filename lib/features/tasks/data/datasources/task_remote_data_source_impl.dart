@@ -441,28 +441,19 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   @override
   Future<void> updateTaskStatus(String taskId, String status) async {
-    // ملاحظة: الباك إند بيحتاج الـ Object كامل في الـ PUT
-    // بما إن التاسك اللي عندنا في الـ Model فيه كل الداتا، بنبعته كامل
-    // بس هنا بنستقبل الـ ID والـ Status بس من الريبو، فلازم ننتبه
-    // سنفترض هنا إن الريبو بيبعت الـ Task كامل، لو مش كده الكود هيحتاج تعديل بسيط
-
-    // الطريقة الآمنة: نبعث الـ State والـ ID بس، والباك يحدث الباقي (لو السيرفر مسموح)
-    // أو نبعث داتا كاملة وهمية زي ما كنت عاملة، لكن الأفضل إدارة الـ Task كامل
-
-    // بما إن الريبو بيبعث (String taskId, String status) فقط:
-    await dio.put(
-      "/api/Tasks/$taskId",
-      data: {
-        "id": int.tryParse(taskId) ?? 0,
-        "state": status,
-        // نبعث حقول وهمية عشان الـ Model Validator في الـ C# ما يزعلش
-        "title": "placeholder",
-        "description": "placeholder",
-        "classId": 0,
-        "teacherId": 0,
-        "deadLine": DateTime.now().toIso8601String()
-      },
-    );
+    final getResp = await dio.get("/api/tasks/$taskId");
+    final existing = Map<String, dynamic>.from(getResp.data as Map);
+    final normalizedState =
+        status.toLowerCase() == "completed" ? "Completed" : "Pending";
+    final payload = Map<String, dynamic>.from(existing)
+      ..remove("subject")
+      ..remove("dueDate")
+      ..["id"] = int.tryParse(taskId) ?? existing["id"]
+      ..["state"] = normalizedState;
+    if (!payload.containsKey("deadLine") && existing["dueDate"] != null) {
+      payload["deadLine"] = existing["dueDate"];
+    }
+    await dio.put("/api/tasks/$taskId", data: payload);
   }
 
   @override
