@@ -46,7 +46,7 @@ class AttendanceModel extends AttendanceRecord {
     };
   }*/
 }*/
-import '../../domain/entities/attendance_record.dart';
+/*import '../../domain/entities/attendance_record.dart';
 
 class AttendanceModel extends AttendanceRecord {
   const AttendanceModel({
@@ -95,5 +95,93 @@ class AttendanceModel extends AttendanceRecord {
       "session":
       session == AttendanceSession.morning ? "Morning" : "Afternoon",
     };
+  }
+}*/
+import '../../domain/entities/attendance_record.dart';
+
+class AttendanceModel extends AttendanceRecord {
+  const AttendanceModel({
+    required super.studentId,
+    required super.studentName,
+    required super.classId,
+    required super.date,
+    required super.session,
+    super.studentImageUrl,
+    required super.status,
+    this.id,
+    this.timeIn,
+    this.timeOut,
+    this.notes,
+  });
+
+  final int? id;
+  final String? timeIn;
+  final String? timeOut;
+  final String? notes;
+
+  factory AttendanceModel.fromJson(Map<String, dynamic> json) {
+    print(" Parsing JSON: $json");
+
+    // Extract student name safely
+    String studentName = "Student";
+    if (json['student'] != null) {
+      studentName = json['student']['name'] ?? "Student";
+    } else if (json['studentName'] != null) {
+      studentName = json['studentName'].toString();
+    } else if (json['name'] != null) {
+      studentName = json['name'].toString();
+    }
+
+    return AttendanceModel(
+      id: json['id'],
+      studentId: (json['studentId'] ?? 0).toString(),
+      studentName: studentName,
+      classId: (json['classId'] ?? '').toString(),
+      date: json['date'] != null
+          ? DateTime.tryParse(json['date']) ?? DateTime.now()
+          : DateTime.now(),
+      session: _parseSession(json['session']),
+      status: _mapStatus(json['status'] ?? 'Present'),
+      timeIn: json['timeIn'],
+      timeOut: json['timeOut'],
+      notes: json['notes'],
+    );
+  }
+
+  static AttendanceSession _parseSession(dynamic sessionValue) {
+    if (sessionValue == null) return AttendanceSession.morning;
+    final sessionStr = sessionValue.toString().toLowerCase();
+    if (sessionStr.contains('afternoon') || sessionStr.contains('pm')) {
+      return AttendanceSession.afternoon;
+    }
+    return AttendanceSession.morning;
+  }
+
+  static AttendanceStatus _mapStatus(String status) {
+    switch (status.toLowerCase()) {
+      case "present":
+        return AttendanceStatus.present;
+      case "late":
+        return AttendanceStatus.late;
+      case "absent":
+        return AttendanceStatus.absent;
+      default:
+        return AttendanceStatus.present;
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "studentId": int.tryParse(studentId) ?? 0,
+      "classId": int.tryParse(classId) ?? 0,
+      "date": date.toIso8601String().split('T').first,
+      "session": session == AttendanceSession.morning ? "Morning" : "Afternoon",
+      "status": status.name,
+    };
+  }
+
+  @override
+  String toString() {
+    return "AttendanceModel(studentId: $studentId, studentName: $studentName, status: ${status.name})";
   }
 }
