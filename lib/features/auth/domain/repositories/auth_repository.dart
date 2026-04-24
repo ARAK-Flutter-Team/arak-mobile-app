@@ -1,4 +1,4 @@
-import '../../../../core/entities/user.dart';
+/*import '../../../../core/entities/user.dart';
 import '../params/login_params.dart';
 import '../../../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
@@ -48,4 +48,13 @@ class FakeAuthRepository implements AuthRepository {
     return await realAuthRepository.getCurrentUser();
     */
   }
+}*/
+import '../../../../core/entities/user.dart';
+import '../params/login_params.dart';
+import '../../../../core/error/failures.dart';
+import 'package:dartz/dartz.dart';
+
+abstract class AuthRepository {
+  Future<Either<Failure, User>> login(LoginParams params);
+  Future<Either<Failure, User>> getCurrentUser();
 }
