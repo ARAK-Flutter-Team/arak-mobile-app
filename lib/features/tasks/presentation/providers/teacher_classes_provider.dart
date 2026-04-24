@@ -1,5 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/network/dio_provider.dart';
 /// ===========================
 /// Provider لجلب الكلاسات الخاصة بالمدرس
 /// ===========================
@@ -26,9 +27,26 @@ FutureProvider.family<List<String>, String>((ref, teacherId) async {
   ///   ClassModel({required this.id, required this.name});
   /// }
 });*/
-final teacherClassesProvider =
+/*final teacherClassesProvider =
 FutureProvider.family<List<String>, String>((ref, teacherId) async {
   await Future.delayed(const Duration(milliseconds: 500));
 
   return ["1", "2", "3"];
-});
+});*/
+final teacherClassesProvider =
+FutureProvider.family<List<String>, String>((ref, teacherId) async {
+  final dio = ref.read(dioProvider);
+
+  final response = await dio.get("/api/Classes");
+
+  final data = response.data;
+
+  print("CLASSES RESPONSE = $data");
+
+  if (data is! List) return [];
+
+  return data
+      .where((e) => e is Map && e["id"] != null)
+      .map<String>((e) => e["id"].toString())
+      .toList();
+});*/

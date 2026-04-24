@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 
-import '../../data/datasources/task_local_data_source_impl.dart';
 import '../../data/datasources/task_remote_data_source_impl.dart';
-import '../../data/models/task_model.dart';
 import '../../data/repositories/task_repository_impl.dart';
 import '../../domain/entities/task.dart';
 import '../../domain/repositories/task_repository.dart';
@@ -46,15 +42,15 @@ final dioProvider = Provider((ref) {
 final taskRemoteDataSourceProvider =
 Provider((ref) => TaskRemoteDataSourceImpl(ref.watch(dioProvider)));
 
-final taskLocalDataSourceProvider =
-Provider((ref) => TaskLocalDataSourceImpl());
+/*final taskLocalDataSourceProvider =
+Provider((ref) => TaskLocalDataSourceImpl());*/
 /// ===============================
 /// Provider for Repository
 /// ===============================
 final taskRepositoryProvider = Provider<TaskRepository>((ref) {
   return TaskRepositoryImpl(
     ref.watch(taskRemoteDataSourceProvider),
-    ref.watch(taskLocalDataSourceProvider),
+    //ref.watch(taskLocalDataSourceProvider),
   );
 });
 
@@ -77,7 +73,7 @@ class TeacherTasksState {
   final String selectedClass;
   final String? error;
   final DateTime? lastUpdated;
-
+  final String teacherId;
   const TeacherTasksState({
     required this.allTasks,
     required this.tasks,
@@ -85,6 +81,7 @@ class TeacherTasksState {
     required this.selectedClass,
     this.error,
     this.lastUpdated,
+    required this.teacherId,
   });
 
   factory TeacherTasksState.initial() => const TeacherTasksState(
@@ -94,25 +91,28 @@ class TeacherTasksState {
     selectedClass: '',
     error: null,
     lastUpdated: null,
+    teacherId: '',
   );
 
-  TeacherTasksState copyWith({
-    List<Task>? allTasks,
-    List<Task>? tasks,
-    bool? isLoading,
-    String? selectedClass,
-    String? error,
-    DateTime? lastUpdated,
-  }) {
-    return TeacherTasksState(
-      allTasks: allTasks ?? this.allTasks,
-      tasks: tasks ?? this.tasks,
-      isLoading: isLoading ?? this.isLoading,
-      selectedClass: selectedClass ?? this.selectedClass,
-      error: error ?? this.error,
-      lastUpdated: lastUpdated ?? this.lastUpdated,
-    );
-  }
+TeacherTasksState copyWith({
+  List<Task>? allTasks,
+  List<Task>? tasks,
+  bool? isLoading,
+  String? selectedClass,
+  String? error,
+  DateTime? lastUpdated,
+  String? teacherId,
+}) {
+  return TeacherTasksState(
+    allTasks: allTasks ?? this.allTasks,
+    tasks: tasks ?? this.tasks,
+    isLoading: isLoading ?? this.isLoading,
+    selectedClass: selectedClass ?? this.selectedClass,
+    error: error ?? this.error,
+    lastUpdated: lastUpdated ?? this.lastUpdated,
+    teacherId: teacherId ?? this.teacherId, 
+  );
+}
 }
 
 /// ===============================
@@ -128,13 +128,13 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
     required this.getTeacherStats,
     required this.ref,
   }) : super(TeacherTasksState.initial()) {
-    _init();
+ //   _init();
   }
 
   /// ===============================
   /// Save locally
   /// ===============================
-  Future<void> saveTasksLocally(List<Task> tasks) async {
+  /*Future<void> saveTasksLocally(List<Task> tasks) async {
     final prefs = await SharedPreferences.getInstance();
 
     final encoded = tasks.map((task) {
@@ -159,12 +159,12 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
     }).toList();
 
     await prefs.setStringList("teacher_tasks", encoded);
-  }
+  }*/
 
   /// ===============================
   /// Load from local
   /// ===============================
-  Future<void> loadSavedTasks() async {
+  /*Future<void> loadSavedTasks() async {
     final prefs = await SharedPreferences.getInstance();
     final savedTasks = prefs.getStringList("teacher_tasks");
 
@@ -190,7 +190,7 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
       tasks: filteredTasks,
       isLoading: false,
     );
-  }
+  }*/
 
   /// ===============================
   /// Fetch tasks
@@ -212,13 +212,48 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
       isLoading: false,
     );
   }*/
+  /*Future<void> fetchTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+    state = state.copyWith(isLoading: true, teacherId: '');
+
+    try {
+      print("CALL API with teacherId: $teacherId , classId: $classId");
+      final result = await getTeacherTasks(
+        teacherId: teacherId,
+        classId: classId,
+      );
+
+      final tasks = result.tasks
+          .where((t) => !t.isDeleted)
+          .toList();
+      print("TASKS COUNT = ${tasks.length}");
+      state = state.copyWith(
+        allTasks: tasks,
+        tasks: tasks,
+        selectedClass: classId,
+        isLoading: false,
+        lastUpdated: result.lastUpdated,
+        teacherId: teacherId,
+      );
+
+      //await saveTasksLocally(tasks);
+
+    } catch (e) {
+     state = state.copyWith(isLoading: true, teacherId: teacherId);
+    }
+  }*/
   Future<void> fetchTasks({
     required String teacherId,
     required String classId,
   }) async {
+
     state = state.copyWith(isLoading: true);
 
     try {
+      print("CALL API with teacherId: $teacherId , classId: $classId");
+
       final result = await getTeacherTasks(
         teacherId: teacherId,
         classId: classId,
@@ -228,20 +263,24 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
           .where((t) => !t.isDeleted)
           .toList();
 
+      print("TASKS COUNT = ${tasks.length}");
+
       state = state.copyWith(
         allTasks: tasks,
         tasks: tasks,
         selectedClass: classId,
         isLoading: false,
         lastUpdated: result.lastUpdated,
+        teacherId: teacherId,
       );
 
-      await saveTasksLocally(tasks);
-
     } catch (e) {
+      print("FETCH ERROR = $e");
+
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
+        teacherId: teacherId,
       );
     }
   }
@@ -271,7 +310,7 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
   /// ===============================
   /// Add task
   /// ===============================
-  Future<void> addTask(Task task) async {
+  /*Future<void> addTask(Task task) async {
     final updatedAllTasks = [...state.allTasks, task];
 
     final filteredTasks = updatedAllTasks
@@ -284,17 +323,17 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
       tasks: filteredTasks,
     );
 
-    await saveTasksLocally(updatedAllTasks);
-  }
+   // await saveTasksLocally(updatedAllTasks);
+  }*/
 
-  Future<void> _init() async {
+  /*Future<void> _init() async {
     await loadSavedTasks();
-  }
+  }*/
 
   /// ===============================
   /// Delete task (Soft Delete)
   /// ===============================
-  Future<void> deleteTask(String taskId) async {
+  /*Future<void> deleteTask(String taskId) async {
     final updatedAllTasks = state.allTasks.map((task) {
       if (task.id == taskId) {
         return TaskModel(
@@ -341,13 +380,231 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
       tasks: filteredTasks,
     );
 
-    await saveTasksLocally(updatedAllTasks);
+    //await saveTasksLocally(updatedAllTasks);
+  }*/
+  Future<void> deleteTask(String taskId) async {
+    try {
+      await ref.read(taskRepositoryProvider).deleteTask(taskId);
+
+      await fetchTasks(
+        teacherId: state.teacherId,
+        classId: state.selectedClass,
+      );
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), teacherId: '');
+    }
   }
 }
 
 /// ===============================
 /// Provider
 /// ===============================
+final teacherTasksNotifierProvider =
+StateNotifierProvider<TeacherTasksNotifier, TeacherTasksState>((ref) {
+  return TeacherTasksNotifier(
+    getTeacherTasks: ref.watch(getTeacherTasksProvider),
+    getTeacherStats: ref.watch(getTeacherStatsProvider),
+    ref: ref,
+  );
+});*/
+// ... imports ...
+// تأكدي من استدعاء taskRepositoryProvider من الـ providers.dart اللي فوق
+/*import 'package:arak_app/features/tasks/providers/providers.dart';
+
+class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
+  // ... الكود زي ما هو بس غيري الـ dependency injection
+  TeacherTasksNotifier({
+    required this.getTeacherTasks,
+    required this.getTeacherStats,
+    required this.ref,
+  }) : super(TeacherTasksState.initial());
+
+  // ... الـ function اللي جوا زي ما هي، بس متعمليش new Dio()
+
+  Future<void> fetchTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final result = await getTeacherTasks(
+        teacherId: teacherId,
+        classId: classId,
+      );
+
+      final tasks = result.tasks
+          .where((t) => !t.isDeleted)
+          .toList();
+
+      state = state.copyWith(
+        allTasks: tasks,
+        tasks: tasks,
+        selectedClass: classId,
+        isLoading: false,
+        lastUpdated: result.lastUpdated,
+        teacherId: teacherId,
+      );
+
+    } catch (e) {
+      print("FETCH ERROR = $e");
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        teacherId: teacherId,
+      );
+    }
+  }
+}*/
+import 'package:arak_app/features/tasks/presentation/providers/providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:arak_app/features/tasks/domain/entities/task.dart';
+import 'package:arak_app/features/tasks/domain/entities/teacher_tasks_result.dart';
+import 'package:arak_app/features/tasks/domain/usecases/get_teacher_tasks.dart';
+import 'package:arak_app/features/tasks/domain/usecases/get_teacher_stats.dart';
+
+/// =============================
+/// State
+/// =============================
+class TeacherTasksState {
+  final List<Task> allTasks;
+  final List<Task> tasks;
+  final bool isLoading;
+  final String selectedClass;
+  final String? error;
+  final DateTime? lastUpdated;
+  final String teacherId;
+
+  const TeacherTasksState({
+    required this.allTasks,
+    required this.tasks,
+    required this.isLoading,
+    required this.selectedClass,
+    this.error,
+    this.lastUpdated,
+    required this.teacherId,
+  });
+
+  factory TeacherTasksState.initial() => const TeacherTasksState(
+    allTasks: [],
+    tasks: [],
+    isLoading: true,
+    selectedClass: '',
+    error: null,
+    lastUpdated: null,
+    teacherId: '',
+  );
+
+  TeacherTasksState copyWith({
+    List<Task>? allTasks,
+    List<Task>? tasks,
+    bool? isLoading,
+    String? selectedClass,
+    String? error,
+    DateTime? lastUpdated,
+    String? teacherId,
+  }) {
+    return TeacherTasksState(
+      allTasks: allTasks ?? this.allTasks,
+      tasks: tasks ?? this.tasks,
+      isLoading: isLoading ?? this.isLoading,
+      selectedClass: selectedClass ?? this.selectedClass,
+      error: error ?? this.error,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      teacherId: teacherId ?? this.teacherId,
+    );
+  }
+}
+
+/// =============================
+/// Notifier
+/// =============================
+class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
+  final GetTeacherTasks getTeacherTasks;
+  final GetTeacherStats getTeacherStats;
+  final Ref ref;
+
+  TeacherTasksNotifier({
+    required this.getTeacherTasks,
+    required this.getTeacherStats,
+    required this.ref,
+  }) : super(TeacherTasksState.initial());
+
+  /// Fetch Tasks من الباك إند
+  Future<void> fetchTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      print("CALL API with teacherId: $teacherId , classId: $classId");
+
+      final result = await getTeacherTasks(
+        teacherId: teacherId,
+        classId: classId,
+      );
+
+      // فلترة التاسكات المش محذوفة
+      final tasks = result.tasks
+          .where((t) => !t.isDeleted)
+          .toList();
+
+      print("TASKS COUNT = ${tasks.length}");
+
+      state = state.copyWith(
+        allTasks: tasks,
+        tasks: tasks,
+        selectedClass: classId,
+        isLoading: false,
+        lastUpdated: result.lastUpdated,
+        teacherId: teacherId,
+      );
+
+    } catch (e) {
+      print("FETCH ERROR = $e");
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        teacherId: teacherId,
+      );
+    }
+  }
+
+  /// Change Class: تستدعي fetchTasks تاني
+  Future<void> changeClass({
+    required String teacherId,
+    required String newClassId,
+  }) async {
+    await fetchTasks(
+      teacherId: teacherId,
+      classId: newClassId,
+    );
+  }
+
+  /// Delete Task: تحذف من الباك ثم تحدث الليست
+  Future<void> deleteTask(String taskId) async {
+    try {
+      // 1. استدعاء الريبو للحذف
+      await ref.read(taskRepositoryProvider).deleteTask(taskId);
+
+      // 2. تحديث البيانات فوراً (Refresh)
+      if (state.teacherId.isNotEmpty && state.selectedClass.isNotEmpty) {
+        await fetchTasks(
+          teacherId: state.teacherId,
+          classId: state.selectedClass,
+        );
+      }
+    } catch (e) {
+      print("DELETE ERROR = $e");
+      state = state.copyWith(error: e.toString());
+    }
+  }
+}
+
+/// =============================
+/// Provider
+/// =============================
 final teacherTasksNotifierProvider =
 StateNotifierProvider<TeacherTasksNotifier, TeacherTasksState>((ref) {
   return TeacherTasksNotifier(

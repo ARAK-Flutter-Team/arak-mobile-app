@@ -162,9 +162,10 @@ StateNotifierProvider<AddTaskNotifier, AddTaskState>(
 /// =============================
 final taskRemoteDataSourceProvider =
 Provider((ref) => TaskRemoteDataSourceImpl());*/
+import 'package:arak_app/features/tasks/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/task.dart';
-import 'teacher_tasks_notifier.dart';
+import 'package:arak_app/features/tasks/domain/entities/task.dart';
+import 'package:arak_app/features/tasks/presentation/providers/teacher_tasks_notifier.dart'; // استدعاء teacherTasksNotifierProvider
 
 /// =============================
 /// State
@@ -178,6 +179,7 @@ class AddTaskState {
   final String? classError;
   final String? subjectError;
   final bool isLoading;
+  final String? error;
 
   const AddTaskState({
     this.selectedClassId,
@@ -188,6 +190,7 @@ class AddTaskState {
     this.classError,
     this.subjectError,
     this.isLoading = false,
+    this.error,
   });
 
   AddTaskState copyWith({
@@ -199,6 +202,8 @@ class AddTaskState {
     String? classError,
     String? subjectError,
     bool? isLoading,
+    String? error,
+    bool clearError = false,
   }) {
     return AddTaskState(
       selectedClassId: selectedClassId ?? this.selectedClassId,
@@ -209,6 +214,7 @@ class AddTaskState {
       classError: classError,
       subjectError: subjectError,
       isLoading: isLoading ?? this.isLoading,
+      error: clearError ? null : (error ?? this.error),
     );
   }
 }
@@ -223,23 +229,23 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
 
   /// Setters
   void setClass(String classId) {
-    state = state.copyWith(selectedClassId: classId, classError: null);
+    state = state.copyWith(selectedClassId: classId, classError: null, clearError: true);
   }
 
   void setSubject(String subject) {
-    state = state.copyWith(selectedSubject: subject, subjectError: null);
+    state = state.copyWith(selectedSubject: subject, subjectError: null, clearError: true);
   }
 
   void setDeadline(DateTime date) {
-    state = state.copyWith(deadline: date);
+    state = state.copyWith(deadline: date, clearError: true);
   }
 
   void clearTitleError() {
-    state = state.copyWith(titleError: null);
+    state = state.copyWith(titleError: null, clearError: true);
   }
 
   void clearDescriptionError() {
-    state = state.copyWith(descriptionError: null);
+    state = state.copyWith(descriptionError: null, clearError: true);
   }
 
   /// Validation
@@ -277,12 +283,19 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
     required String description,
   }) async {
     try {
+      state = state.copyWith(error: null);
+
       if (!validate(title: title, description: description)) return;
+
+      if (state.selectedClassId == null || state.selectedSubject == null) {
+        print("Missing fields");
+        return;
+      }
 
       state = state.copyWith(isLoading: true);
 
       final task = Task(
-        id: "0",
+        id: "",
         title: title,
         description: description,
         subject: state.selectedSubject!,
@@ -292,18 +305,27 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
         teacherName: teacherId,
       );
 
+      // الاتصال بالباك إند
       await ref.read(taskRepositoryProvider).addTask(task);
 
-      /// refresh
-      await ref.read(teacherTasksNotifierProvider.notifier).fetchTasks(
-        teacherId: teacherId,
-        classId: state.selectedClassId!,
-      );
+      // تحديث ليست التاسكات باستخدام ref مباشرة
+      if (state.selectedClassId != null) {
+        // هنا بنستخدم الـ Import اللي فوق مباشرة
+        await ref.read(teacherTasksNotifierProvider.notifier).fetchTasks(
+          teacherId: teacherId,
+          classId: state.selectedClassId!,
+        );
+      }
+
+      state = state.copyWith(isLoading: false);
 
     } catch (e) {
-      print("ERROR = $e");
-    } finally {
-      state = state.copyWith(isLoading: false);
+      print("SUBMIT TASK ERROR = $e");
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceFirst("Exception: ", ""),
+      );
+      rethrow;
     }
   }
 }

@@ -114,7 +114,7 @@ import 'package:shared_preferences/shared_preferences.dart'; task.assignedTo,
     }
   }
 }*/
-import 'package:dio/dio.dart';
+/*import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/task.dart';
@@ -127,7 +127,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   TaskRemoteDataSourceImpl(this.dio);
 
-  @override
+  /*@override
   Future<TeacherTasksResult> getTeacherTasks({
     required String teacherId,
     required String classId,
@@ -148,21 +148,141 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
       ),
     );
 
-    final List data = response.data;
+   // final List data = response.data;
+    final data = response.data;
 
-    final tasks = data.map((e) => TaskModel.fromJson(e)).toList();
+    print("API RESPONSE = $data");
+
+    final List tasksJson = data["tasks"]; // لو الباك بيرجع object
+
+    final tasks = tasksJson.map((e) => TaskModel.fromJson(e)).toList();
+
+    return TeacherTasksResult(
+      tasks: tasks,
+      lastUpdated: DateTime.now(),
+    );
+  }*/
+  /*@override
+  Future<TeacherTasksResult> getTeacherTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) {
+      print(" TOKEN NULL → user not logged in");
+      throw Exception("No token found");
+    }
+
+    print("TOKEN = $token");
+    print("CALL API teacherId=$teacherId classId=$classId");
+
+    final safeTeacherId = int.tryParse(teacherId);
+    if (safeTeacherId == null) {
+      print(" INVALID teacherId: $teacherId");
+      throw Exception("Invalid teacherId");
+    }
+
+    final safeClassId = int.tryParse(classId);
+    if (safeClassId == null) {
+      print(" INVALID classId: $classId");
+      throw Exception("Invalid classId");
+    }
+    final response = await dio.get(
+      "/api/tasks",
+      queryParameters: {
+        "teacherId": safeTeacherId,
+        "classId": safeClassId,
+      },
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    print("API RESPONSE = ${response.data}");
+
+    final data = response.data;
+    if (data == null) {
+      print(" RESPONSE NULL");
+      return TeacherTasksResult(tasks: [], lastUpdated: DateTime.now());
+    }
+    print("RAW RESPONSE = $data");
+
+    final tasksJson = (data is List)
+        ? data
+        : (data["tasks"] ?? data["data"]?["tasks"] ?? []);
+
+    if (tasksJson is! List) {
+      print(" tasksJson NOT LIST: $tasksJson");
+      return TeacherTasksResult(tasks: [], lastUpdated: DateTime.now());
+    }
+
+    final tasks = tasksJson
+        .where((e) => e is Map)
+        .map((e) => TaskModel.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+
+    print("TASKS COUNT = ${tasks.length}");
+
+    return TeacherTasksResult(
+      tasks: tasks,
+      lastUpdated: DateTime.now(),
+    );
+  }*/
+  @override
+  Future<TeacherTasksResult> getTeacherTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) {
+      print("TOKEN NULL");
+      throw Exception("No token found");
+    }
+
+    print("TOKEN = $token");
+    print("CALL API teacherId=$teacherId classId=$classId");
+
+    final response = await dio.get(
+      "/api/tasks",
+      queryParameters: {
+        "teacherId": int.parse(teacherId),
+        "classId": int.parse(classId),
+      },
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    print("API RESPONSE = ${response.data}");
+
+    final List data = response.data as List;
+
+    final tasks = data
+        .map((e) => TaskModel.fromJson(e))
+        .toList();
+
+    print("TASKS COUNT = ${tasks.length}");
 
     return TeacherTasksResult(
       tasks: tasks,
       lastUpdated: DateTime.now(),
     );
   }
-
   @override
   Future<void> addTask(TaskModel task) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-
+    print("TOKEN (ADD TASK) = $token");
     await dio.post(
       "/api/tasks",
       data: task.toJson(),
@@ -178,7 +298,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   Future<void> deleteTask(String taskId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-
+    print("TOKEN (DELETE TASK) = $token");
     await dio.delete(
       "/api/tasks/$taskId",
       options: Options(
@@ -189,10 +309,41 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     );
   }
 
+ /* @override
+  Future<void> updateTaskStatus(String taskId, String status) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    print("TOKEN (UPDATE TASK) = $token");
+    /*await dio.put(
+      "/api/tasks/$taskId",
+      data: {
+        "id": int.parse(taskId),
+        "title": "temp",
+        "description": "temp",
+        "subject": "math",
+        "dueDate": DateTime.now().toIso8601String(),
+        "classId": 1,
+        "teacherId": 1,
+        "state": status,
+      },*/
+    await dio.put(
+      "/api/tasks/$taskId",
+      data: {
+        "state": status,
+      },
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+  }*/
   @override
   Future<void> updateTaskStatus(String taskId, String status) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+
+    if (token == null) throw Exception("No token");
 
     await dio.put(
       "/api/tasks/$taskId",
@@ -213,7 +364,6 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
       ),
     );
   }
-
   @override
   Future<double> getTeacherCompletedPercentage(String teacherId) async {
     return 0;
@@ -226,6 +376,110 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   @override
   Future<List<Task>> getParentTasks({required String studentId}) async {
+    return [];
+  }
+}*/
+import 'package:arak_app/features/tasks/data/datasources/task_remote_data_source.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:arak_app/core/network/dio_provider.dart';
+import 'package:arak_app/features/tasks/data/models/task_model.dart';
+import 'package:arak_app/features/tasks/domain/entities/teacher_tasks_result.dart';
+
+import '../../domain/entities/task.dart';
+
+// استدعاء الـ Provider
+final taskRemoteDataSourceProvider = Provider<TaskRemoteDataSource>((ref) {
+  return TaskRemoteDataSourceImpl(ref.watch(dioProvider));
+});
+
+class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
+  final Dio dio;
+
+  TaskRemoteDataSourceImpl(this.dio);
+
+  @override
+  Future<TeacherTasksResult> getTeacherTasks({
+    required String teacherId,
+    required String classId,
+  }) async {
+    final response = await dio.get(
+      "/api/Tasks", // المسار الصحيح
+      queryParameters: {
+        "teacherId": int.tryParse(teacherId) ?? 0,
+        "classId": int.tryParse(classId) ?? 0,
+      },
+    );
+
+    // الباك بيرجع ليست مباشرة
+    if (response.data is List) {
+      final tasks = (response.data as List)
+          .map((e) => TaskModel.fromJson(e))
+          .toList();
+
+      return TeacherTasksResult(tasks: tasks, lastUpdated: DateTime.now());
+    }
+
+    return TeacherTasksResult(tasks: [], lastUpdated: DateTime.now());
+  }
+
+  @override
+  Future<void> addTask(TaskModel task) async {
+    // نبعث الـ Object كامل
+    await dio.post(
+      "/api/Tasks",
+      data: task.toJson(),
+    );
+  }
+
+  @override
+  Future<void> deleteTask(String taskId) async {
+    await dio.delete(
+      "/api/Tasks/$taskId",
+    );
+  }
+
+  @override
+  Future<void> updateTaskStatus(String taskId, String status) async {
+    // ملاحظة: الباك إند بيحتاج الـ Object كامل في الـ PUT
+    // بما إن التاسك اللي عندنا في الـ Model فيه كل الداتا، بنبعته كامل
+    // بس هنا بنستقبل الـ ID والـ Status بس من الريبو، فلازم ننتبه
+    // سنفترض هنا إن الريبو بيبعت الـ Task كامل، لو مش كده الكود هيحتاج تعديل بسيط
+
+    // الطريقة الآمنة: نبعث الـ State والـ ID بس، والباك يحدث الباقي (لو السيرفر مسموح)
+    // أو نبعث داتا كاملة وهمية زي ما كنت عاملة، لكن الأفضل إدارة الـ Task كامل
+
+    // بما إن الريبو بيبعث (String taskId, String status) فقط:
+    await dio.put(
+      "/api/Tasks/$taskId",
+      data: {
+        "id": int.tryParse(taskId) ?? 0,
+        "state": status,
+        // نبعث حقول وهمية عشان الـ Model Validator في الـ C# ما يزعلش
+        "title": "placeholder",
+        "description": "placeholder",
+        "classId": 0,
+        "teacherId": 0,
+        "deadLine": DateTime.now().toIso8601String()
+      },
+    );
+  }
+
+  @override
+  Future<double> getTeacherCompletedPercentage(String teacherId) async {
+    // دي مفيش EndPoint ليها في السيرفر اللي ابعتته، بنرجع 0 مؤقتاً
+    return 0.0;
+  }
+
+  @override
+  Future<List<TaskModel>> getStudentTasks(String studentId) async {
+    // مفيش EndPoint
+    return [];
+  }
+
+  @override
+  Future<List<Task>> getParentTasks({required String studentId}) async {
+    // مفيش EndPoint
     return [];
   }
 }

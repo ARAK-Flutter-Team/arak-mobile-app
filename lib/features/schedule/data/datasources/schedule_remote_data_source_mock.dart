@@ -1,4 +1,4 @@
-import 'package:arak_app/features/schedule/data/datasources/schedule_remote_data_source.dart';
+/*import 'package:arak_app/features/schedule/data/datasources/schedule_remote_data_source.dart';
 
 import '../models/schedule_item_model.dart';
 
@@ -42,4 +42,4 @@ class ScheduleRemoteDataSourceMock
       ];
     }
   }
-}
+}*/
