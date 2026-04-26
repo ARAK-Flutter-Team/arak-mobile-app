@@ -44,7 +44,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studentPresent => 'تم تسجيل حضور ابنك';
 
   @override
-  String get selectClass => 'أختر الفصل ';
+  String get selectClass => 'أختر الفصل';
 
   @override
   String get addNewTask => 'أضف مهمة جديدة';
@@ -358,4 +358,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get savedSuccessfully => 'تم الحفظ بنجاح';
+
+  @override
+  String get noClassesFound => 'لا توجد فصول دراسية';
+
+  @override
+  String get noScheduleFound => 'لا يوجد جدول دراسي للفلاتر المحددة';
+
+  @override
+  String get tryAgain => 'حاول مرة أخرى';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get activeFilters => 'الفلاتر النشطة:';
+
+  @override
+  String get teacherLabel => 'المعلم';
+
+  @override
+  String get filterSchedule => 'تصفية الجدول';
+
+  @override
+  String get enterClassId => 'أدخل رقم الفصل';
+
+  @override
+  String get enterTeacherId => 'أدخل رقم المعلم';
+
+  @override
+  String get applyFilters => 'تطبيق الفلاتر';
+
+  @override
+  String get mySchedule => 'جدولي';
 }

@@ -4,7 +4,7 @@ import 'attendance_list_item.dart';
 
 class AttendanceList extends StatelessWidget {
   final List<AttendanceRecord> records;
-  final Function(String studentId) onToggle;
+  final Function(int studentId) onToggle;  // changed from String to int
 
   const AttendanceList({
     super.key,
@@ -22,7 +22,7 @@ class AttendanceList extends StatelessWidget {
 
         return AttendanceListItem(
           record: record,
-          onTap: () => onToggle(record.studentId),
+          onTap: () => onToggle(record.studentId),  //  studentId is now int
         );
       },
     );

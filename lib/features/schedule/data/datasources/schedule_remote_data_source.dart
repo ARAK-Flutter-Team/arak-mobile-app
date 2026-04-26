@@ -1,9 +1,4 @@
-/*import '../models/schedule_item_model.dart';
-
-abstract class ScheduleRemoteDataSource {
-  Future<List<ScheduleItemModel>> getTeacherSchedule(int teacherId);
-}*/
-import 'package:arak_app/core/network/api_service.dart'; // تأكدي من المسار
+/*import 'package:arak_app/core/network/api_service.dart'; // تأكدي من المسار
 import '../models/schedule_item_model.dart';
 
 abstract class ScheduleRemoteDataSource {
@@ -32,4 +27,10 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
       throw Exception('Failed to load schedules');
     }
   }
+}*/
+import '../models/schedule_item_model.dart';
+import '../../domain/entities/schedule_filters.dart';
+
+abstract class ScheduleRemoteDataSource {
+  Future<List<ScheduleItemModel>> getSchedules(ScheduleFilters filters);
 }

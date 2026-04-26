@@ -358,4 +358,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedSuccessfully => 'Saved successfully';
+
+  @override
+  String get noClassesFound => 'No classes found';
+
+  @override
+  String get noScheduleFound => 'No schedule found for the selected filters';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get clearFilters => 'Clear Filters';
+
+  @override
+  String get activeFilters => 'Active Filters:';
+
+  @override
+  String get teacherLabel => 'Teacher';
+
+  @override
+  String get filterSchedule => 'Filter Schedule';
+
+  @override
+  String get enterClassId => 'Enter class ID';
+
+  @override
+  String get enterTeacherId => 'Enter teacher ID';
+
+  @override
+  String get applyFilters => 'Apply Filters';
+
+  @override
+  String get mySchedule => 'My Schedule';
 }
