@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/schedule_item_model.dart';
@@ -9,39 +10,63 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
 
   ScheduleRemoteDataSourceImpl(this.dio);
 
-  // دالة مساعدة لجلب التوكن من SharedPreferences
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
 
+  Future<int?> _getTeacherIdFromToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token == null) return null;
+
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return null;
+
+      String payload = parts[1];
+      while (payload.length % 4 != 0) {
+        payload += '=';
+      }
+
+      final bytes = base64Decode(payload);
+      final json = jsonDecode(utf8.decode(bytes));
+
+      return json['teacherId'] ?? json['TeacherId'] as int?;
+    } catch (e) {
+      print('Failed to get teacherId from token: $e');
+      return null;
+    }
+  }
+
   @override
   Future<List<ScheduleItemModel>> getSchedules(ScheduleFilters filters) async {
     try {
-      //  جلب التوكن وإضافته للـ headers
       final token = await _getToken();
       if (token != null) {
         dio.options.headers['Authorization'] = 'Bearer $token';
-        print(" Token added to request headers");
       } else {
-        print("️ No token found! User may not be logged in.");
+        print('No token found. User may not be logged in.');
       }
 
-      //  بناء الـ query parameters
       final queryParams = <String, dynamic>{};
-      if (filters.classId != null) queryParams['classId'] = filters.classId;
-      if (filters.teacherId != null) queryParams['teacherId'] = filters.teacherId;
 
-      //  طباعة الـ request بشكل صحيح
-      print(" GET /api/Schedules?classId=${filters.classId}&teacherId=${filters.teacherId}");
+      if (filters.classId != null) {
+        queryParams['classId'] = filters.classId;
+      }
 
-      //  إرسال الطلب
+      final teacherId = await _getTeacherIdFromToken();
+      if (teacherId != null) {
+        queryParams['teacherId'] = teacherId;
+      }
+
+      print('GET /api/Schedules?$queryParams');
+
       final response = await dio.get(
         '/api/Schedules',
         queryParameters: queryParams,
       );
 
-      //  معالجة الـ response
       if (response.statusCode == 200) {
         List dataList = [];
 
@@ -52,11 +77,11 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
         } else if (response.data is Map && response.data['\$values'] is List) {
           dataList = response.data['\$values'] as List;
         } else {
-          print("️ Unknown response format: ${response.data.runtimeType}");
+          print('Unknown response format: ${response.data.runtimeType}');
           return [];
         }
 
-        print(" Parsing ${dataList.length} schedule items");
+        print('Parsing ${dataList.length} schedule items');
         return dataList
             .map((json) => ScheduleItemModel.fromJson(json as Map<String, dynamic>))
             .toList();
@@ -64,13 +89,13 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
         throw Exception('Failed to load schedules: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      print(" Dio Error: ${e.message}");
+      print('Dio Error: ${e.message}');
       if (e.response?.statusCode == 401) {
         throw Exception('Unauthorized: Please login again');
       }
       throw Exception('Network error: ${e.message}');
     } catch (e) {
-      print(" Error: $e");
+      print('Error: $e');
       throw Exception('Unexpected error: $e');
     }
   }

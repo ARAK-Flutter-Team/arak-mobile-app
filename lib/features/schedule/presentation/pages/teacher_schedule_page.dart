@@ -163,7 +163,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/schedule_filters.dart';
 import '../../domain/entities/schedule_item.dart';
 import '../providers/schedule_filter_provider.dart';
@@ -219,12 +218,6 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final user = ref.read(authProvider).user;
-      if (user != null && user.teacherId != null) {
-        final controller = ref.read(scheduleFilterControllerProvider);
-        controller.updateFilter(teacherId: user.teacherId);
-      }
-      //  تحميل البيانات أول ما الصفحة تفتح
       ref.read(teacherScheduleNotifierProvider.notifier).loadSchedules();
     });
   }
@@ -234,8 +227,8 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
     final state = ref.watch(teacherScheduleNotifierProvider);
     final filters = ref.watch(scheduleFiltersProvider);
     final loc = AppLocalizations.of(context)!;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    //  listen لـ تغيير الفلاتر (جوه build مش initState)
     ref.listen<ScheduleFilters>(scheduleFiltersProvider, (prev, next) {
       if (prev != next) {
         ref.read(teacherScheduleNotifierProvider.notifier).loadSchedules();
@@ -248,7 +241,10 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
         showBackButton: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: Icon(
+              Icons.filter_list,
+              color: isDarkMode ? Colors.white : null,
+            ),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -271,12 +267,10 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
       ScheduleFilters filters,
       AppLocalizations loc,
       ) {
-    //  معالجة حالة Loading
     if (state is ScheduleLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    //  معالجة حالة Error
     if (state is ScheduleError) {
       return Center(
         child: Column(
@@ -297,7 +291,6 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
       );
     }
 
-    //  معالجة حالة Loaded
     if (state is ScheduleLoaded) {
       final schedule = state.schedule;
 
@@ -326,7 +319,6 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
         );
       }
 
-      // تجميع الحصص حسب اليوم
       final Map<String, List<ScheduleItem>> grouped = {};
       for (var item in schedule) {
         final dayKey = item.dayName;
@@ -340,10 +332,8 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const ScheduleHeader(),
-
             if (_hasActiveFilters(filters))
               _buildActiveFiltersChips(filters, loc),
-
             ...daysOrder.map((day) {
               final items = grouped[day] ?? [];
               if (items.isEmpty) return const SizedBox.shrink();
@@ -361,17 +351,20 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
   }
 
   bool _hasActiveFilters(ScheduleFilters filters) {
-    return filters.classId != null || filters.teacherId != null;
+    return filters.classId != null;
   }
 
   Widget _buildActiveFiltersChips(ScheduleFilters filters, AppLocalizations loc) {
     final controller = ref.read(scheduleFilterControllerProvider);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final chipColor = isDarkMode ? Colors.grey[800] : Colors.grey[200];
+    final textColor = isDarkMode ? Colors.white : Colors.black;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: isDarkMode ? Colors.grey[900] : Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -388,13 +381,13 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
             children: [
               if (filters.classId != null)
                 Chip(
-                  label: Text('${loc.classLabel}: ${filters.classId}'),
+                  backgroundColor: chipColor,
+                  label: Text(
+                    '${loc.classLabel}: ${filters.classId}',
+                    style: TextStyle(color: textColor),
+                  ),
                   onDeleted: () => controller.updateFilter(classId: null),
-                ),
-              if (filters.teacherId != null)
-                Chip(
-                  label: Text('${loc.teacherLabel}: ${filters.teacherId}'),
-                  onDeleted: () => controller.updateFilter(teacherId: null),
+                  deleteIconColor: textColor,
                 ),
             ],
           ),
