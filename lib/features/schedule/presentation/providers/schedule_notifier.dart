@@ -33,21 +33,15 @@ class ScheduleNotifier extends StateNotifier<ScheduleState> {
   Future<void> loadSchedules() async {
     final filters = _ref.read(scheduleFiltersProvider);
 
-    print(' Loading schedules with filters: ${filters.toQueryParams()}');
-
-    //  حول الحالة لـ Loading
+    print('Loading schedules with filters: ${filters.toQueryParams()}');
     state = const ScheduleLoading();
 
     try {
       final result = await getSchedules(filters);
-      print(' Loaded ${result.length} schedule items');
-
-      //  حول الحالة لـ Loaded بالبيانات
+      print('Loaded ${result.length} schedule items');
       state = ScheduleLoaded(result);
     } catch (e) {
-      print(' Error loading schedules: $e');
-
-      //  حول الحالة لـ Error
+      print('Error loading schedules: $e');
       state = ScheduleError(e.toString());
     }
   }
