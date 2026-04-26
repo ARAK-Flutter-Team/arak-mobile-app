@@ -3,11 +3,13 @@ import '../../data/datasources/student_remote_data_source.dart';
 import '../../data/repositories/student_repository_impl.dart';
 import '../../domain/entities/student.dart';
 import '../../domain/repositories/student_repository.dart';
+import 'package:arak_app/core/network/dio_provider.dart';
 
 // 1. Provider للـ DataSource
 final studentRemoteDataSourceProvider =
     Provider<StudentRemoteDataSource>((ref) {
-  return StudentRemoteDataSourceImpl();
+  final dio = ref.watch(dioProvider);
+  return StudentRemoteDataSourceImpl(dio);
 });
 
 // 2. Provider للـ Repository

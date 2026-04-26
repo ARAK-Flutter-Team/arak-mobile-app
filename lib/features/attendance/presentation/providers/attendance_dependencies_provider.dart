@@ -47,7 +47,7 @@ import '../../domain/usecases/submit_attendance_usecase.dart';
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
     //baseUrl: "http://192.168.1.9:5000/api",
-    baseUrl: "http://192.168.1.9:5000",
+    baseUrl: "http://192.168.1.11:5000",
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {
@@ -61,7 +61,8 @@ final dioProvider = Provider<Dio>((ref) {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
 
-      print(" TOKEN from storage: ${token != null ? "Found (${token.substring(0, 20)}...)" : "NOT FOUND"}");
+      print(
+          " TOKEN from storage: ${token != null ? "Found (${token.substring(0, 20)}...)" : "NOT FOUND"}");
 
       if (token != null && token.isNotEmpty) {
         options.headers["Authorization"] = "Bearer $token";
@@ -98,25 +99,25 @@ final dioProvider = Provider<Dio>((ref) {
 });
 
 final attendanceRemoteDataSourceProvider = Provider<AttendanceRemoteDataSource>(
-      (ref) => AttendanceRemoteDataSourceImpl(
+  (ref) => AttendanceRemoteDataSourceImpl(
     ref.read(dioProvider),
   ),
 );
 
 final attendanceRepositoryProvider = Provider<AttendanceRepositoryImpl>(
-      (ref) => AttendanceRepositoryImpl(
+  (ref) => AttendanceRepositoryImpl(
     ref.read(attendanceRemoteDataSourceProvider),
   ),
 );
 
 final loadAttendanceUseCaseProvider = Provider<LoadAttendanceUseCase>(
-      (ref) => LoadAttendanceUseCase(
+  (ref) => LoadAttendanceUseCase(
     ref.read(attendanceRepositoryProvider),
   ),
 );
 
 final submitAttendanceUseCaseProvider = Provider<SubmitAttendanceUseCase>(
-      (ref) => SubmitAttendanceUseCase(
+  (ref) => SubmitAttendanceUseCase(
     ref.read(attendanceRepositoryProvider),
   ),
 );

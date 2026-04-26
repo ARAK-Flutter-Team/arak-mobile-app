@@ -15,15 +15,15 @@ class StudentAttendanceModel extends StudentAttendance {
 
   factory StudentAttendanceModel.fromJson(Map<String, dynamic> json) {
     return StudentAttendanceModel(
-      name: json['name'] ?? '',
+      name: json['studentName'] ?? json['name'] ?? '',
       grade: json['grade'] ?? '',
-      status: json['status'] ?? '',
+      status: json['todayStatus'] ?? json['status'] ?? '',
       date: json['date'] ?? '',
-      checkIn: json['checkIn'] ?? '',
-      checkOut: json['checkOut'] ?? '',
+      checkIn: json['todayTimeIn']?.toString() ?? json['checkIn'] ?? '--:--',
+      checkOut: json['todayTimeOut']?.toString() ?? json['checkOut'] ?? '--:--',
       attendanceRate: (json['attendanceRate'] ?? 0).toDouble(),
-      lateTimes: json['lateTimes'] ?? 0,
-      absentTimes: json['absentTimes'] ?? 0,
+      lateTimes: json['lateArrivals'] ?? json['lateTimes'] ?? 0,
+      absentTimes: json['absences'] ?? json['absentTimes'] ?? 0,
     );
   }
 }

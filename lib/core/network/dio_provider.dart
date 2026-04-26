@@ -72,12 +72,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DioProvider {
-  static const String _baseUrl = "http://192.168.1.9:5000";
+  static const String _baseUrl = "http://192.168.1.11:5000";
 
   static Dio getDio() {
     final dio = Dio(BaseOptions(
       baseUrl: _baseUrl,
-      connectTimeout: const Duration(seconds: 30),  //  زودتها لـ 30 ثانية
+      connectTimeout: const Duration(seconds: 30), //  زودتها لـ 30 ثانية
       receiveTimeout: const Duration(seconds: 30), //  زودتها لـ 30 ثانية
       headers: {
         "Content-Type": "application/json",
@@ -99,7 +99,8 @@ class DioProvider {
         return handler.next(options);
       },
       onResponse: (response, handler) {
-        print(" RESPONSE: ${response.statusCode} ${response.requestOptions.uri}");
+        print(
+            " RESPONSE: ${response.statusCode} ${response.requestOptions.uri}");
         return handler.next(response);
       },
       onError: (error, handler) {

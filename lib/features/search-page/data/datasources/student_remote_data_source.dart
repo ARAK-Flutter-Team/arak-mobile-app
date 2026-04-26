@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
 import '../models/student_model.dart';
 
 abstract class StudentRemoteDataSource {
@@ -6,19 +6,19 @@ abstract class StudentRemoteDataSource {
 }
 
 class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
+  final Dio dio;
+
+  StudentRemoteDataSourceImpl(this.dio);
+
   @override
   Future<List<StudentModel>> getStudents() async {
-    // محاكاة للـ API (Mock)
-    await Future.delayed(const Duration(seconds: 2));
+    final response = await dio.get('/api/students/SearchStudentsByClassId/0');
 
-    String fakeJsonResponse = '''
-    [
-      {"name": "Ahmed Khaled", "grade": "Grade 9 - Class 3", "status": "Present", "date": "October 2025", "checkIn": "08:00 AM", "checkOut": "02:00 PM", "attendanceRate": 90},
-      {"name": "Sara Ali", "grade": "Grade 9 - Class 3", "status": "Absent", "date": "October 2025", "checkIn": "--:--", "checkOut": "--:--", "attendanceRate": 85}
-    ]
-    ''';
+    final List<dynamic> data =
+        response.data is List ? response.data as List : [];
 
-    final List<dynamic> jsonData = jsonDecode(fakeJsonResponse);
-    return jsonData.map((json) => StudentModel.fromJson(json)).toList();
+    return data
+        .map((json) => StudentModel.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 }

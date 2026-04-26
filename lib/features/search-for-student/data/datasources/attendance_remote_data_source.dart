@@ -1,27 +1,44 @@
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import '../models/student_attendance_model.dart';
 import '../../domain/entities/student_attendance_entity.dart';
 
 abstract class AttendanceRemoteDataSource {
-  Future<StudentAttendanceModel> getAttendance();
+  Future<StudentAttendanceModel> getAttendance(int studentId,
+      {int? month, int? year});
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
-  @override
-  Future<StudentAttendanceModel> getAttendance() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+  final Dio dio;
 
-    // الداتا الوهمية اللي كانت عندك في الكود
-    return const StudentAttendanceModel(
-      name: "Ahmed Abdullah Khaled",
-      grade: "Grade 9 - Class 3",
-      status: "Present Today",
-      date: "October 2024",
-      checkIn: "08:00 AM",
-      checkOut: "02:00 PM",
-      attendanceRate: 90.0,
-      lateTimes: 3,
-      absentTimes: 5,
+  AttendanceRemoteDataSourceImpl(this.dio);
+
+  @override
+  Future<StudentAttendanceModel> getAttendance(int studentId,
+      {int? month, int? year}) async {
+    final now = DateTime.now();
+    final targetMonth = month ?? now.month;
+    final targetYear = year ?? now.year;
+
+    final response = await dio.get(
+      '/api/attendance/student/$studentId',
+      queryParameters: {
+        'month': targetMonth,
+        'year': targetYear,
+      },
+    );
+
+    final data = response.data as Map<String, dynamic>;
+
+    return StudentAttendanceModel(
+      name: data['studentName'] ?? '',
+      grade: '${data['grade'] ?? ''} - ${data['className'] ?? ''}',
+      status: data['todayStatus'] ?? 'NotRecorded',
+      date: '$targetMonth/$targetYear',
+      checkIn: data['todayTimeIn']?.toString() ?? '--:--',
+      checkOut: data['todayTimeOut']?.toString() ?? '--:--',
+      attendanceRate: (data['attendanceRate'] as num?)?.toDouble() ?? 0.0,
+      lateTimes: data['lateArrivals'] ?? 0,
+      absentTimes: data['absences'] ?? 0,
     );
   }
 }

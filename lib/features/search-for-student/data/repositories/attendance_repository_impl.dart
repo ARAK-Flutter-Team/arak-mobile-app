@@ -8,7 +8,9 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   AttendanceRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<StudentAttendance> getStudentAttendance() async {
-    return await remoteDataSource.getAttendance();
+  Future<StudentAttendance> getStudentAttendance(int studentId,
+      {int? month, int? year}) async {
+    return await remoteDataSource.getAttendance(studentId,
+        month: month, year: year);
   }
 }

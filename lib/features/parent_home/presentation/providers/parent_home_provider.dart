@@ -7,11 +7,11 @@ import 'package:arak_app/features/parent_home/domain/usecases/get_parent_home_da
 import 'package:arak_app/features/parent_home/domain/usecases/get_parent_recent_activities_usecase.dart';
 import 'package:arak_app/shared/models/activity_model.dart';
 import 'package:arak_app/core/usecase/no_params.dart';
+import 'package:arak_app/core/network/dio_provider.dart'; // أضف الـ import ده
 
 final _dataSourceProvider = Provider<ParentHomeRemoteDataSource>(
-  (_) => ParentHomeRemoteDataSourceImpl(),
+  (ref) => ParentHomeRemoteDataSourceImpl(ref.watch(dioProvider)),
 );
-
 final _repositoryProvider = Provider<ParentHomeRepositoryImpl>(
   (ref) => ParentHomeRepositoryImpl(ref.watch(_dataSourceProvider)),
 );
@@ -29,7 +29,11 @@ final parentHomeProvider = FutureProvider<ParentHomeEntity>((ref) async {
   final result = await usecase(const NoParams());
   return result.fold(
     (failure) => throw Exception(failure.message),
-    (data) => data,
+    (data) {
+      print(
+          "✅ STUDENTS: ${data.students.map((s) => 'id=${s.id} name=${s.name}').toList()}");
+      return data;
+    },
   );
 });
 

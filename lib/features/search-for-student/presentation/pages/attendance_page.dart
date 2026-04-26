@@ -386,22 +386,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../domain/entities/student_attendance_entity.dart';
 import '../providers/attendance_provider.dart';
+import 'package:arak_app/features/parent_home/presentation/providers/parent_home_provider.dart';
 
 class AttendancePage extends ConsumerWidget {
   const AttendancePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attendanceAsync = ref.watch(attendanceProvider);
+    final selectedStudent = ref.watch(selectedStudentProvider);
+    final studentId = int.tryParse(selectedStudent?.id ?? '') ?? 0;
+    final attendanceAsync = ref.watch(attendanceProvider(studentId));
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-
       appBar: const AppMainAppBar(
         title: "Attendance Details",
         centerTitle: false,
       ),
-
       body: attendanceAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
@@ -416,7 +417,6 @@ class AttendancePage extends ConsumerWidget {
               const SizedBox(height: 20),
               StatsOverviewRow(data: data),
               const SizedBox(height: 20),
-
               Text(
                 "Attendance Calendar",
                 style: TextStyle(
@@ -425,13 +425,9 @@ class AttendancePage extends ConsumerWidget {
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-
               const SizedBox(height: 10),
-
               AttendanceCalendar(initialMonth: DateTime(2024, 10, 1)),
-
               const SizedBox(height: 10),
-
               Center(
                 child: Text(
                   "Last updated: ${data.checkOut}",
@@ -458,11 +454,9 @@ class StudentInfoCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(15),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
@@ -471,7 +465,6 @@ class StudentInfoCard extends StatelessWidget {
           )
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -483,9 +476,7 @@ class StudentInfoCard extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-
           const SizedBox(height: 4),
-
           Text(
             data.grade,
             style: TextStyle(
@@ -493,17 +484,13 @@ class StudentInfoCard extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
-
           const SizedBox(height: 10),
-
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-
             decoration: BoxDecoration(
               color: Colors.green.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
-
             child: Text(
               data.status,
               style: const TextStyle(
@@ -536,18 +523,14 @@ class TimeBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(15),
-
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
       ),
-
       child: Row(
         children: <Widget>[
           Icon(icon, color: color),
-
           const SizedBox(width: 10),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -558,7 +541,6 @@ class TimeBox extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-
               Text(
                 time,
                 style: TextStyle(
@@ -591,9 +573,7 @@ class TimeAttendanceCard extends StatelessWidget {
             color: Colors.green,
           ),
         ),
-
         const SizedBox(width: 15),
-
         Expanded(
           child: TimeBox(
             icon: Icons.logout,
@@ -631,7 +611,6 @@ class StatItem extends StatelessWidget {
             SizedBox(
               width: 60,
               height: 60,
-
               child: CircularProgressIndicator(
                 value: progress,
                 strokeWidth: 6,
@@ -639,7 +618,6 @@ class StatItem extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation<Color>(color),
               ),
             ),
-
             Text(
               value,
               style: TextStyle(
@@ -650,9 +628,7 @@ class StatItem extends StatelessWidget {
             ),
           ],
         ),
-
         const SizedBox(height: 8),
-
         Text(
           label,
           style: TextStyle(
@@ -680,14 +656,12 @@ class StatsOverviewRow extends StatelessWidget {
           progress: data.attendanceRate / 100.0,
           color: Colors.blue,
         ),
-
         StatItem(
           value: data.lateTimes.toString(),
           label: "Late",
           progress: data.lateTimes / 10.0,
           color: Colors.orange,
         ),
-
         StatItem(
           value: data.absentTimes.toString(),
           label: "Absent",
@@ -723,51 +697,54 @@ class _AttendanceCalendarState extends State<AttendanceCalendar> {
 
   String _getMonthName(int month) {
     const months = [
-      'Jan','Feb','Mar','Apr','May','Jun',
-      'Jul','Aug','Sep','Oct','Nov','Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return months[month - 1];
   }
 
   @override
   Widget build(BuildContext context) {
-
-    const daysOfWeek = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
     final firstDayOfMonth =
-    DateTime(_currentMonth.year, _currentMonth.month, 1);
+        DateTime(_currentMonth.year, _currentMonth.month, 1);
 
     final firstDayVisualOffset = (firstDayOfMonth.weekday % 7);
 
     final totalDaysInMonth =
         DateTime(_currentMonth.year, _currentMonth.month + 1, 0).day;
 
-    int totalCells =
-        (firstDayVisualOffset + totalDaysInMonth + 6) ~/ 7 * 7;
+    int totalCells = (firstDayVisualOffset + totalDaysInMonth + 6) ~/ 7 * 7;
 
     return Container(
       padding: const EdgeInsets.all(15),
-
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(15),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
             blurRadius: 6,
-            offset: const Offset(0,3),
+            offset: const Offset(0, 3),
           )
         ],
       ),
-
       child: Column(
         children: <Widget>[
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-
               Text(
                 "${_getMonthName(_currentMonth.month)} ${_currentMonth.year}",
                 style: TextStyle(
@@ -776,92 +753,70 @@ class _AttendanceCalendarState extends State<AttendanceCalendar> {
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-
               Row(
                 children: <Widget>[
                   IconButton(
                     icon: const Icon(Icons.keyboard_arrow_left, size: 20),
-                    onPressed: () => setState(() =>
-                    _currentMonth = DateTime(
-                        _currentMonth.year,
-                        _currentMonth.month - 1,
-                        1)),
+                    onPressed: () => setState(() => _currentMonth = DateTime(
+                        _currentMonth.year, _currentMonth.month - 1, 1)),
                   ),
-
                   IconButton(
                     icon: const Icon(Icons.keyboard_arrow_right, size: 20),
-                    onPressed: () => setState(() =>
-                    _currentMonth = DateTime(
-                        _currentMonth.year,
-                        _currentMonth.month + 1,
-                        1)),
+                    onPressed: () => setState(() => _currentMonth = DateTime(
+                        _currentMonth.year, _currentMonth.month + 1, 1)),
                   ),
                 ],
               ),
             ],
           ),
-
           const SizedBox(height: 15),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: daysOfWeek
                 .map((e) => Expanded(
-              child: Center(
-                child: Text(
-                  e,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ))
+                      child: Center(
+                        child: Text(
+                          e,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ))
                 .toList(),
           ),
-
           const SizedBox(height: 10),
-
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
-
             itemCount: totalCells,
-
             itemBuilder: (context, index) {
-
               final day = index - firstDayVisualOffset + 1;
 
               if (day < 1 || day > totalDaysInMonth) return Container();
 
               final now = DateTime.now();
 
-              final isToday =
-                  day == now.day &&
-                      _currentMonth.month == now.month &&
-                      _currentMonth.year == now.year;
+              final isToday = day == now.day &&
+                  _currentMonth.month == now.month &&
+                  _currentMonth.year == now.year;
 
               return Container(
                 alignment: Alignment.center,
-
                 decoration: BoxDecoration(
                   color: isToday
                       ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
                       : Colors.transparent,
-
                   borderRadius: BorderRadius.circular(8),
                 ),
-
                 child: Text(
                   '$day',
                   style: TextStyle(
@@ -869,8 +824,7 @@ class _AttendanceCalendarState extends State<AttendanceCalendar> {
                     color: isToday
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.onSurface,
-                    fontWeight:
-                    isToday ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               );

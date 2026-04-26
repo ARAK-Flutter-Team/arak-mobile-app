@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../../../../shared/models/activity_model.dart';
 import '../models/parent_home_model.dart';
 import '../models/student_model.dart';
@@ -8,60 +9,59 @@ abstract class ParentHomeRemoteDataSource {
 }
 
 class ParentHomeRemoteDataSourceImpl implements ParentHomeRemoteDataSource {
-  // ✅ لما الـ API يجهز، استبدل الـ mock بـ apiClient.get(...)
+  final Dio dio;
+  ParentHomeRemoteDataSourceImpl(this.dio);
 
   @override
   Future<ParentHomeModel> getParentHomeData() async {
-    // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    return ParentHomeModel(
-      parentName: 'Ahmed',
-      performancePercentage: 78,
-      students: [
-        StudentModel(
-          id: '1',
-          name: 'Shenouda Romany',
-          grade: 9,
-          classNumber: 3,
-          profileImage: null,
-          // assetImage: ("assets/images/shenouda.jpeg"),
-          parentUsername: 'shenoudar3243@gmail.com',
-          isVerified: true,
-        ),
-        StudentModel(
-          id: '2',
-          name: 'Ibrahem Saed',
-          grade: 7,
-          classNumber: 1,
-          profileImage: null,
-          // assetImage: ("assets/images/ibrahim.jpeg"),
-          parentUsername: 'ibrahim23@gmail.com',
-          isVerified: true,
-        ),
-      ],
-    );
+    try {
+      final response = await dio.get('/api/Parents/me');
+      return ParentHomeModel.fromJson(response.data as Map<String, dynamic>);
+    } catch (e) {
+      // مؤقتاً لحد ما الـ API يجهز
+      return ParentHomeModel(
+        parentName: 'John Parent',
+        performancePercentage: 78,
+        students: [
+          StudentModel(
+            id: '5',
+            name: 'Ahmed',
+            grade: 3,
+            classNumber: 1,
+            profileImage: null,
+            parentUsername: 'parent1@arak.com',
+            isVerified: true,
+          ),
+          StudentModel(
+            id: '6',
+            name: 'Ibrahem Saed',
+            grade: 7,
+            classNumber: 1,
+            profileImage: null,
+            parentUsername: 'parent1@arak.com',
+            isVerified: true,
+          ),
+        ],
+      );
+    }
   }
 
   @override
   Future<List<ActivityModel>> getRecentActivities() async {
-    await Future.delayed(const Duration(milliseconds: 600));
-
-    return [
-      ActivityModel(
-        id: '1',
-        title: 'Ahmed submitted drawing shapes task',
-        iconPath: 'assets/icons/tasks.svg',
-        keepOriginalIconColor: false,
-        route: null,
-      ),
-      ActivityModel(
-        id: '2',
-        title: 'You marked grade 3 attendance',
-        iconPath: 'assets/icons/attendance.svg',
-        keepOriginalIconColor: false,
-        route: null,
-      ),
-    ];
+    try {
+      final response = await dio.get('/api/Parents/me/activities');
+      final List data = response.data as List? ?? [];
+      return data
+          .map((a) => ActivityModel(
+                id: a['id']?.toString() ?? '',
+                title: a['title'] ?? '',
+                iconPath: 'assets/icons/tasks.svg',
+                keepOriginalIconColor: false,
+                route: null,
+              ))
+          .toList();
+    } catch (e) {
+      return []; // فاضية مؤقتاً
+    }
   }
 }
