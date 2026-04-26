@@ -781,6 +781,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved successfully'**
   String get savedSuccessfully;
+
+  /// No description provided for @noClassesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No classes found'**
+  String get noClassesFound;
+
+  /// No description provided for @noScheduleFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No schedule found for the selected filters'**
+  String get noScheduleFound;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clearFilters;
+
+  /// No description provided for @activeFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Filters:'**
+  String get activeFilters;
+
+  /// No description provided for @teacherLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher'**
+  String get teacherLabel;
+
+  /// No description provided for @filterSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Schedule'**
+  String get filterSchedule;
+
+  /// No description provided for @enterClassId.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter class ID'**
+  String get enterClassId;
+
+  /// No description provided for @enterTeacherId.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter teacher ID'**
+  String get enterTeacherId;
+
+  /// No description provided for @applyFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get applyFilters;
+
+  /// No description provided for @mySchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'My Schedule'**
+  String get mySchedule;
 }
 
 class _AppLocalizationsDelegate

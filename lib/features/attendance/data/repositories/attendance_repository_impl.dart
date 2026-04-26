@@ -1,8 +1,7 @@
-import 'package:http/http.dart' as _api;
 import '../../domain/entities/attendance_record.dart';
 import '../../domain/repositories/attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
-import '../models/attendance_model.dart';
+import '../models/attendance_student_model.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {
   final AttendanceRemoteDataSource remote;
@@ -13,31 +12,55 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<List<AttendanceRecord>> getAttendanceForSession({
     required String classId,
     required DateTime date,
-    required AttendanceSession session,
   }) async {
-    return await remote.getAttendanceForSession(
+    final response = await remote.getAttendanceForSession(
       classId: classId,
       date: date,
-      session: session,
     );
+
+    return response.students.map((student) {
+      return AttendanceRecord(
+        attendanceRecordId: student.attendanceRecordId,
+        studentId: student.studentId,
+        studentName: student.studentName,
+        status: _mapStatus(student.status),
+      );
+    }).toList();
+  }
+
+// أضيفي الـ mapStatus داخل الـ Repository
+  AttendanceStatus _mapStatus(String status) {
+    switch (status.toLowerCase()) {
+      case "present":
+        return AttendanceStatus.present;
+      case "late":
+        return AttendanceStatus.late;
+      case "absent":
+        return AttendanceStatus.absent;
+      default:
+        return AttendanceStatus.present;
+    }
   }
 
   @override
-  Future<void> submitAttendance(
-      List<AttendanceRecord> records,
-      ) async {
-    final models = records.map(
-          (e) => AttendanceModel(
-        studentId: e.studentId,
-        studentName: e.studentName,
-        classId: e.classId,
-        date: e.date,
-        session: e.session,
-        status: e.status,
-      ),
-    ).toList();
+  Future<void> submitAttendance({
+    required int classId,
+    required String date,
+    required String session,
+    required List<AttendanceRecord> records,
+  }) async {
+    final recordsData = records.map((record) {
+      return {
+        "studentId": record.studentId,
+        "status": record.status.name,
+      };
+    }).toList();
 
-    await remote.submitAttendance(models);
+    await remote.submitAttendance(
+      classId: classId,
+      date: date,
+      session: session,
+      records: recordsData,
+    );
   }
-
 }

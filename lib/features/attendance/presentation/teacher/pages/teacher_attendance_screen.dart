@@ -7,6 +7,7 @@ import '../../../../../shared/widgets/app_dropdown.dart';
 import '../../../../../shared/widgets/app_dropdown_session.dart';
 import '../../../domain/entities/attendance_record.dart';
 import '../providers/teacher_attendance_provider.dart';
+import '../providers/class_provider.dart';
 import '../widgets/attendance_list.dart';
 import '../widgets/attendance_percentage_header.dart';
 import '../widgets/attendance_save_button.dart';
@@ -30,103 +31,130 @@ class _TeacherAttendanceScreenState
   late String selectedClass;
   AttendanceSession selectedSession = AttendanceSession.morning;
 
-  ///  IDs
-  /*final List<String> classes = [
-    "class1",
-    "class2",
-    "class3",
-  ];*/
-  final List<String> classes = [
-    "1",
-    "2",
-    "3",
-  ];
-  ///  ترجمة الكلاس (UI فقط)
-  String getClassName(BuildContext context, String classId) {
-    final loc = AppLocalizations.of(context)!;
-
-    switch (classId) {
-      case "class1": return "${loc.classLabel} 1";
-      case "class2": return "${loc.classLabel} 2";
-      case "class3": return "${loc.classLabel} 3";
-      default: return classId;
-    }
-  }
+  List<ClassEntity> classes = [];
+  bool isLoadingClasses = true;
 
   @override
   void initState() {
     super.initState();
+    _loadClasses();
+  }
 
-    selectedClass = classes.contains(widget.classId)
-        ? widget.classId
-        : classes.first;
+  Future<void> _loadClasses() async {
+    try {
+      final getClassesUseCase = ref.read(getClassesUseCaseProvider);
+      final fetchedClasses = await getClassesUseCase();
 
-    Future.microtask(() {
-      ref
-          .read(teacherAttendanceNotifierProvider.notifier)
-          .load(selectedClass, selectedSession);
-    });
+      if (mounted) {
+        setState(() {
+          classes = fetchedClasses;
+          isLoadingClasses = false;
+
+          if (classes.isNotEmpty) {
+            if (classes.any((c) => c.id.toString() == widget.classId)) {
+              selectedClass = widget.classId;
+            } else {
+              selectedClass = classes.first.id.toString();
+            }
+          }
+        });
+
+        if (classes.isNotEmpty && mounted) {
+          _loadAttendance();
+        }
+      }
+    } catch (e) {
+      print(" Error loading classes: $e");
+      if (mounted) {
+        setState(() {
+          isLoadingClasses = false;
+        });
+      }
+    }
+  }
+
+  void _loadAttendance() {
+    ref
+        .read(teacherAttendanceNotifierProvider.notifier)
+        .load(selectedClass, selectedSession);
+  }
+
+  String getClassName(ClassEntity classObj) {
+    return classObj.name;
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(teacherAttendanceNotifierProvider);
     final notifier = ref.read(teacherAttendanceNotifierProvider.notifier);
+    final loc = AppLocalizations.of(context)!;
 
-    ///  Map آمن بدل المقارنة بالنص
+    if (isLoadingClasses) {
+      return Scaffold(
+        appBar: AppMainAppBar(
+          title: loc.attendance,
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (classes.isEmpty) {
+      return Scaffold(
+        appBar: AppMainAppBar(
+          title: loc.attendance,
+        ),
+        body: Center(
+          child: Text(
+            loc.noClassesFound,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      );
+    }
+
+    final currentClass = classes.firstWhere(
+          (c) => c.id.toString() == selectedClass,
+      orElse: () => classes.first,
+    );
+
     final classMap = {
-      for (var c in classes) getClassName(context, c): c
+      for (var c in classes) c.name: c.id.toString()
     };
 
     return Scaffold(
       appBar: AppMainAppBar(
-        title: AppLocalizations.of(context)!.attendance,
+        title: loc.attendance,
       ),
       body: Stack(
         children: [
-
-          /// Loading
           if (state.isLoading)
             const Center(child: CircularProgressIndicator())
           else
             Column(
               children: [
-
                 const SizedBox(height: 16),
 
-                /// Dropdowns
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-
-                      /// Class Dropdown
                       SizedBox(
                         width: 150,
                         child: AppDropdown(
-                          selectedClass:
-                          getClassName(context, selectedClass),
+                          selectedClass: currentClass.name,
                           classes: classMap.keys.toList(),
                           onChanged: (value) async {
                             final selectedId = classMap[value];
-
                             if (selectedId != null) {
                               setState(() {
                                 selectedClass = selectedId;
                               });
-
-                              await notifier.load(
-                                selectedClass,
-                                selectedSession,
-                              );
+                              await notifier.load(selectedClass, selectedSession);
                             }
                           },
                         ),
                       ),
-
                       const Spacer(),
-
-                      /// Session Dropdown
                       SizedBox(
                         width: 150,
                         child: AppDropdownSession(
@@ -135,11 +163,7 @@ class _TeacherAttendanceScreenState
                             setState(() {
                               selectedSession = session!;
                             });
-
-                            await notifier.load(
-                              selectedClass,
-                              selectedSession,
-                            );
+                            await notifier.load(selectedClass, selectedSession);
                           },
                         ),
                       ),
@@ -149,7 +173,6 @@ class _TeacherAttendanceScreenState
 
                 const SizedBox(height: 16),
 
-                /// Attendance %
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: AttendancePercentageHeader(
@@ -159,19 +182,16 @@ class _TeacherAttendanceScreenState
 
                 const SizedBox(height: 16),
 
-                /// Students List
                 Expanded(
                   child: AttendanceList(
                     records: state.records,
-                    onToggle: notifier.toggleStatus,
+                    onToggle: (studentId) => notifier.toggleStatus(studentId),
                   ),
                 ),
-
                 const SizedBox(height: 80),
               ],
             ),
 
-          /// Save Button
           Positioned(
             bottom: 16,
             left: 20,
@@ -179,18 +199,13 @@ class _TeacherAttendanceScreenState
             child: AttendanceSaveButton(
               onPressed: () async {
                 final success = await notifier.save();
-
-                if (context.mounted) {
+                if (mounted) {
                   AppSnackBar.show(
                     context,
                     message: success
-                        ? AppLocalizations.of(context)!
-                        .attendanceSavedSuccessfully
-                        : AppLocalizations.of(context)!
-                        .failedToSaveAttendance,
-                    type: success
-                        ? AppSnackBarType.success
-                        : AppSnackBarType.error,
+                        ? loc.attendanceSavedSuccessfully
+                        : loc.failedToSaveAttendance,
+                    type: success ? AppSnackBarType.success : AppSnackBarType.error,
                   );
                 }
               },

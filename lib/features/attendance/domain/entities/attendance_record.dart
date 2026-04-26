@@ -10,34 +10,29 @@ enum AttendanceStatus {
 }
 
 class AttendanceRecord {
-  final String studentId;
+  final int attendanceRecordId;
+  final int studentId;
   final String studentName;
-  final String classId;
-  final DateTime date;
-  final AttendanceSession session;
   final AttendanceStatus status;
-  final String? studentImageUrl;
+
   const AttendanceRecord({
+    required this.attendanceRecordId,
     required this.studentId,
     required this.studentName,
-    required this.classId,
-    required this.date,
-    required this.session,
     required this.status,
-    this.studentImageUrl,
   });
 
   AttendanceRecord copyWith({
+    int? attendanceRecordId,
+    int? studentId,
+    String? studentName,
     AttendanceStatus? status,
   }) {
     return AttendanceRecord(
-      studentId: studentId,
-      studentName: studentName,
-      classId: classId,
-      date: date,
-      session: session,
+      attendanceRecordId: attendanceRecordId ?? this.attendanceRecordId,
+      studentId: studentId ?? this.studentId,
+      studentName: studentName ?? this.studentName,
       status: status ?? this.status,
-      studentImageUrl: studentImageUrl,
     );
   }
 }

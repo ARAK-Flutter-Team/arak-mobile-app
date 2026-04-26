@@ -45,7 +45,7 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/schedule_item.dart';
 
 class ScheduleItemRow extends StatelessWidget {
-  final ScheduleItem item; // تم تعديل النوع من dynamic
+  final ScheduleItem item;
 
   const ScheduleItemRow({
     super.key,
@@ -61,15 +61,26 @@ class ScheduleItemRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Center(
-              child: Text(
-                item.title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
                 ),
-              ),
+                if (item.location.isNotEmpty)
+                  Text(
+                    item.location,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+              ],
             ),
           ),
           Text(

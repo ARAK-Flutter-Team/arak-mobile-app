@@ -9,12 +9,10 @@ class LoadAttendanceUseCase {
   Future<List<AttendanceRecord>> call({
     required String classId,
     required DateTime date,
-    required AttendanceSession session,
   }) {
     return repository.getAttendanceForSession(
       classId: classId,
       date: date,
-      session: session,
     );
   }
 }

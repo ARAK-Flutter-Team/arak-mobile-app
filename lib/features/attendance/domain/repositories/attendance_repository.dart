@@ -4,10 +4,12 @@ abstract class AttendanceRepository {
   Future<List<AttendanceRecord>> getAttendanceForSession({
     required String classId,
     required DateTime date,
-    required AttendanceSession session,
   });
 
-  Future<void> submitAttendance(
-      List<AttendanceRecord> records,
-      );
+  Future<void> submitAttendance({
+    required int classId,
+    required String date,
+    required String session,
+    required List<AttendanceRecord> records,
+  });
 }
