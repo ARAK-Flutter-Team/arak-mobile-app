@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/models/quick_action_item.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
@@ -17,17 +18,18 @@ class ParentHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n =
+        AppLocalizations.of(context)!; // ✅ تعريف واحد وبستخدمه في كل حتة
     final homeAsync = ref.watch(parentHomeProvider);
     final selectedIndex = ref.watch(selectedStudentIndexProvider);
     final selectedStudent = ref.watch(selectedStudentProvider);
     final notificationAsync = ref.watch(notificationProvider);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.black
-          : Colors.white,
+      backgroundColor:
+          Theme.of(context).scaffoldBackgroundColor, // ✅ زي teacher
       appBar: AppMainAppBar(
-        title: "Welcome ${ref.watch(currentUserProvider)?.name ?? ''}!",
+        title: l10n.welcome(ref.watch(currentUserProvider)?.name ?? ''), // ✅
         showBackButton: false,
       ),
       body: SafeArea(
@@ -38,7 +40,7 @@ class ParentHomeScreen extends ConsumerWidget {
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.all(16.w), // ✅
+            padding: EdgeInsets.all(16.w),
             child: Column(
               children: [
                 homeAsync.when(
@@ -64,9 +66,7 @@ class ParentHomeScreen extends ConsumerWidget {
                         .state = i,
                   ),
                 ),
-
-                SizedBox(height: 16.h), // ✅
-
+                SizedBox(height: 16.h),
                 homeAsync.when(
                   loading: () => const CircularProgressIndicator(),
                   error: (_, __) => const SizedBox(),
@@ -78,14 +78,13 @@ class ParentHomeScreen extends ConsumerWidget {
                         .state = i,
                   ),
                 ),
-
-                SizedBox(height: 24.h), // ✅
-
+                SizedBox(height: 24.h),
                 notificationAsync.when(
                   loading: () => const SizedBox(),
                   error: (_, __) => const SizedBox(),
                   data: (state) => QuickActionsGrid(
-                    items: _buildQuickActions(selectedStudent?.id ?? ""),
+                    items: _buildQuickActions(
+                        selectedStudent?.id ?? '', l10n), // ✅ بنمرر l10n
                     hasNewTasks: state.hasNewTasks,
                     hasNewMessages: state.hasNewMessages,
                     onTasksOpened: () async {
@@ -99,9 +98,7 @@ class ParentHomeScreen extends ConsumerWidget {
                     },
                   ),
                 ),
-
-                SizedBox(height: 24.h), // ✅
-
+                SizedBox(height: 24.h),
                 const ParentRecentActivitiesSection(),
               ],
             ),
@@ -111,35 +108,37 @@ class ParentHomeScreen extends ConsumerWidget {
     );
   }
 
-  List<QuickActionItem> _buildQuickActions(String studentId) => [
+  List<QuickActionItem> _buildQuickActions(
+          String studentId, AppLocalizations l10n) =>
+      [
         QuickActionItem(
-          title: "Tasks",
+          title: l10n.tasks, // ✅
           route: '/parent-home/tasks',
           iconPath: 'assets/icons/tasks.svg',
           extra: studentId,
         ),
         QuickActionItem(
-          title: "Evaluation",
+          title: l10n.evaluation, // ✅
           route: '/parent-home/evaluation',
           iconPath: 'assets/icons/star.svg',
         ),
         QuickActionItem(
-          title: "Schedule",
+          title: l10n.schedule, // ✅ موجود أصلاً في ARB
           route: '/parent-home/schedule',
           iconPath: 'assets/icons/schedule.svg',
         ),
         QuickActionItem(
-          title: "Contact us",
+          title: l10n.contactUs, // ✅
           route: '/parent-home/contact',
           iconPath: 'assets/icons/contact.svg',
         ),
         QuickActionItem(
-          title: "Attendance",
+          title: l10n.attendance, // ✅ موجود أصلاً في ARB
           route: '/parent-home/attendance',
           iconPath: 'assets/icons/attendance.svg',
         ),
         QuickActionItem(
-          title: "Fox chatbot",
+          title: l10n.foxChatbot, // ✅
           route: '/parent-home/chatbot',
           iconPath: 'assets/icons/chatbot.svg',
         ),
@@ -192,10 +191,10 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!; // ✅
 
     return Column(
       children: [
-        // Dots
         if (widget.students.length > 1) ...[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -203,24 +202,22 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
               final isSelected = i == widget.selectedIndex;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: EdgeInsets.symmetric(horizontal: 4.w), // ✅
-                width: isSelected ? 16.w : 8.w, // ✅
-                height: 8.h, // ✅
+                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                width: isSelected ? 16.w : 8.w,
+                height: 8.h,
                 decoration: BoxDecoration(
                   color: isSelected
                       ? theme.colorScheme.primary
                       : Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4.r), // ✅
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
               );
             }),
           ),
-          SizedBox(height: 12.h), // ✅
+          SizedBox(height: 12.h),
         ],
-
-        // Swipeable Cards
         SizedBox(
-          height: 160.h, // ✅ الأهم
+          height: 160.h,
           child: PageView.builder(
             controller: _pageController,
             itemCount: widget.students.length,
@@ -228,11 +225,11 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
             itemBuilder: (context, i) {
               final student = widget.students[i];
               return Container(
-                margin: EdgeInsets.symmetric(horizontal: 4.w), // ✅
-                padding: EdgeInsets.all(16.w), // ✅
+                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(16.r), // ✅
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: theme.colorScheme.outline.withValues(alpha: 0.3),
                   ),
@@ -242,22 +239,26 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                   children: [
                     Center(
                       child: Text(
-                        "student information",
+                        l10n.studentInformation, // ✅
                         style: theme.textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(height: 12.h), // ✅
+                    SizedBox(height: 12.h),
                     Text(
-                      "Name: ${student.name}",
+                      "${l10n.studentName}: ${student.name}", // ✅
                       style: theme.textTheme.bodyLarge
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                    Text("Grade: ${student.grade}",
-                        style: theme.textTheme.bodyMedium),
-                    Text("Class: ${student.classNumber}",
-                        style: theme.textTheme.bodyMedium),
-                    SizedBox(height: 8.h), // ✅
+                    Text(
+                      "${l10n.studentGrade}: ${student.grade}", // ✅
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    Text(
+                      "${l10n.classLabel}: ${student.classNumber}", // ✅ موجود أصلاً
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    SizedBox(height: 8.h),
                     GestureDetector(
                       onTap: () => context.push(
                         '/parent-home/student/${student.id}',
@@ -267,16 +268,16 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "more",
+                              l10n.more, // ✅
                               style: TextStyle(
                                 color: theme.colorScheme.primary,
-                                fontSize: 12.sp, // ✅
+                                fontSize: 12.sp,
                               ),
                             ),
-                            SizedBox(width: 2.w), // ✅
+                            SizedBox(width: 2.w),
                             Icon(
                               Icons.arrow_forward,
-                              size: 14.sp, // ✅
+                              size: 14.sp,
                               color: theme.colorScheme.primary,
                             ),
                           ],

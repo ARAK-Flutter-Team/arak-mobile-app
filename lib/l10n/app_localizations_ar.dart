@@ -391,4 +391,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mySchedule => 'جدولي';
+
+  @override
+  String get studentInformation => 'معلومات الطالب';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get grade => 'الصف';
+
+  @override
+  String get className => 'الفصل';
+
+  @override
+  String get more => 'المزيد';
+
+  @override
+  String get evaluation => 'التقييم';
+
+  @override
+  String get contactUs => 'تواصل معنا';
+
+  @override
+  String get foxChatbot => 'شات بوت فوكس';
+
+  @override
+  String get studentName => 'اسم الطالب';
+
+  @override
+  String get studentGrade => 'درجة الطالب';
 }

@@ -129,5 +129,15 @@
   "enterClassId": "أدخل رقم الفصل",
   "enterTeacherId": "أدخل رقم المعلم",
   "applyFilters": "تطبيق الفلاتر",
-  "mySchedule": "جدولي"
+  "mySchedule": "جدولي",
+  "studentInformation": "معلومات الطالب",
+  "name": "الاسم",
+  "grade": "الصف",
+  "className": "الفصل",
+  "more": "المزيد",
+  "evaluation": "التقييم",
+  "contactUs": "تواصل معنا",
+  "foxChatbot": "شات بوت فوكس",
+  "studentName": "اسم الطالب",
+  "studentGrade": "درجة الطالب"
 }

@@ -391,4 +391,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mySchedule => 'My Schedule';
+
+  @override
+  String get studentInformation => 'Student Information';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get grade => 'Grade';
+
+  @override
+  String get className => 'Class';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String get evaluation => 'Evaluation';
+
+  @override
+  String get contactUs => 'Contact us';
+
+  @override
+  String get foxChatbot => 'Fox chatbot';
+
+  @override
+  String get studentName => 'Student Name';
+
+  @override
+  String get studentGrade => 'Student Grade';
 }

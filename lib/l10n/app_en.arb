@@ -129,5 +129,16 @@
   "enterClassId": "Enter class ID",
   "enterTeacherId": "Enter teacher ID",
   "applyFilters": "Apply Filters",
-  "mySchedule": "My Schedule"
+  "mySchedule": "My Schedule",
+  "studentInformation": "Student Information",
+  "name": "Name",
+  "grade": "Grade",
+  "className": "Class",
+  "more": "More",
+  "tasks": "Tasks",
+  "evaluation": "Evaluation",
+  "contactUs": "Contact us",
+  "foxChatbot": "Fox chatbot",
+  "studentName": "Student Name",
+  "studentGrade": "Student Grade"
 }

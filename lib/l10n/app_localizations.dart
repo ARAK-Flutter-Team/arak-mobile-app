@@ -847,6 +847,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Schedule'**
   String get mySchedule;
+
+  /// No description provided for @studentInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Student Information'**
+  String get studentInformation;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @grade.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade'**
+  String get grade;
+
+  /// No description provided for @className.
+  ///
+  /// In en, this message translates to:
+  /// **'Class'**
+  String get className;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @evaluation.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluation'**
+  String get evaluation;
+
+  /// No description provided for @contactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get contactUs;
+
+  /// No description provided for @foxChatbot.
+  ///
+  /// In en, this message translates to:
+  /// **'Fox chatbot'**
+  String get foxChatbot;
+
+  /// No description provided for @studentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Student Name'**
+  String get studentName;
+
+  /// No description provided for @studentGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Student Grade'**
+  String get studentGrade;
 }
 
 class _AppLocalizationsDelegate
