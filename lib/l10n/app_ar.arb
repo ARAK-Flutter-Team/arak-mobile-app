@@ -139,5 +139,48 @@
   "contactUs": "تواصل معنا",
   "foxChatbot": "شات بوت فوكس",
   "studentName": "اسم الطالب",
-  "studentGrade": "درجة الطالب"
+  "studentGrade": "درجة الطالب",
+  "parentTasksTitle": "مهام ابنك",
+  "parentTasksSubtitle": "يمكنك هنا متابعة المهام اليومية وتقدم ابنك",
+  "viewReports": "عرض التقارير",
+  "taskDetails": "تفاصيل المهمة",
+  "taskStatusInProgress": "جارٍ التنفيذ",
+  "taskStatusNotStarted": "لم يبدأ",
+  "parentTaskViewOnly": "يمكنك فقط عرض المهام. تواصل مع المعلم لتحديث الحالة.",
+  "checkIn": "وقت الحضور",
+"checkOut": "وقت الانصراف",
+"attendanceRate": "نسبة الحضور",
+"overallPerformance": "الأداء العام هذا الشهر",
+"searchStudent": "البحث عن طالب",
+"searchByName": "ابحث بالاسم...",
+"noStudentFound": "لا يوجد طالب",
+"attendanceDetails": "تفاصيل الحضور",
+"attendanceCalendar": "تقويم الحضور",
+"lastUpdated": "آخر تحديث: {time}",
+"@lastUpdated": {
+  "placeholders": {
+    "time": {}
+  }
+},
+"schedule": "الجدول",
+"schoolSchedule": "الجدول الدراسي",
+"daily": "يومي",
+"weekly": "أسبوعي",
+"downloadFullSchedule": "تحميل الجدول كاملاً",
+"evaluation": "التقييم",
+"subjects": "المواد",
+"overallPerformance": "الأداء العام",
+"downloadReport": "تحميل التقرير",
+"downloading": "جاري التحميل...",
+"reportDownloaded": "تم تحميل التقرير!",
+"contactUs": "تواصل معنا",
+"writeYourMessage": "اكتب رسالتك أدناه:",
+"typeYourMessage": "اكتب رسالتك هنا...",
+"ourSocialMedia": "وسائل التواصل الاجتماعي",
+"couldNotLaunch": "تعذر فتح {url}",
+"@couldNotLaunch": {
+  "placeholders": {
+    "url": {}
+  }
+}
 }

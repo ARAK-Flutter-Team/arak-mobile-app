@@ -887,7 +887,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactUs.
   ///
   /// In en, this message translates to:
-  /// **'Contact us'**
+  /// **'Contact Us'**
   String get contactUs;
 
   /// No description provided for @foxChatbot.
@@ -907,6 +907,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Student Grade'**
   String get studentGrade;
+
+  /// No description provided for @parentTasksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks for your child'**
+  String get parentTasksTitle;
+
+  /// No description provided for @parentTasksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Here you can track your child\'s daily tasks and progress'**
+  String get parentTasksSubtitle;
+
+  /// No description provided for @viewReports.
+  ///
+  /// In en, this message translates to:
+  /// **'View Reports'**
+  String get viewReports;
+
+  /// No description provided for @taskDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Details'**
+  String get taskDetails;
+
+  /// No description provided for @taskStatusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get taskStatusInProgress;
+
+  /// No description provided for @taskStatusNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started'**
+  String get taskStatusNotStarted;
+
+  /// No description provided for @parentTaskViewOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'You can only view tasks. Contact the teacher to update status.'**
+  String get parentTaskViewOnly;
+
+  /// No description provided for @checkIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Check In'**
+  String get checkIn;
+
+  /// No description provided for @checkOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Out'**
+  String get checkOut;
+
+  /// No description provided for @attendanceRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Rate'**
+  String get attendanceRate;
+
+  /// No description provided for @overallPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall performance'**
+  String get overallPerformance;
+
+  /// No description provided for @searchStudent.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Student'**
+  String get searchStudent;
+
+  /// No description provided for @searchByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name...'**
+  String get searchByName;
+
+  /// No description provided for @noStudentFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No student found'**
+  String get noStudentFound;
+
+  /// No description provided for @attendanceDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Details'**
+  String get attendanceDetails;
+
+  /// No description provided for @attendanceCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Calendar'**
+  String get attendanceCalendar;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: {time}'**
+  String lastUpdated(Object time);
+
+  /// No description provided for @schoolSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'School Schedule'**
+  String get schoolSchedule;
+
+  /// No description provided for @daily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get daily;
+
+  /// No description provided for @weekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// No description provided for @downloadFullSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Download full Schedule'**
+  String get downloadFullSchedule;
+
+  /// No description provided for @subjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Subjects'**
+  String get subjects;
+
+  /// No description provided for @downloadReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Report'**
+  String get downloadReport;
+
+  /// No description provided for @downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get downloading;
+
+  /// No description provided for @reportDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Downloaded!'**
+  String get reportDownloaded;
+
+  /// No description provided for @writeYourMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your message below:'**
+  String get writeYourMessage;
+
+  /// No description provided for @typeYourMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your message here...'**
+  String get typeYourMessage;
+
+  /// No description provided for @ourSocialMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Social Media'**
+  String get ourSocialMedia;
+
+  /// No description provided for @couldNotLaunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not launch {url}'**
+  String couldNotLaunch(Object url);
 }
 
 class _AppLocalizationsDelegate

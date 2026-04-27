@@ -411,7 +411,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get evaluation => 'Evaluation';
 
   @override
-  String get contactUs => 'Contact us';
+  String get contactUs => 'Contact Us';
 
   @override
   String get foxChatbot => 'Fox chatbot';
@@ -421,4 +421,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studentGrade => 'Student Grade';
+
+  @override
+  String get parentTasksTitle => 'Tasks for your child';
+
+  @override
+  String get parentTasksSubtitle =>
+      'Here you can track your child\'s daily tasks and progress';
+
+  @override
+  String get viewReports => 'View Reports';
+
+  @override
+  String get taskDetails => 'Task Details';
+
+  @override
+  String get taskStatusInProgress => 'In progress';
+
+  @override
+  String get taskStatusNotStarted => 'Not started';
+
+  @override
+  String get parentTaskViewOnly =>
+      'You can only view tasks. Contact the teacher to update status.';
+
+  @override
+  String get checkIn => 'Check In';
+
+  @override
+  String get checkOut => 'Check Out';
+
+  @override
+  String get attendanceRate => 'Attendance Rate';
+
+  @override
+  String get overallPerformance => 'Overall performance';
+
+  @override
+  String get searchStudent => 'Search Student';
+
+  @override
+  String get searchByName => 'Search by name...';
+
+  @override
+  String get noStudentFound => 'No student found';
+
+  @override
+  String get attendanceDetails => 'Attendance Details';
+
+  @override
+  String get attendanceCalendar => 'Attendance Calendar';
+
+  @override
+  String lastUpdated(Object time) {
+    return 'Last updated: $time';
+  }
+
+  @override
+  String get schoolSchedule => 'School Schedule';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get downloadFullSchedule => 'Download full Schedule';
+
+  @override
+  String get subjects => 'Subjects';
+
+  @override
+  String get downloadReport => 'Download Report';
+
+  @override
+  String get downloading => 'Downloading...';
+
+  @override
+  String get reportDownloaded => 'Report Downloaded!';
+
+  @override
+  String get writeYourMessage => 'Write your message below:';
+
+  @override
+  String get typeYourMessage => 'Type your message here...';
+
+  @override
+  String get ourSocialMedia => 'Our Social Media';
+
+  @override
+  String couldNotLaunch(Object url) {
+    return 'Could not launch $url';
+  }
 }

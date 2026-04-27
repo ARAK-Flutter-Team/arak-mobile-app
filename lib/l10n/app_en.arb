@@ -140,5 +140,48 @@
   "contactUs": "Contact us",
   "foxChatbot": "Fox chatbot",
   "studentName": "Student Name",
-  "studentGrade": "Student Grade"
+  "studentGrade": "Student Grade",
+  "parentTasksTitle": "Tasks for your child",
+  "parentTasksSubtitle": "Here you can track your child's daily tasks and progress",
+  "viewReports": "View Reports",
+  "taskDetails": "Task Details",
+  "taskStatusInProgress": "In progress",
+  "taskStatusNotStarted": "Not started",
+  "parentTaskViewOnly": "You can only view tasks. Contact the teacher to update status.",
+  "checkIn": "Check In",
+"checkOut": "Check Out",
+"attendanceRate": "Attendance Rate",
+"overallPerformance": "Overall performance this month",
+"searchStudent": "Search Student",
+"searchByName": "Search by name...",
+"noStudentFound": "No student found",
+"attendanceDetails": "Attendance Details",
+"attendanceCalendar": "Attendance Calendar",
+"lastUpdated": "Last updated: {time}",
+"@lastUpdated": {
+  "placeholders": {
+    "time": {}
+  }
+},
+"schedule": "Schedule",
+"schoolSchedule": "School Schedule",
+"daily": "Daily",
+"weekly": "Weekly",
+"downloadFullSchedule": "Download full Schedule",
+"evaluation": "Evaluation",
+"subjects": "Subjects",
+"overallPerformance": "Overall performance",
+"downloadReport": "Download Report",
+"downloading": "Downloading...",
+"reportDownloaded": "Report Downloaded!",
+"contactUs": "Contact Us",
+"writeYourMessage": "Write your message below:",
+"typeYourMessage": "Type your message here...",
+"ourSocialMedia": "Our Social Media",
+"couldNotLaunch": "Could not launch {url}",
+"@couldNotLaunch": {
+  "placeholders": {
+    "url": {}
+  }
+}
 }

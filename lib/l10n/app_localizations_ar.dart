@@ -421,4 +421,97 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studentGrade => 'درجة الطالب';
+
+  @override
+  String get parentTasksTitle => 'مهام ابنك';
+
+  @override
+  String get parentTasksSubtitle =>
+      'يمكنك هنا متابعة المهام اليومية وتقدم ابنك';
+
+  @override
+  String get viewReports => 'عرض التقارير';
+
+  @override
+  String get taskDetails => 'تفاصيل المهمة';
+
+  @override
+  String get taskStatusInProgress => 'جارٍ التنفيذ';
+
+  @override
+  String get taskStatusNotStarted => 'لم يبدأ';
+
+  @override
+  String get parentTaskViewOnly =>
+      'يمكنك فقط عرض المهام. تواصل مع المعلم لتحديث الحالة.';
+
+  @override
+  String get checkIn => 'وقت الحضور';
+
+  @override
+  String get checkOut => 'وقت الانصراف';
+
+  @override
+  String get attendanceRate => 'نسبة الحضور';
+
+  @override
+  String get overallPerformance => 'الأداء العام';
+
+  @override
+  String get searchStudent => 'البحث عن طالب';
+
+  @override
+  String get searchByName => 'ابحث بالاسم...';
+
+  @override
+  String get noStudentFound => 'لا يوجد طالب';
+
+  @override
+  String get attendanceDetails => 'تفاصيل الحضور';
+
+  @override
+  String get attendanceCalendar => 'تقويم الحضور';
+
+  @override
+  String lastUpdated(Object time) {
+    return 'آخر تحديث: $time';
+  }
+
+  @override
+  String get schoolSchedule => 'الجدول الدراسي';
+
+  @override
+  String get daily => 'يومي';
+
+  @override
+  String get weekly => 'أسبوعي';
+
+  @override
+  String get downloadFullSchedule => 'تحميل الجدول كاملاً';
+
+  @override
+  String get subjects => 'المواد';
+
+  @override
+  String get downloadReport => 'تحميل التقرير';
+
+  @override
+  String get downloading => 'جاري التحميل...';
+
+  @override
+  String get reportDownloaded => 'تم تحميل التقرير!';
+
+  @override
+  String get writeYourMessage => 'اكتب رسالتك أدناه:';
+
+  @override
+  String get typeYourMessage => 'اكتب رسالتك هنا...';
+
+  @override
+  String get ourSocialMedia => 'وسائل التواصل الاجتماعي';
+
+  @override
+  String couldNotLaunch(Object url) {
+    return 'تعذر فتح $url';
+  }
 }

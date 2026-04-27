@@ -1,6 +1,7 @@
 import 'package:arak_app/shared/widgets/app_main_appbar.dart';
 import 'package:flutter/material.dart';
 import '../../domain/entities/task.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ParentTaskDetailsPage extends StatelessWidget {
   final Task task;
@@ -8,6 +9,7 @@ class ParentTaskDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -21,7 +23,7 @@ class ParentTaskDetailsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppMainAppBar(
-        title: 'Task Details',
+        title: l10n.taskDetails, // ✅
         showBackButton: true,
       ),
       body: SafeArea(
@@ -90,9 +92,9 @@ class ParentTaskDetailsPage extends StatelessWidget {
                   ),
                   child: Text(
                     switch (task.status) {
-                      TaskStatus.completed => 'Done',
-                      TaskStatus.pending => 'In progress',
-                      TaskStatus.notStarted => 'Not started',
+                      TaskStatus.completed => l10n.done, // ✅
+                      TaskStatus.pending => l10n.taskStatusInProgress, // ✅
+                      TaskStatus.notStarted => l10n.taskStatusNotStarted, // ✅
                     },
                     style: const TextStyle(
                       fontSize: 16,
@@ -117,7 +119,7 @@ class ParentTaskDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Description',
+                      l10n.description, // ✅
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: colorScheme.primary,
@@ -149,7 +151,7 @@ class ParentTaskDetailsPage extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'You can only view tasks. Contact the teacher to update status.',
+                        l10n.parentTaskViewOnly, // ✅
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: noteIconColor,
                         ),

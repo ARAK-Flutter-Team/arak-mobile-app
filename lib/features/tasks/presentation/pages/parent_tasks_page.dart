@@ -7,6 +7,7 @@ import '../widgets/task_item_card.dart';
 import '../widgets/loading_view.dart';
 import '../widgets/error_view.dart';
 import '../widgets/empty_view.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ParentTasksPage extends ConsumerStatefulWidget {
   final String studentId;
@@ -20,7 +21,6 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
   @override
   void initState() {
     super.initState();
-
     print('🔥 studentId = ${widget.studentId}');
     Future.microtask(
       () => ref
@@ -31,13 +31,14 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(parentTasksNotifierProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppMainAppBar(
-        title: 'Tasks',
+        title: l10n.tasks,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -51,14 +52,14 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tasks for your child',
+                    l10n.parentTasksTitle,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "Here you can track your child's daily tasks and progress",
+                    l10n.parentTasksSubtitle, // ✅ اتصلحت
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
@@ -116,9 +117,10 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'View Reports',
-                    style: TextStyle(
+                  child: Text(
+                    // ✅ شيلنا الـ const
+                    l10n.viewReports,
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
