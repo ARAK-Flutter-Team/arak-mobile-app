@@ -10,13 +10,10 @@ class ParentHomeModel extends ParentHomeEntity {
 
   factory ParentHomeModel.fromJson(Map<String, dynamic> json) {
     return ParentHomeModel(
-      parentName:
-          json['name'] ?? json['parentName'] ?? json['parent_name'] ?? '',
-      performancePercentage:
-          (json['performancePercentage'] ?? json['performance_percentage'] ?? 0)
-              .toDouble(),
+      parentName: json['name'] ?? '',
+      performancePercentage: 0,
       students: (json['students'] as List? ?? [])
-          .map((s) => StudentModel.fromJson(s))
+          .map((s) => StudentModel.fromJson(s as Map<String, dynamic>))
           .toList(),
     );
   }

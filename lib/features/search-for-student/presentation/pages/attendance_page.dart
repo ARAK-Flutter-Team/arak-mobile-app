@@ -394,7 +394,7 @@ class AttendancePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedStudent = ref.watch(selectedStudentProvider);
-    final studentId = int.tryParse(selectedStudent?.id ?? '') ?? 0;
+    final studentId = selectedStudent?.numericId ?? 0;
     final attendanceAsync = ref.watch(attendanceProvider(studentId));
 
     return Scaffold(

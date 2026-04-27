@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class StudentEntity extends Equatable {
   final String id;
+  final int numericId;
   final String name;
   final int grade;
   final int classNumber;
@@ -13,6 +14,7 @@ class StudentEntity extends Equatable {
 
   const StudentEntity({
     required this.id,
+    required this.numericId,
     required this.name,
     required this.grade,
     required this.classNumber,
