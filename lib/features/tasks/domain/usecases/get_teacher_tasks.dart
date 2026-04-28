@@ -7,10 +7,9 @@ class GetTeacherTasks {
 
   GetTeacherTasks(this.repository);
 
-  //Future<List<Task>> call({
   Future<TeacherTasksResult> call({
-    required String teacherId,
-    required String classId,
+    required int teacherId,
+    required int classId,
   }) {
     return repository.getTeacherTasks(
       teacherId: teacherId,

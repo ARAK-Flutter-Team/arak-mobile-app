@@ -9,15 +9,13 @@ class LastUpdateText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lastUpdated =
-        ref.watch(teacherTasksNotifierProvider).lastUpdated;
+    final lastUpdated = ref.watch(teacherTasksNotifierProvider).lastUpdated;
 
     if (lastUpdated == null) {
       return const SizedBox.shrink();
     }
 
-    final formattedTime =
-    DateFormat('hh:mm a').format(lastUpdated);
+    final formattedTime = DateFormat('hh:mm a').format(lastUpdated);
 
     return Align(
       alignment: Alignment.centerLeft,

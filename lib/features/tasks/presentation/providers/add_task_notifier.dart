@@ -1,76 +1,69 @@
-/*import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/task_remote_data_source_impl.dart';
-import '../../data/models/task_model.dart';
-import '../../domain/entities/task.dart';
-import 'teacher_tasks_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:arak_app/features/tasks/domain/entities/task.dart';
+import 'package:arak_app/features/tasks/domain/usecases/add_task.dart';
+import 'package:arak_app/features/tasks/presentation/providers/teacher_tasks_notifier.dart';
+import '../../../../core/utils/logger_utils.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
+import 'providers.dart';
 
-/// =============================
-/// State for Add Task Page
-/// =============================
 class AddTaskState {
   final String? selectedClassId;
-  final String? selectedSubject;
   final DateTime? deadline;
   final String? titleError;
   final String? descriptionError;
   final String? classError;
-  final String? subjectError;
   final bool isLoading;
+  final String? error;
 
   const AddTaskState({
     this.selectedClassId,
-    this.selectedSubject,
     this.deadline,
     this.titleError,
     this.descriptionError,
     this.classError,
-    this.subjectError,
     this.isLoading = false,
+    this.error,
   });
 
   AddTaskState copyWith({
     String? selectedClassId,
-    String? selectedSubject,
     DateTime? deadline,
     String? titleError,
     String? descriptionError,
     String? classError,
-    String? subjectError,
     bool? isLoading,
+    String? error,
   }) {
     return AddTaskState(
       selectedClassId: selectedClassId ?? this.selectedClassId,
-      selectedSubject: selectedSubject ?? this.selectedSubject,
       deadline: deadline ?? this.deadline,
       titleError: titleError,
       descriptionError: descriptionError,
-      classError: classError,
-      subjectError: subjectError,
+      classError: classError ?? this.classError,
       isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
     );
   }
 }
 
-/// =============================
-/// Notifier
-/// =============================
 class AddTaskNotifier extends StateNotifier<AddTaskState> {
   final Ref ref;
+  final AddTask addTask;
 
-  AddTaskNotifier(this.ref) : super(const AddTaskState());
+  AddTaskNotifier(this.ref, this.addTask) : super(const AddTaskState());
 
-  /// =============================
-  /// Setters
-  /// =============================
   void setClass(String classId) {
-    state = state.copyWith(selectedClassId: classId, classError: null);
-  }
-
-  void setSubject(String subject) {
-    state = state.copyWith(selectedSubject: subject, subjectError: null);
+    AppLogger.logInfo(' AddTaskNotifier.setClass called with: "$classId"');
+    if (classId.isNotEmpty) {
+      state = state.copyWith(selectedClassId: classId, classError: null);
+      AppLogger.logSuccess('selectedClassId updated to: "$classId"');
+    } else {
+      AppLogger.logWarning('setClass called with empty string, ignoring');
+    }
   }
 
   void setDeadline(DateTime date) {
+    AppLogger.logInfo(' AddTaskNotifier.setDeadline: $date');
     state = state.copyWith(deadline: date);
   }
 
@@ -82,256 +75,90 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
     state = state.copyWith(descriptionError: null);
   }
 
-  /// =============================
-  /// Validation
-  /// =============================
-  bool validate({
-    required String title,
-    required String description,
-  }) {
+  bool validate({required String title, required String description}) {
+    AppLogger.logInfo(' AddTaskNotifier.validate - selectedClassId: "${state.selectedClassId}"');
 
-    if (state.selectedClassId == null) {
-      state = state.copyWith(classError: "Please select class");
+    if (state.selectedClassId == null || state.selectedClassId!.isEmpty) {
+      AppLogger.logError('Validation failed: No class selected');
+      state = state.copyWith(classError: "Please select a class");
       return false;
     }
-
-    if (state.selectedSubject == null) {
-      state = state.copyWith(subjectError: "Please select subject");
-      return false;
-    }
-
-    if (title.isEmpty) {
+    if (title.trim().isEmpty) {
+      AppLogger.logError('Validation failed: Title is empty');
       state = state.copyWith(titleError: "Title is required");
       return false;
     }
-
-    if (description.isEmpty) {
+    if (description.trim().isEmpty) {
+      AppLogger.logError('Validation failed: Description is empty');
       state = state.copyWith(descriptionError: "Description is required");
       return false;
     }
-
+    AppLogger.logSuccess('Validation passed');
     return true;
   }
 
-  /// =============================
-  /// Submit Task
-  /// =============================
   Future<void> submitTask({
-    required String teacherId,
     required String title,
     required String description,
   }) async {
+    AppLogger.logInfo('========== SUBMIT TASK STARTED ==========');
+    AppLogger.logInfo('Title: "$title", Description: "$description"');
 
-    try {
-      state = state.copyWith(isLoading: true);
+    if (!validate(title: title, description: description)) return;
 
-      final newTask = TaskModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: title,
-        description: description,
-        subject: state.selectedSubject!,
-        dueDate: state.deadline ?? DateTime.now().add(const Duration(days: 7)),
-        status: TaskStatus.pending,
-        imageUrl: '',
-        assignedTo: state.selectedClassId!,
-        teacherName: teacherId,
-      );
+    final classIdStr = state.selectedClassId!;
+    final teacherIdInt = ref.read(currentTeacherIdProvider);
 
-      await ref
-          .read(teacherTasksNotifierProvider.notifier)
-          .addTask(newTask);
+    AppLogger.logInfo('Class ID String: "$classIdStr"');
+    AppLogger.logInfo('Teacher ID from provider: $teacherIdInt');
 
-    } catch (e) {
-      print("Add Task Error: $e");
-    } finally {
-      state = state.copyWith(isLoading: false);
+    if (teacherIdInt == 0) {
+      AppLogger.logError('Teacher ID is 0, aborting');
+      state = state.copyWith(error: "Teacher ID not found", isLoading: false);
+      return;
     }
-  }
-}
 
-/// =============================
-/// Provider
-/// =============================
-final addTaskNotifierProvider =
-StateNotifierProvider<AddTaskNotifier, AddTaskState>(
-      (ref) => AddTaskNotifier(ref),
-);
-
-/// =============================
-/// Remote DataSource Provider
-/// =============================
-final taskRemoteDataSourceProvider =
-Provider((ref) => TaskRemoteDataSourceImpl());*/
-import 'package:arak_app/features/tasks/presentation/providers/providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:arak_app/features/tasks/domain/entities/task.dart';
-import 'package:arak_app/features/tasks/presentation/providers/teacher_tasks_notifier.dart'; // استدعاء teacherTasksNotifierProvider
-
-/// =============================
-/// State
-/// =============================
-class AddTaskState {
-  final String? selectedClassId;
-  final String? selectedSubject;
-  final DateTime? deadline;
-  final String? titleError;
-  final String? descriptionError;
-  final String? classError;
-  final String? subjectError;
-  final bool isLoading;
-  final String? error;
-
-  const AddTaskState({
-    this.selectedClassId,
-    this.selectedSubject,
-    this.deadline,
-    this.titleError,
-    this.descriptionError,
-    this.classError,
-    this.subjectError,
-    this.isLoading = false,
-    this.error,
-  });
-
-  AddTaskState copyWith({
-    String? selectedClassId,
-    String? selectedSubject,
-    DateTime? deadline,
-    String? titleError,
-    String? descriptionError,
-    String? classError,
-    String? subjectError,
-    bool? isLoading,
-    String? error,
-    bool clearError = false,
-  }) {
-    return AddTaskState(
-      selectedClassId: selectedClassId ?? this.selectedClassId,
-      selectedSubject: selectedSubject ?? this.selectedSubject,
-      deadline: deadline ?? this.deadline,
-      titleError: titleError,
-      descriptionError: descriptionError,
-      classError: classError,
-      subjectError: subjectError,
-      isLoading: isLoading ?? this.isLoading,
-      error: clearError ? null : (error ?? this.error),
+    final task = Task(
+      id: "",
+      title: title.trim(),
+      description: description.trim(),
+      dueDate: state.deadline ?? DateTime.now().add(const Duration(days: 7)),
+      status: TaskStatus.pending,
+      assignedTo: classIdStr,
+      teacherId: teacherIdInt.toString(),
     );
-  }
-}
 
-/// =============================
-/// Notifier
-/// =============================
-class AddTaskNotifier extends StateNotifier<AddTaskState> {
-  final Ref ref;
+    AppLogger.logInfo('Task to add: title=${task.title}, assignedTo=${task.assignedTo}, teacherId=${task.teacherId}');
 
-  AddTaskNotifier(this.ref) : super(const AddTaskState());
+    state = state.copyWith(isLoading: true, error: null);
 
-  /// Setters
-  void setClass(String classId) {
-    state = state.copyWith(selectedClassId: classId, classError: null, clearError: true);
-  }
-
-  void setSubject(String subject) {
-    state = state.copyWith(selectedSubject: subject, subjectError: null, clearError: true);
-  }
-
-  void setDeadline(DateTime date) {
-    state = state.copyWith(deadline: date, clearError: true);
-  }
-
-  void clearTitleError() {
-    state = state.copyWith(titleError: null, clearError: true);
-  }
-
-  void clearDescriptionError() {
-    state = state.copyWith(descriptionError: null, clearError: true);
-  }
-
-  /// Validation
-  bool validate({
-    required String title,
-    required String description,
-  }) {
-    if (state.selectedClassId == null) {
-      state = state.copyWith(classError: "Please select class");
-      return false;
-    }
-
-    if (state.selectedSubject == null) {
-      state = state.copyWith(subjectError: "Please select subject");
-      return false;
-    }
-
-    if (title.isEmpty) {
-      state = state.copyWith(titleError: "Title is required");
-      return false;
-    }
-
-    if (description.isEmpty) {
-      state = state.copyWith(descriptionError: "Description is required");
-      return false;
-    }
-
-    return true;
-  }
-
-  ///  Submit Task
-  Future<void> submitTask({
-    required String teacherId,
-    required String title,
-    required String description,
-  }) async {
     try {
-      state = state.copyWith(error: null);
+      AppLogger.logInfo('Calling addTask...');
+      await addTask(task);
+      AppLogger.logSuccess('Task added successfully');
 
-      if (!validate(title: title, description: description)) return;
+      final classIdInt = int.tryParse(classIdStr) ?? 0;
+      AppLogger.logInfo('Class ID int: $classIdInt');
 
-      if (state.selectedClassId == null || state.selectedSubject == null) {
-        print("Missing fields");
-        return;
-      }
-
-      state = state.copyWith(isLoading: true);
-
-      final task = Task(
-        id: "",
-        title: title,
-        description: description,
-        subject: state.selectedSubject!,
-        dueDate: state.deadline ?? DateTime.now().add(const Duration(days: 7)),
-        status: TaskStatus.pending,
-        assignedTo: state.selectedClassId!,
-        teacherName: teacherId,
-      );
-
-      // الاتصال بالباك إند
-      await ref.read(taskRepositoryProvider).addTask(task);
-
-      // تحديث ليست التاسكات باستخدام ref مباشرة
-      if (state.selectedClassId != null) {
-        // هنا بنستخدم الـ Import اللي فوق مباشرة
+      if (classIdInt != 0) {
+        AppLogger.logInfo('Fetching tasks again with teacherId: $teacherIdInt, classId: $classIdInt');
         await ref.read(teacherTasksNotifierProvider.notifier).fetchTasks(
-          teacherId: teacherId,
-          classId: state.selectedClassId!,
+          teacherId: teacherIdInt,
+          classId: classIdInt,
         );
+        AppLogger.logSuccess('Tasks fetched again');
       }
 
       state = state.copyWith(isLoading: false);
-
+      AppLogger.logSuccess('========== SUBMIT TASK COMPLETED ==========');
     } catch (e) {
-      print("SUBMIT TASK ERROR = $e");
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString().replaceFirst("Exception: ", ""),
-      );
-      rethrow;
+      AppLogger.logError('Submit task error: $e');
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 }
 
-/// Provider
-final addTaskNotifierProvider =
-StateNotifierProvider<AddTaskNotifier, AddTaskState>((ref) {
-  return AddTaskNotifier(ref);
+final addTaskNotifierProvider = StateNotifierProvider<AddTaskNotifier, AddTaskState>((ref) {
+  final addTaskUseCase = ref.watch(addTaskProvider);
+  return AddTaskNotifier(ref, addTaskUseCase);
 });

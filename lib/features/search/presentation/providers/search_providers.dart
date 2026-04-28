@@ -13,7 +13,7 @@ final searchQueryProvider = StateProvider<String>((ref) {
 });
 
 
-/// 👨‍🎓 mock students
+///  mock students
 final studentsProvider = Provider<List<Student>>((ref) {
 
   return [
@@ -45,7 +45,7 @@ final studentsProvider = Provider<List<Student>>((ref) {
 final tasksProvider = Provider<List<Task>>((ref) {
   return [
 
-    Task(
+    /*Task(
       id: "1",
       title: "Math Homework",
       subject: "Math",
@@ -53,9 +53,9 @@ final tasksProvider = Provider<List<Task>>((ref) {
       dueDate: DateTime.now().add(const Duration(days: 2)),
       description: "Solve exercises 1 to 10",
       assignedTo: "1",
-    ),
+    ),*/
 
-    Task(
+    /*Task(
       id: "2",
       title: "Science Project",
       subject: "Science",
@@ -63,9 +63,9 @@ final tasksProvider = Provider<List<Task>>((ref) {
       dueDate: DateTime.now().add(const Duration(days: 4)),
       description: "Prepare volcano model",
       assignedTo: "2",
-    ),
+    ),*/
 
-    Task(
+    /*Task(
       id: "3",
       title: "English Essay",
       subject: "English",
@@ -73,7 +73,7 @@ final tasksProvider = Provider<List<Task>>((ref) {
       dueDate: DateTime.now().add(const Duration(days: 1)),
       description: "Write essay about environment",
       assignedTo: "3",
-    ),
+    ),*/
 
   ];
 });
