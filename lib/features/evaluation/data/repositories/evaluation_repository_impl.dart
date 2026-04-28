@@ -1,8 +1,8 @@
 // lib/features/evaluation/data/repositories/evaluation_repository_impl.dart
 
-import 'package:arak_app/features/evaluation/domain/entities/student_entity.dart';
-import 'package:arak_app/features/evaluation/domain/repositories/evaluation_repository.dart';
 import 'package:arak_app/features/evaluation/data/datasources/evaluation_remote_data_source.dart';
+import 'package:arak_app/features/evaluation/data/models/evaluation_model.dart';
+import 'package:arak_app/features/evaluation/domain/repositories/evaluation_repository.dart';
 
 class EvaluationRepositoryImpl implements EvaluationRepository {
   final EvaluationRemoteDataSource remoteDataSource;
@@ -10,8 +10,7 @@ class EvaluationRepositoryImpl implements EvaluationRepository {
   EvaluationRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Student> getStudentData() async {
-    final studentModel = await remoteDataSource.getStudentEvaluation();
-    return studentModel;
+  Future<List<EvaluationModel>> getStudentEvaluations(int studentId) async {
+    return remoteDataSource.getStudentEvaluations(studentId);
   }
 }

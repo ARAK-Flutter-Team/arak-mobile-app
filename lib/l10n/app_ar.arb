@@ -169,5 +169,6 @@
   "pleaseSelectClass": "الرجاء اختيار فصل",
   "pleaseSelectDeadline": "الرجاء اختيار موعد التسليم",
   "errorOccurred": "حدث خطأ",
-  "retry": "إعادة المحاولة"
+  "retry": "إعادة المحاولة",
+  "noScheduleAvailable": "لا يوجد جدول متاح"
 }

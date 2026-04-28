@@ -1,39 +1,25 @@
-import 'package:flutter/material.dart';
-import '../models/student_model.dart';
-// ضفنا الاستيراد ده عشان يتعرف على Subject
-import '../../domain/entities/student_entity.dart';
+import 'package:dio/dio.dart';
+import '../models/evaluation_model.dart';
 
 abstract class EvaluationRemoteDataSource {
-  Future<StudentModel> getStudentEvaluation();
+  Future<List<EvaluationModel>> getStudentEvaluations(int studentId);
 }
 
 class EvaluationRemoteDataSourceImpl implements EvaluationRemoteDataSource {
-  @override
-  Future<StudentModel> getStudentEvaluation() async {
-    // محاكاة تأخير السيرفر
-    await Future.delayed(const Duration(milliseconds: 500));
+  final Dio dio;
 
-    // شيلنا كلمة const من هنا عشان مفيش مشاكل
-    return StudentModel(
-      name: 'Ahmed Abdullah',
-      grade: 'Grade 9',
-      subjects: [
-        Subject(
-            name: 'Math',
-            score: 92,
-            icon: Icons.calculate,
-            color: Colors.orange),
-        Subject(
-            name: 'Science',
-            score: 85,
-            icon: Icons.science,
-            color: Colors.green),
-        Subject(
-            name: 'English',
-            score: 84,
-            icon: Icons.book,
-            color: Colors.lightBlue),
-      ],
+  EvaluationRemoteDataSourceImpl(this.dio);
+
+  @override
+  Future<List<EvaluationModel>> getStudentEvaluations(int studentId) async {
+    final response = await dio.get(
+      '/api/evaluations',
+      queryParameters: {'studentId': studentId},
     );
+
+    final List data = response.data as List? ?? [];
+    return data
+        .map((e) => EvaluationModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

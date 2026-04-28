@@ -1,5 +1,7 @@
-import '../entities/student_entity.dart';
+// lib/features/evaluation/domain/repositories/evaluation_repository.dart
+
+import '../../data/models/evaluation_model.dart';
 
 abstract class EvaluationRepository {
-  Future<Student> getStudentData();
+  Future<List<EvaluationModel>> getStudentEvaluations(int studentId);
 }

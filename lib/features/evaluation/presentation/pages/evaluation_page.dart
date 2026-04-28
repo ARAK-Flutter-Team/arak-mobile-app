@@ -52,7 +52,7 @@ class StudentEvaluationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final studentAsync = ref.watch(studentProvider);
+    final studentAsync = ref.watch(studentEvaluationProvider);
     final downloadStatus = ref.watch(downloadStatusProvider);
 
     return Scaffold(

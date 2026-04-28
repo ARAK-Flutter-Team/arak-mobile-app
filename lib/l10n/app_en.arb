@@ -167,6 +167,11 @@
   "error": "Error",
   "pleaseSelectClass": "Please select a class",
   "pleaseSelectDeadline": "Please select a deadline",
-  "errorOccurred": "An error occurred",
-  "retry": "Retry"
+    "errorOccurred": "An error occurred",
+  "retry": "Retry",
+  "lastUpdated": "Last Updated",
+  "@lastUpdated": {
+    "description": "Label for last updated time"
+  },
+  "noScheduleAvailable": "No schedule available"
 }
