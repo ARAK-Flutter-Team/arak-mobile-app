@@ -1,19 +1,3 @@
-/*import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'auth_notifier.dart';
-import 'auth_state.dart';
-import 'authRemoteDataSourceProvider.dart';
-
-final authProvider =
-StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final loginUseCase = ref.read(loginUseCaseProvider);
-  final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
-
-  return AuthNotifier(
-    ref,
-    loginUseCase,
-    getCurrentUserUseCase,
-  );
-});*/
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 
@@ -31,13 +15,12 @@ import '../../domain/usecases/login.dart';
 import '../../../profile/domain/usecases/get_current_user.dart';
 
 // =========================
-/// DIO PROVIDER (خاص بالـ Auth)
+/// DIO PROVIDER
 /// =========================
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
-      baseUrl:
-          "http://192.168.1.11:5000/api", // نفس الرابط المستخدم في الـ Implementation
+      baseUrl: "http://192.168.1.9:5000/api",
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {
@@ -77,7 +60,12 @@ final getCurrentUserUseCaseProvider = Provider<GetCurrentUser>((ref) {
 });
 
 // =========================
-/// AUTH PROVIDER (المزود الرئيسي للشاشة)
+/// CURRENT TEACHER ID PROVIDER
+/// =========================
+final currentTeacherIdProvider = StateProvider<int>((ref) => 0);
+
+// =========================
+/// AUTH PROVIDER
 /// =========================
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final loginUseCase = ref.read(loginUseCaseProvider);

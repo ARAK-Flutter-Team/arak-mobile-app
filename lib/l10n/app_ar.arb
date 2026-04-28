@@ -1,11 +1,6 @@
 {
   "@@locale": "ar",
   "welcome": "مرحباً {name}",
-  "@welcome": {
-    "placeholders": {
-      "name": {}
-    }
-  },
   "teacherPerformance": "أداء المعلم",
   "tasks": "المهام",
   "messages": "الرسائل",
@@ -148,39 +143,31 @@
   "taskStatusNotStarted": "لم يبدأ",
   "parentTaskViewOnly": "يمكنك فقط عرض المهام. تواصل مع المعلم لتحديث الحالة.",
   "checkIn": "وقت الحضور",
-"checkOut": "وقت الانصراف",
-"attendanceRate": "نسبة الحضور",
-"overallPerformance": "الأداء العام هذا الشهر",
-"searchStudent": "البحث عن طالب",
-"searchByName": "ابحث بالاسم...",
-"noStudentFound": "لا يوجد طالب",
-"attendanceDetails": "تفاصيل الحضور",
-"attendanceCalendar": "تقويم الحضور",
-"lastUpdated": "آخر تحديث: {time}",
-"@lastUpdated": {
-  "placeholders": {
-    "time": {}
-  }
-},
-"schedule": "الجدول",
-"schoolSchedule": "الجدول الدراسي",
-"daily": "يومي",
-"weekly": "أسبوعي",
-"downloadFullSchedule": "تحميل الجدول كاملاً",
-"evaluation": "التقييم",
-"subjects": "المواد",
-"overallPerformance": "الأداء العام",
-"downloadReport": "تحميل التقرير",
-"downloading": "جاري التحميل...",
-"reportDownloaded": "تم تحميل التقرير!",
-"contactUs": "تواصل معنا",
-"writeYourMessage": "اكتب رسالتك أدناه:",
-"typeYourMessage": "اكتب رسالتك هنا...",
-"ourSocialMedia": "وسائل التواصل الاجتماعي",
-"couldNotLaunch": "تعذر فتح {url}",
-"@couldNotLaunch": {
-  "placeholders": {
-    "url": {}
-  }
-}
+  "checkOut": "وقت الانصراف",
+  "attendanceRate": "نسبة الحضور",
+  "overallPerformance": "الأداء العام هذا الشهر",
+  "searchStudent": "البحث عن طالب",
+  "searchByName": "ابحث بالاسم...",
+  "noStudentFound": "لا يوجد طالب",
+  "attendanceDetails": "تفاصيل الحضور",
+  "attendanceCalendar": "تقويم الحضور",
+  "lastUpdated": "آخر تحديث: {time}",
+  "schoolSchedule": "الجدول الدراسي",
+  "daily": "يومي",
+  "weekly": "أسبوعي",
+  "downloadFullSchedule": "تحميل الجدول كاملاً",
+  "subjects": "المواد",
+  "downloadReport": "تحميل التقرير",
+  "downloading": "جاري التحميل...",
+  "reportDownloaded": "تم تحميل التقرير!",
+  "writeYourMessage": "اكتب رسالتك أدناه:",
+  "typeYourMessage": "اكتب رسالتك هنا...",
+  "ourSocialMedia": "وسائل التواصل الاجتماعي",
+  "couldNotLaunch": "تعذر فتح {url}",
+  "parentTaskNote": "يمكنك فقط عرض المهام. تواصل مع المعلم لتحديث الحالة.",
+  "error": "خطأ",
+  "pleaseSelectClass": "الرجاء اختيار فصل",
+  "pleaseSelectDeadline": "الرجاء اختيار موعد التسليم",
+  "errorOccurred": "حدث خطأ",
+  "retry": "إعادة المحاولة"
 }

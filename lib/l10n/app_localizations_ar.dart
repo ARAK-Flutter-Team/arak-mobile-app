@@ -4,7 +4,6 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Arabic (`ar`).
 class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
@@ -393,6 +392,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mySchedule => 'جدولي';
 
   @override
+  String get taskDetails => 'تفاصيل المهمة';
+
+  @override
+  String get parentTaskNote =>
+      'يمكنك فقط عرض المهام. تواصل مع المعلم لتحديث الحالة.';
+
+  @override
+  String get error => 'خطأ';
+
+  @override
+  String get pleaseSelectClass => 'الرجاء اختيار فصل';
+
+  @override
+  String get pleaseSelectDeadline => 'الرجاء اختيار موعد التسليم';
+
+  @override
+  String get errorOccurred => 'حدث خطأ';
+
+  @override
+  String get className => 'الفصل';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  // ==================== Colleague's Keys (from upstream) ====================
+  @override
   String get studentInformation => 'معلومات الطالب';
 
   @override
@@ -400,9 +425,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get grade => 'الصف';
-
-  @override
-  String get className => 'الفصل';
 
   @override
   String get more => 'المزيد';
@@ -431,9 +453,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get viewReports => 'عرض التقارير';
-
-  @override
-  String get taskDetails => 'تفاصيل المهمة';
 
   @override
   String get taskStatusInProgress => 'جارٍ التنفيذ';

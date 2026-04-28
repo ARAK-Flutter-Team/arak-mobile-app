@@ -151,9 +151,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               return Consumer(
                 builder: (context, ref, _) {
                   final user = ref.watch(authProvider).user;
-                  return TeacherTasksScreen(
-                    teacherId: user?.id.toString() ?? '',
-                  );
+                  return const TeacherTasksScreen();
                 },
               );
             },
@@ -161,8 +159,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/teacher/add-task',
             builder: (context, state) {
-              final teacherId = state.extra as String;
-              return AddTaskPage(teacherId: teacherId);
+              // final teacherId = state.extra as String;
+              return const AddTaskPage();
             },
           ),
           GoRoute(

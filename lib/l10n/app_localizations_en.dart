@@ -4,7 +4,6 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
@@ -393,6 +392,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mySchedule => 'My Schedule';
 
   @override
+  String get taskDetails => 'Task Details';
+
+  @override
+  String get parentTaskNote =>
+      'You can only view tasks. Contact the teacher to update status.';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get pleaseSelectClass => 'Please select a class';
+
+  @override
+  String get pleaseSelectDeadline => 'Please select a deadline';
+
+  @override
+  String get errorOccurred => 'An error occurred';
+
+  @override
+  String get className => 'Class';
+
+  @override
+  String get retry => 'Retry';
+
+  // ==================== Colleague's Keys (from upstream) ====================
+  @override
   String get studentInformation => 'Student Information';
 
   @override
@@ -400,9 +425,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grade => 'Grade';
-
-  @override
-  String get className => 'Class';
 
   @override
   String get more => 'More';
@@ -431,9 +453,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewReports => 'View Reports';
-
-  @override
-  String get taskDetails => 'Task Details';
 
   @override
   String get taskStatusInProgress => 'In progress';
