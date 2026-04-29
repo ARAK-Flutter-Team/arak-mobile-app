@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/providers/current_user_provider.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 
 class LogoutButton extends ConsumerWidget {
   const LogoutButton({super.key});
@@ -50,11 +50,7 @@ class LogoutButton extends ConsumerWidget {
           );
 
           if (confirm == true) {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.clear();
-
-            ref.read(currentUserProvider.notifier).state = null;
-
+            await ref.read(authProvider.notifier).logout();
             context.go('/login');
           }
         },

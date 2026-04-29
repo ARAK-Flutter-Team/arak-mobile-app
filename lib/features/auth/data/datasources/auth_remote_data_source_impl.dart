@@ -1,106 +1,3 @@
-/*import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../core/error/exceptions.dart';
-import '../../domain/params/login_params.dart';
-import '../models/user_model.dart';
-import 'auth_remote_data_source.dart';
-
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final Dio dio;
-
-<<<<<<< HEAD
-  final String baseUrl = "http://192.168.1.9:5000/api/Auth";
-
-=======
-final String baseUrl = "http://192.168.1.9:5000/api/Auth";
-
-  AuthRemoteDataSourceImpl({required this.dio});
-
-  // ===============================
-  // LOGIN
-  // ===============================
-  @override
-  Future<UserModel> login(LoginParams params) async {
-    try {
-      final response = await dio.post(
-        "$baseUrl/login",
-        data: {
-          "email": params.email,
-          "password": params.password,
-        },
-        options: Options(
-          headers: {
-            "Content-Type": "application/json",
-          },
-        ),
-      );
-
-      final data = response.data;
-
-      if (response.statusCode == 200) {
-        final token = data['token'];
-
-        // تخزين التوكن
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
-
-        return UserModel.fromJson(data['user']);
-      } else {
-        throw ServerException(data['message'] ?? "Login Failed");
-      }
-    } on DioException catch (e) {
-      throw ServerException(
-        e.response?.data?['message'] ?? "Login error",
-      );
-    }
-  }
-
-  // ===============================
-  // GET CURRENT USER
-  // ===============================
-  @override
-  Future<UserModel> getCurrentUser() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-
-      if (token == null) {
-        throw ServerException("No token found");
-      }
-
-      final response = await dio.get(
-        "$baseUrl/me",
-        options: Options(
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-
-      final data = response.data;
-
-      if (response.statusCode == 200) {
-        return UserModel.fromJson(data['user']);
-      } else {
-        throw ServerException(data['message'] ?? "Unauthorized");
-      }
-    } on DioException catch (e) {
-      throw ServerException(
-        e.response?.data?['message'] ?? "Get user error",
-      );
-    }
-  }
-
-  // ===============================
-  // LOGOUT
-  // ===============================
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-  }
-}*/
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -112,13 +9,10 @@ import 'auth_remote_data_source.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio dio;
-  final String baseUrl = "http://192.168.1.11:5000/api/Auth";
+  final String baseUrl = "http://192.168.1.9:5000/api/Auth";
 
   AuthRemoteDataSourceImpl({required this.dio});
 
-  // ======================
-  // دالة مساعدة عشان نفك التوكن يدوياً (بدون مكتبات خارجية)
-  // ======================
   Map<String, dynamic> _parseJwt(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
@@ -144,6 +38,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final decodedString = utf8.decode(decodedBytes);
 
     return json.decode(decodedString) as Map<String, dynamic>;
+  }
+
+  String _getUserFriendlyMessage(DioException e) {
+    if (e.response?.statusCode == 401) {
+      return "Invalid email or password.";
+    }
+    if (e.response?.statusCode == 404) {
+      return "Server error. Please contact support.";
+    }
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout) {
+      return "Connection timed out. Check your internet.";
+    }
+    if (e.type == DioExceptionType.connectionError) {
+      return "No internet connection.";
+    }
+    return "Login failed. Please try again.";
   }
 
   @override
@@ -198,12 +109,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       print(" Dio Error Message: ${e.message}");
       print(" Dio Response: ${e.response?.data}");
 
-      throw ServerException(
-        e.response?.data?['message'] ?? e.message ?? "Login error",
-      );
+      String userMessage = _getUserFriendlyMessage(e);
+      throw ServerException(userMessage);
     } catch (e) {
       print(" Unknown Error: $e");
-      rethrow;
+      throw ServerException("Something went wrong. Please try again.");
     }
   }
 
@@ -243,89 +153,30 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-  }
-}
-
-// ============================================================
-/*
-
-import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/error/exceptions.dart';
-import '../../domain/params/login_params.dart';
-import '../models/user_model.dart';
-import 'auth_remote_data_source.dart';
-
-class AuthRemoteDataSourceImpl_Old implements AuthRemoteDataSource {
-  final Dio dio;
-  final String baseUrl = "http://192.168.1.9:5000/api/Auth";
-
-  AuthRemoteDataSourceImpl_Old({required this.dio});
-
-  @override
-  Future<UserModel> login(LoginParams params) async {
-    try {
-      final response = await dio.post(
-        "$baseUrl/login",
-        data: {
-          "email": params.email,
-          "password": params.password,
-        },
-        options: Options(
-          headers: {
-            "Content-Type": "application/json",
-          },
-        ),
-      );
-
-      final data = response.data;
-
-      if (response.statusCode == 200) {
-        final token = data['token'] ?? "";
-        final userJson = data['user'] as Map<String, dynamic>;
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
-        return UserModel.fromLoginJson(userJson, token);
-      } else {
-        throw ServerException(data['message'] ?? "Login Failed");
-      }
-    } on DioException catch (e) {
-      throw ServerException(
-        e.response?.data?['message'] ?? e.message ?? "Login error",
-      );
-    }
-  }
-
-  @override
-  Future<UserModel> getCurrentUser() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
-      if (token == null) throw ServerException("No token found");
 
-      final response = await dio.get(
-        "$baseUrl/me",
-        options: Options(
-          headers: {"Authorization": "Bearer $token"},
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        return UserModel.fromJson(response.data['user']);
+      if (token != null && token.isNotEmpty) {
+        await dio.post(
+          "$baseUrl/logout",
+          options: Options(
+            headers: {
+              "Authorization": "Bearer $token",
+              "Content-Type": "application/json",
+            },
+          ),
+        );
+        print(" Backend logout successful");
       } else {
-        throw ServerException("Unauthorized");
+        print("️ No token found, skipping backend logout");
       }
-    } on DioException catch (e) {
-      throw ServerException("Get user error");
+    } catch (e) {
+      print(" Backend logout error: $e");
+    } finally {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('token');
+      print(" Token removed from device");
     }
   }
-
-  @override
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-  }
 }
-*/

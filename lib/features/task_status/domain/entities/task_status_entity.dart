@@ -1,31 +1,23 @@
-class TaskStatusEntity {
-  final String taskId;
+/*class TaskStatusEntity {
   final String studentId;
   final String studentName;
   final bool isDone;
 
-  TaskStatusEntity({
-    required this.taskId,
+  const TaskStatusEntity({
     required this.studentId,
     required this.studentName,
     required this.isDone,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'taskId': taskId,
-      'studentId': studentId,
-      'studentName': studentName,
-      'isDone': isDone,
-    };
-  }
-
-  factory TaskStatusEntity.fromJson(Map<String, dynamic> json) {
+  TaskStatusEntity copyWith({
+    String? studentId,
+    String? studentName,
+    bool? isDone,
+  }) {
     return TaskStatusEntity(
-      taskId: json['taskId'],
-      studentId: json['studentId'],
-      studentName: json['studentName'],
-      isDone: json['isDone'],
+      studentId: studentId ?? this.studentId,
+      studentName: studentName ?? this.studentName,
+      isDone: isDone ?? this.isDone,
     );
   }
-}
+}*/

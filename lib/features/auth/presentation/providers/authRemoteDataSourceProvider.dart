@@ -12,22 +12,10 @@ import '../../domain/usecases/login.dart';
 /// =========================
 /// DIO
 /// =========================
-/*final dioProvider = Provider<Dio>((ref) {
-  return Dio(
-    BaseOptions(
-      baseUrl: "http://192.168.1.9:5000/api",
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    ),
-  );
-});*/
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
-      baseUrl: "http://192.168.1.11:5000/api",
+      baseUrl: "http://192.168.1.9:5000/api",
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {

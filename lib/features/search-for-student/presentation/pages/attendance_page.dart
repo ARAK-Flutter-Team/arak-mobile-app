@@ -49,7 +49,7 @@ class AttendancePage extends ConsumerWidget {
               const SizedBox(height: 10),
               Center(
                 child: Text(
-                  l10n.lastUpdated(data.checkOut), // ✅
+                  '${l10n.lastUpdate}: ${data.checkOut ?? '--:--'}',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontSize: 12,

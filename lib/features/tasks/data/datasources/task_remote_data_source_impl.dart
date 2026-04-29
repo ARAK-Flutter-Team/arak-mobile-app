@@ -4,6 +4,8 @@ import 'package:arak_app/core/network/dio_provider.dart';
 import 'package:arak_app/features/tasks/data/models/task_model.dart';
 import 'package:arak_app/features/tasks/domain/entities/teacher_tasks_result.dart';
 import 'package:arak_app/features/tasks/domain/entities/task.dart';
+import 'package:arak_app/features/tasks/data/models/task_student_status_model.dart';
+import '../../domain/entities/task_student_status.dart';
 import 'task_remote_data_source.dart';
 
 final taskRemoteDataSourceProvider = Provider<TaskRemoteDataSource>((ref) {
@@ -90,5 +92,23 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     }
 
     return [];
+  }
+
+// ==================== New Methods ====================
+  @override
+  Future<List<TaskStudentStatus>> getTaskStatus(int taskId) async {
+    final response = await dio.get("/api/Tasks/$taskId/status");
+
+    if (response.data is List) {
+      return (response.data as List)
+          .map((e) => TaskStudentStatusModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  @override
+  Future<void> updateTaskStudentStatus(int taskId, List<Map<String, dynamic>> updates) async {
+    await dio.put("/api/Tasks/$taskId/status", data: updates);
   }
 }

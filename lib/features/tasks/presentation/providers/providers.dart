@@ -9,6 +9,8 @@ import '../../domain/repositories/task_repository.dart';
 import '../../domain/usecases/get_teacher_tasks.dart';
 import '../../domain/usecases/add_task.dart';
 import '../../domain/usecases/delete_task.dart';
+import '../../domain/usecases/get_task_status.dart';
+import '../../domain/usecases/update_task_student_status.dart';
 
 final taskRemoteDataSourceProvider = Provider<TaskRemoteDataSource>((ref) {
   final Dio dio = ref.watch(dioProvider);
@@ -30,6 +32,15 @@ final addTaskProvider = Provider<AddTask>((ref) {
 
 final deleteTaskProvider = Provider<DeleteTask>((ref) {
   return DeleteTask(ref.watch(taskRepositoryProvider));
+});
+
+// ==================== New Providers ====================
+final getTaskStatusProvider = Provider<GetTaskStatus>((ref) {
+  return GetTaskStatus(ref.watch(taskRepositoryProvider));
+});
+
+final updateTaskStudentStatusProvider = Provider<UpdateTaskStudentStatus>((ref) {
+  return UpdateTaskStudentStatus(ref.watch(taskRepositoryProvider));
 });
 
 final teacherClassesProvider = FutureProvider<List<String>>((ref) async {

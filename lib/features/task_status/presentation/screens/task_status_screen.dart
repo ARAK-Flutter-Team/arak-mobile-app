@@ -19,14 +19,12 @@ class TaskStatusScreen extends ConsumerStatefulWidget {
       _TaskStatusScreenState();
 }
 
-class _TaskStatusScreenState
-    extends ConsumerState<TaskStatusScreen> {
+class _TaskStatusScreenState extends ConsumerState<TaskStatusScreen> {
 
   @override
   void initState() {
     super.initState();
 
-    /// Load data after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(taskStatusProvider.notifier)
@@ -41,8 +39,7 @@ class _TaskStatusScreenState
     final loc = AppLocalizations.of(context)!;
 
     final total = state.students.length;
-    final done =
-        state.students.where((e) => e.isDone).length;
+    final done = state.students.where((e) => e.isDone).length;
 
     return Scaffold(
       appBar: AppMainAppBar(
@@ -57,7 +54,6 @@ class _TaskStatusScreenState
           children: [
             const SizedBox(height: 16),
 
-            /// Progress
             Row(
               children: [
                 Text(
@@ -76,7 +72,6 @@ class _TaskStatusScreenState
 
             const SizedBox(height: 20),
 
-            /// List
             Expanded(
               child: TaskStatusList(
                 students: state.students,
@@ -93,7 +88,6 @@ class _TaskStatusScreenState
 
             const SizedBox(height: 12),
 
-            /// Save Button
             TaskStatusSaveButton(
               isLoading: state.isSaving,
               onPressed: () async {

@@ -22,7 +22,7 @@ class TaskStatusSaveButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? const CircularProgressIndicator()
-            : Text(loc.save), // أو saveStatus
+            : Text(loc.save),
       ),
     );
   }
