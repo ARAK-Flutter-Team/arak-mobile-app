@@ -11,19 +11,36 @@ class StudentAttendanceModel extends StudentAttendance {
     required super.attendanceRate,
     required super.lateTimes,
     required super.absentTimes,
+    super.records,
   });
 
-  factory StudentAttendanceModel.fromJson(Map<String, dynamic> json) {
+  factory StudentAttendanceModel.fromJson(
+      Map<String, dynamic> json, int month, int year) {
+    // ✅ parse الـ records
+    final rawRecords = json['records'] as List<dynamic>? ?? [];
+    final parsedRecords = rawRecords.map((r) {
+      final dateParts = (r['date'] as String).split('-');
+      return AttendanceDayRecord(
+        date: DateTime(
+          int.parse(dateParts[0]),
+          int.parse(dateParts[1]),
+          int.parse(dateParts[2]),
+        ),
+        status: r['status'] ?? 'NotRecorded',
+      );
+    }).toList();
+
     return StudentAttendanceModel(
-      name: json['studentName'] ?? json['name'] ?? '',
-      grade: json['grade'] ?? '',
-      status: json['todayStatus'] ?? json['status'] ?? '',
-      date: json['date'] ?? '',
-      checkIn: json['todayTimeIn']?.toString() ?? json['checkIn'] ?? '--:--',
-      checkOut: json['todayTimeOut']?.toString() ?? json['checkOut'] ?? '--:--',
+      name: json['studentName'] ?? '',
+      grade: '${json['grade'] ?? ''} - ${json['className'] ?? ''}',
+      status: json['todayStatus'] ?? 'NotRecorded',
+      date: '$month/$year',
+      checkIn: json['todayTimeIn']?.toString() ?? '--:--',
+      checkOut: json['todayTimeOut']?.toString() ?? '--:--',
       attendanceRate: (json['attendanceRate'] ?? 0).toDouble(),
-      lateTimes: json['lateArrivals'] ?? json['lateTimes'] ?? 0,
-      absentTimes: json['absences'] ?? json['absentTimes'] ?? 0,
+      lateTimes: json['lateArrivals'] ?? 0,
+      absentTimes: json['absences'] ?? 0,
+      records: parsedRecords, // ✅
     );
   }
 }

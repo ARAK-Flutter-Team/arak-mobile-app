@@ -20,25 +20,17 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     final targetYear = year ?? now.year;
 
     final response = await dio.get(
-      '/api/attendance/student/$studentId',
+      '/api/Attendance/student/$studentId',
       queryParameters: {
         'month': targetMonth,
         'year': targetYear,
       },
     );
 
-    final data = response.data as Map<String, dynamic>;
-
-    return StudentAttendanceModel(
-      name: data['studentName'] ?? '',
-      grade: '${data['grade'] ?? ''} - ${data['className'] ?? ''}',
-      status: data['todayStatus'] ?? 'NotRecorded',
-      date: '$targetMonth/$targetYear',
-      checkIn: data['todayTimeIn']?.toString() ?? '--:--',
-      checkOut: data['todayTimeOut']?.toString() ?? '--:--',
-      attendanceRate: (data['attendanceRate'] as num?)?.toDouble() ?? 0.0,
-      lateTimes: data['lateArrivals'] ?? 0,
-      absentTimes: data['absences'] ?? 0,
+    return StudentAttendanceModel.fromJson(
+      response.data as Map<String, dynamic>,
+      targetMonth,
+      targetYear,
     );
   }
 }

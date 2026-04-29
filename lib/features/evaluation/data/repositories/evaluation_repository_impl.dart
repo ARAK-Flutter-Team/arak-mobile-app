@@ -10,7 +10,7 @@ class EvaluationRepositoryImpl implements EvaluationRepository {
   EvaluationRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<EvaluationModel>> getStudentEvaluations(int studentId) async {
-    return remoteDataSource.getStudentEvaluations(studentId);
+  Future<List<EvaluationModel>> getStudentEvaluations(int classId) async {
+    return remoteDataSource.getStudentEvaluations(classId);
   }
 }

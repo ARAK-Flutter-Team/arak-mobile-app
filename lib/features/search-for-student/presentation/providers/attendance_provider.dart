@@ -5,6 +5,28 @@ import '../../domain/repositories/attendance_repository.dart';
 import '../../data/datasources/attendance_remote_data_source.dart';
 import '../../data/repositories/attendance_repository_impl.dart';
 
+class AttendanceParams {
+  final int studentId;
+  final int month;
+  final int year;
+
+  const AttendanceParams({
+    required this.studentId,
+    required this.month,
+    required this.year,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      other is AttendanceParams &&
+      other.studentId == studentId &&
+      other.month == month &&
+      other.year == year;
+
+  @override
+  int get hashCode => Object.hash(studentId, month, year);
+}
+
 final attendanceRemoteDataSourceProvider =
     Provider<AttendanceRemoteDataSource>((ref) {
   final dio = ref.watch(dioProvider);
@@ -17,9 +39,14 @@ final attendanceRepositoryProvider = Provider<AttendanceRepository>((ref) {
   );
 });
 
-final attendanceProvider = FutureProvider.family<StudentAttendance, int>(
-  (ref, studentId) async {
+final attendanceProvider =
+    FutureProvider.family<StudentAttendance, AttendanceParams>(
+  (ref, params) async {
     final repository = ref.watch(attendanceRepositoryProvider);
-    return repository.getStudentAttendance(studentId);
+    return repository.getStudentAttendance(
+      params.studentId,
+      month: params.month,
+      year: params.year,
+    );
   },
 );

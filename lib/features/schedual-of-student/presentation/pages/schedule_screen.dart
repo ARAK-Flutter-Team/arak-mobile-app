@@ -31,7 +31,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     final schedule = notifier.displaySchedule;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface, // ✅
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppMainAppBar(
         title: l10n.schedule,
         centerTitle: false,
@@ -48,7 +48,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                     style: TextStyle(
                       fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSurface, // ✅
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -65,7 +65,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                       : schedule.isEmpty
                           ? Center(
                               child: Text(
-                                'No schedule available', // ✅
+                                'No schedule available',
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   color:
@@ -152,9 +152,9 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
           ),
           selected: currentIndex == 0,
           selectedColor:
-              Theme.of(context).colorScheme.primary.withValues(alpha: 0.2), // ✅
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
           backgroundColor:
-              Theme.of(context).colorScheme.surfaceContainerHighest, // ✅
+              Theme.of(context).colorScheme.surfaceContainerHighest,
           onSelected: (_) => notifier.toggleView(0),
         ),
         SizedBox(width: 10.w),
@@ -165,9 +165,9 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
           ),
           selected: currentIndex == 1,
           selectedColor:
-              Theme.of(context).colorScheme.primary.withValues(alpha: 0.2), // ✅
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
           backgroundColor:
-              Theme.of(context).colorScheme.surfaceContainerHighest, // ✅
+              Theme.of(context).colorScheme.surfaceContainerHighest,
           onSelected: (_) => notifier.toggleView(1),
         ),
       ],
@@ -189,12 +189,11 @@ class ScheduleCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(
-          color:
-              Theme.of(context).colorScheme.primary.withValues(alpha: 0.4), // ✅
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08), // ✅
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -202,6 +201,7 @@ class ScheduleCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // ── الأيقونة ──
           Container(
             width: 40.w,
             height: 40.w,
@@ -211,17 +211,24 @@ class ScheduleCard extends StatelessWidget {
             ),
             child: Center(child: item.iconContent),
           ),
-          const Spacer(),
-          Text(
-            item.time,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14.sp,
-              color: Theme.of(context).colorScheme.onSurface,
+          SizedBox(width: 12.w), // ✅ بدل Spacer
+
+          // ── الوقت ── في المنتصف
+          Expanded(
+            child: Text(
+              item.time,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14.sp,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
-          const Spacer(),
-          Expanded(
+
+          // ── اسم المادة ── على اليمين بمساحة ثابتة ✅
+          SizedBox(
+            width: 100.w,
             child: Text(
               item.title,
               textAlign: TextAlign.end,
@@ -230,6 +237,7 @@ class ScheduleCard extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ],

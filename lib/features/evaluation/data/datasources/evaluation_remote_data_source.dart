@@ -11,10 +11,10 @@ class EvaluationRemoteDataSourceImpl implements EvaluationRemoteDataSource {
   EvaluationRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<List<EvaluationModel>> getStudentEvaluations(int studentId) async {
+  Future<List<EvaluationModel>> getStudentEvaluations(int classId) async {
     final response = await dio.get(
       '/api/evaluations',
-      queryParameters: {'studentId': studentId},
+      queryParameters: {'classId': classId},
     );
 
     final List data = response.data as List? ?? [];

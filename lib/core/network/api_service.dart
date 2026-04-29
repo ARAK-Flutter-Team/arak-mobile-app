@@ -33,7 +33,7 @@ class ApiService {
 
   ApiService() {
     dio = Dio(BaseOptions(
-      baseUrl: "http://192.168.1.9:5000", // رابط الكمبيوتر
+      baseUrl: "http://192.168.1.11:5000", // رابط الكمبيوتر
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
     ));

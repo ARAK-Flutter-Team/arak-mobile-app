@@ -27,38 +27,43 @@ final evaluationRepositoryProvider = Provider<EvaluationRepository>((ref) {
   );
 });
 
-// ── Provider النهائي — يجيب studentId من selectedStudentProvider ──
+// ── Provider النهائي ──────────────────────────────────────────
 final studentEvaluationProvider = FutureProvider<Student>((ref) async {
-  // نجيب بيانات الطالب المختار من الـ Parent Home
   final selectedStudent = ref.watch(selectedStudentProvider);
 
   if (selectedStudent == null) {
     throw Exception('No student selected');
   }
 
-  final studentId = selectedStudent.numericId;
+  final classId = selectedStudent.classNumber;
   final studentName = selectedStudent.name;
   final studentGrade = 'Grade ${selectedStudent.grade}';
 
-  // نجيب الـ evaluations من الـ API
   final repository = ref.watch(evaluationRepositoryProvider);
-  final evaluations = await repository.getStudentEvaluations(studentId);
 
-  // نحول الـ evaluations لـ Subject objects
-  final subjects = evaluations
-      .map((e) => Subject(
-            name: e.subjectName,
-            score: e.score.toInt(),
-            icon: _iconForSubject(e.subjectName),
-            color: _colorForSubject(e.subjectName),
-          ))
-      .toList();
+  try {
+    final evaluations = await repository.getStudentEvaluations(classId);
+    final studentEvaluations = evaluations
+        .where((e) => e.studentId == selectedStudent.numericId)
+        .toList();
 
-  return Student(
-    name: studentName,
-    grade: studentGrade,
-    subjects: subjects,
-  );
+    final subjects = studentEvaluations
+        .map((e) => Subject(
+              name: e.subjectName,
+              score: e.score.toInt(),
+              icon: _iconForSubject(e.subjectName),
+              color: _colorForSubject(e.subjectName),
+            ))
+        .toList();
+
+    return Student(
+      name: studentName,
+      grade: studentGrade,
+      subjects: subjects,
+    );
+  } catch (e) {
+    rethrow;
+  }
 });
 
 // ── Helper — icon بناءً على اسم المادة ────────────────────────

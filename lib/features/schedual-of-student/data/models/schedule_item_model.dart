@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/schedule_item.dart';
 
 class ScheduleItemModel extends ScheduleItem {
-  final String dayName; // ✅ للـ grouping في الـ repository
+  final String dayName;
 
   ScheduleItemModel({
     required super.iconContent,
@@ -30,6 +30,32 @@ class ScheduleItemModel extends ScheduleItem {
     );
   }
 
+  // ✅ map حقيقية من الـ API
+  static const _subjectMap = {
+    5: 'Mathematics',
+    6: 'Physics',
+    7: 'English',
+    8: 'Arabic',
+  };
+
+  static String _getSubjectName(Map<String, dynamic> json) {
+    // أولاً: لو الـ API رجّع subject object
+    if (json['subject'] != null && json['subject']['name'] != null) {
+      return json['subject']['name'];
+    }
+    // ثانياً: لو رجّع subjectName مباشرة
+    if (json['subjectName'] != null &&
+        json['subjectName'].toString().isNotEmpty) {
+      return json['subjectName'];
+    }
+    // ثالثاً: نجيبه من الـ map بالـ subjectId ✅
+    final subjectId = json['subjectId'];
+    if (subjectId != null && _subjectMap.containsKey(subjectId)) {
+      return _subjectMap[subjectId]!;
+    }
+    return 'Lesson';
+  }
+
   static String _getDayName(int dayOfWeek) {
     const days = [
       'Sunday',
@@ -41,17 +67,6 @@ class ScheduleItemModel extends ScheduleItem {
       'Saturday'
     ];
     return days[dayOfWeek % 7];
-  }
-
-  static String _getSubjectName(Map<String, dynamic> json) {
-    if (json['subject'] != null && json['subject']['name'] != null) {
-      return json['subject']['name'];
-    }
-    if (json['subjectName'] != null &&
-        json['subjectName'].toString().isNotEmpty) {
-      return json['subjectName'];
-    }
-    return 'Lesson';
   }
 
   static String _formatTime(dynamic time) {
@@ -68,6 +83,7 @@ class ScheduleItemModel extends ScheduleItem {
   static IconData _iconForSubject(String name) {
     final l = name.toLowerCase();
     if (l.contains('math')) return Icons.calculate;
+    if (l.contains('physics')) return Icons.electric_bolt; // ✅ أضفناها
     if (l.contains('science') || l.contains('bio')) return Icons.science;
     if (l.contains('english')) return Icons.menu_book;
     if (l.contains('arabic')) return Icons.translate;
@@ -81,6 +97,7 @@ class ScheduleItemModel extends ScheduleItem {
   static Color _colorForSubject(String name) {
     final l = name.toLowerCase();
     if (l.contains('math')) return Colors.teal;
+    if (l.contains('physics')) return Colors.indigo; // ✅ أضفناها
     if (l.contains('science') || l.contains('bio')) return Colors.green;
     if (l.contains('english')) return Colors.blue;
     if (l.contains('arabic')) return Colors.purple;

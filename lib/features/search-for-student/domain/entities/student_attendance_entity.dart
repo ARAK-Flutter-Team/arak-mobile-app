@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+class AttendanceDayRecord {
+  final DateTime date;
+  final String status; // Present, Absent, Late, NotRecorded
+
+  const AttendanceDayRecord({
+    required this.date,
+    required this.status,
+  });
+}
+
 class StudentAttendance {
   final String name;
   final String grade;
@@ -10,6 +20,7 @@ class StudentAttendance {
   final double attendanceRate;
   final int lateTimes;
   final int absentTimes;
+  final List<AttendanceDayRecord> records; // ✅ جديد
 
   const StudentAttendance({
     required this.name,
@@ -21,5 +32,6 @@ class StudentAttendance {
     required this.attendanceRate,
     required this.lateTimes,
     required this.absentTimes,
+    this.records = const [], // ✅ جديد
   });
 }

@@ -134,7 +134,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<int?> _fetchTeacherId(String token) async {
     try {
       final dio = Dio(BaseOptions(
-        baseUrl: "http://192.168.1.9:5000",
+        baseUrl: "http://192.168.1.11:5000",
         headers: {"Authorization": "Bearer $token"},
       ));
 

@@ -3,5 +3,5 @@
 import '../../data/models/evaluation_model.dart';
 
 abstract class EvaluationRepository {
-  Future<List<EvaluationModel>> getStudentEvaluations(int studentId);
+  Future<List<EvaluationModel>> getStudentEvaluations(int classId);
 }

@@ -3,7 +3,7 @@ import '../../domain/entities/student_entity.dart';
 class StudentModel extends StudentEntity {
   const StudentModel({
     required super.id,
-    required super.numericId, // ← أضف ده
+    required super.numericId,
     required super.name,
     required super.grade,
     required super.classNumber,
@@ -14,9 +14,6 @@ class StudentModel extends StudentEntity {
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
-    print('🔍 Student JSON keys: ${json.keys.toList()}');
-    print('🔍 Full JSON: $json'); // ✅ ضيف دي
-
     final rawId = json['id'];
     return StudentModel(
       id: rawId?.toString() ?? '',
@@ -24,13 +21,14 @@ class StudentModel extends StudentEntity {
           rawId is int ? rawId : int.tryParse(rawId?.toString() ?? '') ?? 0,
       name: json['name'] ?? '',
       grade: int.tryParse(json['grade']?.toString() ?? '') ?? 0,
-      classNumber: json['classnumber'] ?? // ✅ lowercase
+      classNumber: json['class_number'] ?? // ✅ التعديل هنا
+          json['classnumber'] ??
           json['classId'] ??
           json['classNumber'] ??
           0,
       profileImage: json['profileImage'],
-      parentUsername: '',
-      isVerified: false,
+      parentUsername: json['parent_username'] ?? '',
+      isVerified: json['is_verified'] ?? false,
     );
   }
 }
