@@ -528,4 +528,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String lastUpdated(Object time) {
+    return 'Last Updated';
+  }
+
+  @override
+  String get noScheduleAvailable => 'No schedule available';
 }

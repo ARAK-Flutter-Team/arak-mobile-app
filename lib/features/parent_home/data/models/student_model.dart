@@ -14,15 +14,20 @@ class StudentModel extends StudentEntity {
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
+    print('🔍 Student JSON keys: ${json.keys.toList()}');
+    print('🔍 Full JSON: $json'); // ✅ ضيف دي
+
     final rawId = json['id'];
     return StudentModel(
       id: rawId?.toString() ?? '',
       numericId:
           rawId is int ? rawId : int.tryParse(rawId?.toString() ?? '') ?? 0,
       name: json['name'] ?? '',
-      grade:
-          int.tryParse(json['grade']?.toString() ?? '') ?? 0, // ← string → int
-      classNumber: json['classNumber'] ?? 0,
+      grade: int.tryParse(json['grade']?.toString() ?? '') ?? 0,
+      classNumber: json['classnumber'] ?? // ✅ lowercase
+          json['classId'] ??
+          json['classNumber'] ??
+          0,
       profileImage: json['profileImage'],
       parentUsername: '',
       isVerified: false,

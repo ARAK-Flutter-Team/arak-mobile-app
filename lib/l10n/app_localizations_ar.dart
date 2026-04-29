@@ -528,4 +528,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retry => 'إعادة المحاولة';
+
+  @override
+  String lastUpdated(Object time) {
+    return 'آخر تحديث: $time';
+  }
+
+  @override
+  String get noScheduleAvailable => 'لا يوجد جدول متاح';
 }

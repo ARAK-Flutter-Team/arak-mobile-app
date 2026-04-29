@@ -16,11 +16,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final Ref ref;
 
   AuthNotifier(
-      this.ref,
-      this.loginUseCase,
-      this.getCurrentUserUseCase,
-      this.logoutUseCase,
-      ) : super(AuthState.initial());
+    this.ref,
+    this.loginUseCase,
+    this.getCurrentUserUseCase,
+    this.logoutUseCase,
+  ) : super(AuthState.initial());
 
   void validateEmail(String email) {
     if (email.isEmpty) {
@@ -99,13 +99,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
 
     result.fold(
-          (failure) {
+      (failure) {
         state = state.copyWith(
           isLoadingLogin: false,
           generalError: failure.message,
         );
       },
-          (user) async {
+      (user) async {
         if (user.token != null && user.token!.isNotEmpty) {
           await _saveToken(user.token!);
         }
@@ -156,13 +156,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoadingLogin: true);
     final result = await getCurrentUserUseCase();
     result.fold(
-          (failure) {
+      (failure) {
         state = state.copyWith(
           isLoadingLogin: false,
           generalError: failure.message,
         );
       },
-          (user) {
+      (user) {
         state = state.copyWith(
           isLoadingLogin: false,
           isSuccess: true,

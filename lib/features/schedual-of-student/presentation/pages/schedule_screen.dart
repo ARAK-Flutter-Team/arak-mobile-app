@@ -1,3 +1,5 @@
+// lib/features/schedual-of-student/presentation/pages/schedule_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,20 +8,32 @@ import '../../../../shared/widgets/app_main_appbar.dart';
 import '../providers/schedule_provider.dart';
 import '../../domain/entities/schedule_item.dart';
 
-class ScheduleScreen extends ConsumerWidget {
+class ScheduleScreen extends ConsumerStatefulWidget {
   const ScheduleScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ScheduleScreen> createState() => _ScheduleScreenState();
+}
+
+class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+        () => ref.read(scheduleNotifierProvider.notifier).loadParentSchedule());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(scheduleNotifierProvider);
     final notifier = ref.read(scheduleNotifierProvider.notifier);
     final schedule = notifier.displaySchedule;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface, // ✅
       appBar: AppMainAppBar(
-        title: l10n.schedule, // ✅
+        title: l10n.schedule,
         centerTitle: false,
       ),
       body: SafeArea(
@@ -30,11 +44,11 @@ class ScheduleScreen extends ConsumerWidget {
               child: Row(
                 children: [
                   Text(
-                    l10n.schoolSchedule, // ✅
+                    l10n.schoolSchedule,
                     style: TextStyle(
                       fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface, // ✅
                     ),
                   ),
                 ],
@@ -44,57 +58,79 @@ class ScheduleScreen extends ConsumerWidget {
             _buildToggleButtons(context, state.currentViewIndex, notifier),
             SizedBox(height: 20.h),
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                itemCount:
-                    schedule.length + (state.currentViewIndex == 1 ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (state.currentViewIndex == 1 && index == schedule.length) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Center(
-                        child: SizedBox(
-                          width: 280.w,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                            ),
-                            child: Text(l10n.downloadFullSchedule), // ✅
-                          ),
-                        ),
-                      ),
-                    );
-                  }
+              child: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : state.error != null
+                      ? Center(child: Text(state.error!))
+                      : schedule.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No schedule available', // ✅
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              itemCount: schedule.length +
+                                  (state.currentViewIndex == 1 ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (state.currentViewIndex == 1 &&
+                                    index == schedule.length) {
+                                  return Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 20.h),
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 280.w,
+                                        child: ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          child:
+                                              Text(l10n.downloadFullSchedule),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
 
-                  final day = schedule[index];
+                                final day = schedule[index];
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (state.currentViewIndex == 1)
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.h, bottom: 5.h),
-                          child: Text(
-                            day.dayName,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.sp,
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (state.currentViewIndex == 1)
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 10.h, bottom: 5.h),
+                                        child: Text(
+                                          day.dayName,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ...day.items.map(
+                                      (item) => Padding(
+                                        padding: EdgeInsets.only(bottom: 8.h),
+                                        child: ScheduleCard(item: item),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                          ),
-                        ),
-                      ...day.items.map(
-                        (item) => Padding(
-                          padding: EdgeInsets.only(bottom: 8.h),
-                          child: ScheduleCard(item: item),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -111,27 +147,27 @@ class ScheduleScreen extends ConsumerWidget {
       children: [
         ChoiceChip(
           label: Text(
-            l10n.daily, // ✅
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+            l10n.daily,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
           selected: currentIndex == 0,
-          selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+          selectedColor:
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.2), // ✅
+          backgroundColor:
+              Theme.of(context).colorScheme.surfaceContainerHighest, // ✅
           onSelected: (_) => notifier.toggleView(0),
         ),
         SizedBox(width: 10.w),
         ChoiceChip(
           label: Text(
-            l10n.weekly, // ✅
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+            l10n.weekly,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
           selected: currentIndex == 1,
-          selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+          selectedColor:
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.2), // ✅
+          backgroundColor:
+              Theme.of(context).colorScheme.surfaceContainerHighest, // ✅
           onSelected: (_) => notifier.toggleView(1),
         ),
       ],
@@ -139,7 +175,7 @@ class ScheduleScreen extends ConsumerWidget {
   }
 }
 
-// ── ScheduleCard ─────────────────────────────────────────────
+// ── ScheduleCard ──────────────────────────────────────────────
 class ScheduleCard extends StatelessWidget {
   final ScheduleItem item;
 
@@ -153,11 +189,12 @@ class ScheduleCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+          color:
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.4), // ✅
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08), // ✅
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),

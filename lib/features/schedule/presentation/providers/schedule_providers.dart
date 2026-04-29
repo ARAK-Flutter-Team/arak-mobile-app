@@ -52,14 +52,15 @@ import 'schedule_state.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   return Dio(BaseOptions(
-    baseUrl: "http://192.168.1.9:5000",
+    baseUrl: "http://192.168.1.11:5000",
     connectTimeout: const Duration(seconds: 60),
     receiveTimeout: const Duration(seconds: 60),
     headers: {"Content-Type": "application/json"},
   ));
 });
 
-final scheduleRemoteDataSourceProvider = Provider<ScheduleRemoteDataSource>((ref) {
+final scheduleRemoteDataSourceProvider =
+    Provider<ScheduleRemoteDataSource>((ref) {
   return ScheduleRemoteDataSourceImpl(ref.read(dioProvider));
 });
 
@@ -71,7 +72,8 @@ final getSchedulesProvider = Provider<GetSchedules>((ref) {
   return GetSchedules(ref.read(scheduleRepositoryProvider));
 });
 
-final teacherScheduleNotifierProvider = StateNotifierProvider<ScheduleNotifier, ScheduleState>((ref) {
+final teacherScheduleNotifierProvider =
+    StateNotifierProvider<ScheduleNotifier, ScheduleState>((ref) {
   return ScheduleNotifier(
     ref.read(getSchedulesProvider),
     ref,

@@ -1111,6 +1111,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// Label for last updated time
+  ///
+  /// In en, this message translates to:
+  /// **'Last Updated'**
+  String lastUpdated(Object time);
+
+  /// No description provided for @noScheduleAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No schedule available'**
+  String get noScheduleAvailable;
 }
 
 class _AppLocalizationsDelegate
