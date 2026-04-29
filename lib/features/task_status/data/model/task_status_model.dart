@@ -1,4 +1,4 @@
-import '../../domain/entities/task_status_entity.dart';
+/*import '../../domain/entities/task_status_entity.dart';
 
 class TaskStatusModel extends TaskStatusEntity {
   TaskStatusModel({
@@ -25,4 +25,4 @@ class TaskStatusModel extends TaskStatusEntity {
       'isDone': isDone,
     };
   }
-}
+}*/

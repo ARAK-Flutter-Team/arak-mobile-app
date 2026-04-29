@@ -1,25 +1,29 @@
-import '../../domain/entities/task_status_entity.dart';
+import '../../../tasks/domain/entities/task_student_status.dart';
 
 class TaskStatusState {
-  final List<TaskStatusEntity> students;
+  final List<TaskStudentStatus> students;
   final bool isLoading;
   final bool isSaving;
+  final String? error;
 
   const TaskStatusState({
     this.students = const [],
     this.isLoading = false,
     this.isSaving = false,
+    this.error,
   });
 
   TaskStatusState copyWith({
-    List<TaskStatusEntity>? students,
+    List<TaskStudentStatus>? students,
     bool? isLoading,
     bool? isSaving,
+    String? error,
   }) {
     return TaskStatusState(
       students: students ?? this.students,
       isLoading: isLoading ?? this.isLoading,
       isSaving: isSaving ?? this.isSaving,
+      error: error ?? this.error,
     );
   }
 }

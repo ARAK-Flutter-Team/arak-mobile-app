@@ -16,7 +16,6 @@ class TaskStatusBadge extends StatelessWidget {
 
   String getText(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-
     return isDone ? loc.done : loc.pending;
   }
 

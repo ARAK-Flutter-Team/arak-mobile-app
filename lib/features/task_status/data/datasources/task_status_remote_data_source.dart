@@ -1,4 +1,4 @@
-import '../../domain/entities/task_status_entity.dart';
+/*import '../../domain/entities/task_status_entity.dart';
 
 abstract class TaskStatusRemoteDataSource {
   Future<List<TaskStatusEntity>> getTaskStatuses(String taskId);
@@ -8,4 +8,4 @@ abstract class TaskStatusRemoteDataSource {
     required String studentId,
     required bool isDone,
   });
-}
+}*/

@@ -16,7 +16,6 @@ class UserModel extends User {
     this.roleId,
   });
 
-  // ✅ fromJson واحدة بس - بالـ validation
   factory UserModel.fromJson(Map<String, dynamic> json) {
     final avatar = json['avatar']?.toString() ?? "";
 
@@ -27,14 +26,14 @@ class UserModel extends User {
       role: _mapRole(json['role']),
       avatarUrl: (avatar.startsWith('http') || avatar.startsWith('/'))
           ? avatar
-          : null, // ✅ "JP" هيبقى null → هيعرض الصورة الافتراضية
+          : null,
       subject: json['subject'],
       roleId: json['roleId'],
       token: json['token'],
     );
   }
 
-  // ✅ fromLoginJson
+  //  fromLoginJson
   factory UserModel.fromLoginJson(Map<String, dynamic> userJson, String token) {
     final avatar = userJson['avatar']?.toString() ?? "";
 

@@ -1,16 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../data/datasources/task_status_remote_data_source_impl.dart';
-import '../../data/repositoryImpl/task_status_repository_impl.dart';
+import '../../../tasks/presentation/providers/providers.dart';
 import '../controller/task_status_notifier.dart';
 import '../state/task_status_state.dart';
 
-final taskStatusProvider =
-StateNotifierProvider<TaskStatusNotifier, TaskStatusState>((ref) {
+final taskStatusProvider = StateNotifierProvider<TaskStatusNotifier, TaskStatusState>((ref) {
+  final getTaskStatus = ref.watch(getTaskStatusProvider);
+  final updateTaskStudentStatus = ref.watch(updateTaskStudentStatusProvider);
 
-  final remote = TaskStatusRemoteDataSourceImpl();
-
-  final repository = TaskStatusRepositoryImpl(remote);
-
-  return TaskStatusNotifier(repository);
+  return TaskStatusNotifier(
+    getTaskStatus: getTaskStatus,
+    updateTaskStudentStatus: updateTaskStudentStatus,
+  );
 });

@@ -1,70 +1,81 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/entities/task_status_entity.dart';
-import '../../domain/repositories/task_status_repository.dart';
+import '../../../tasks/domain/entities/task_student_status.dart';
+import '../../../tasks/domain/usecases/get_task_status.dart';
+import '../../../tasks/domain/usecases/update_task_student_status.dart';
 import '../state/task_status_state.dart';
 
 class TaskStatusNotifier extends StateNotifier<TaskStatusState> {
+  final GetTaskStatus getTaskStatus;
+  final UpdateTaskStudentStatus updateTaskStudentStatus;
 
-  final TaskStatusRepository repository;
+  TaskStatusNotifier({
+    required this.getTaskStatus,
+    required this.updateTaskStudentStatus,
+  }) : super(const TaskStatusState());
 
-  TaskStatusNotifier(this.repository)
-      : super(const TaskStatusState());
-
-  /// Load task status
   Future<void> load(String taskId) async {
-    state = state.copyWith(isLoading: true);
-
-    final data = await repository.getTaskStatuses(taskId);
-
-    state = state.copyWith(
-      students: data,
-      isLoading: false,
-    );
-  }
-
-  /// Toggle student status
-  Future<void> toggle(String taskId, String studentId) async {
-    final index =
-    state.students.indexWhere((e) => e.studentId == studentId);
-
-    if (index == -1) return;
-
-    final current = state.students[index];
-    final updated = !current.isDone;
-
-    await repository.updateStatus(
-      taskId: taskId,
-      studentId: studentId,
-      isDone: updated,
-    );
-
-    final newList = [...state.students];
-    newList[index] = TaskStatusEntity(
-      taskId: current.taskId,
-      studentId: current.studentId,
-      studentName: current.studentName,
-      isDone: updated,
-    );
-
-    state = state.copyWith(students: newList);
-  }
-  /// save student status
-  Future<void> save(String taskId) async {
-    state = state.copyWith(isSaving: true);
+    state = state.copyWith(isLoading: true, error: null);
 
     try {
-      for (final student in state.students) {
-        await repository.updateStatus(
-          taskId: taskId,
+      final taskIdInt = int.tryParse(taskId) ?? 0;
+      final result = await getTaskStatus(taskIdInt);
+
+      final students = result.map((status) {
+        return TaskStudentStatus(
+          studentId: status.studentId,
+          studentName: status.studentName,
+          isDone: status.isDone,
+        );
+      }).toList();
+
+      state = state.copyWith(
+        isLoading: false,
+        students: students,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
+
+  void toggle(String taskId, String studentId) {
+    final updatedStudents = state.students.map((student) {
+      if (student.studentId == studentId) {
+        return TaskStudentStatus(
           studentId: student.studentId,
-          isDone: student.isDone,
+          studentName: student.studentName,
+          isDone: !student.isDone,
         );
       }
-    } catch (e) {
-      // ممكن تضيفي error handling بعدين
-    }
+      return student;
+    }).toList();
 
-    state = state.copyWith(isSaving: false);
+    state = state.copyWith(students: updatedStudents);
+  }
+
+  Future<void> save(String taskId) async {
+    state = state.copyWith(isSaving: true, error: null);
+
+    try {
+      final taskIdInt = int.tryParse(taskId) ?? 0;
+      final updates = state.students.map((student) {
+        return {
+          "studentId": student.studentId,
+          "isDone": student.isDone,
+        };
+      }).toList();
+
+      await updateTaskStudentStatus(taskIdInt, updates);
+
+      state = state.copyWith(isSaving: false);
+    } catch (e) {
+      state = state.copyWith(
+        isSaving: false,
+        error: e.toString(),
+      );
+      rethrow;
+    }
   }
 }

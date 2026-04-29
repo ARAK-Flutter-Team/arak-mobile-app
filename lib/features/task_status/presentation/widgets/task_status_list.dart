@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/task_status_entity.dart';
+import '../../../tasks/domain/entities/task_student_status.dart';
 import 'task_status_list_item.dart';
 
 class TaskStatusList extends StatelessWidget {
-  final List<TaskStatusEntity> students;
+  final List<TaskStudentStatus> students;
   final Function(String studentId) onToggle;
 
   const TaskStatusList({
@@ -19,9 +19,10 @@ class TaskStatusList extends StatelessWidget {
       separatorBuilder: (_, __) => const Divider(),
       itemBuilder: (_, index) {
         final student = students[index];
-
         return TaskStatusListItem(
-          student: student,
+          studentId: student.studentId,
+          studentName: student.studentName,
+          isDone: student.isDone,
           onTap: () => onToggle(student.studentId),
         );
       },

@@ -1,4 +1,4 @@
-import '../entities/task_status_entity.dart';
+/*import '../entities/task_status_entity.dart';
 
 abstract class TaskStatusRepository {
   Future<List<TaskStatusEntity>> getTaskStatuses(String taskId);
@@ -8,4 +8,4 @@ abstract class TaskStatusRepository {
     required String studentId,
     required bool isDone,
   });
-}
+}*/
