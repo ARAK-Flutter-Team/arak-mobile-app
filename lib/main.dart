@@ -56,8 +56,7 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
     final locale = ref.watch(localeProvider);
 
-    final fontFamily =
-    locale.languageCode == 'ar' ? 'Tajawal' : 'Poppins';
+    final fontFamily = locale.languageCode == 'ar' ? 'Tajawal' : 'Poppins';
 
     return MaterialApp.router(
       title: 'Arak',

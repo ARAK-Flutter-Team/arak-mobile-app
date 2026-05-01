@@ -1,131 +1,80 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../data/repositories/notification_repository_impl.dart';
 import '../../domain/entities/notification.dart';
 import '../../domain/usecases/get_notifications.dart';
 import '../../domain/usecases/get_unread_count.dart';
 import '../../domain/usecases/mark_all_as_read.dart';
 
-/// UseCases Providers
+// ✅ unread count provider
+final unreadNotificationsProvider = StateProvider<int>((ref) => 0);
 
+// UseCases Providers
 final getNotificationsUseCaseProvider =
-Provider<GetNotificationsUseCase>((ref) {
-
-  final repo = NotificationsRepositoryImpl();
-
-  return GetNotificationsUseCase(repo);
+    Provider<GetNotificationsUseCase>((ref) {
+  return GetNotificationsUseCase(NotificationsRepositoryImpl());
 });
 
-final getUnreadCountUseCaseProvider =
-Provider<GetUnreadCountUseCase>((ref) {
-
-  final repo = NotificationsRepositoryImpl();
-
-  return GetUnreadCountUseCase(repo);
+final getUnreadCountUseCaseProvider = Provider<GetUnreadCountUseCase>((ref) {
+  return GetUnreadCountUseCase(NotificationsRepositoryImpl());
 });
 
-final markAllAsReadUseCaseProvider =
-Provider<MarkAllAsReadUseCase>((ref) {
-
-  final repo = NotificationsRepositoryImpl();
-
-  return MarkAllAsReadUseCase(repo);
+final markAllAsReadUseCaseProvider = Provider<MarkAllAsReadUseCase>((ref) {
+  return MarkAllAsReadUseCase(NotificationsRepositoryImpl());
 });
 
-
-/// Controller
-
+// Controller
 class NotificationsController
-    extends StateNotifier<List<AppNotification>> {
-
+    extends StateNotifier<AsyncValue<List<AppNotification>>> {
   final GetNotificationsUseCase getNotificationsUseCase;
   final GetUnreadCountUseCase getUnreadCountUseCase;
   final MarkAllAsReadUseCase markAllAsReadUseCase;
+  final Ref ref;
 
   NotificationsController({
     required this.getNotificationsUseCase,
     required this.getUnreadCountUseCase,
     required this.markAllAsReadUseCase,
-  }) : super([]);
+    required this.ref,
+  }) : super(const AsyncData([])); // ✅ بدأنا بـ empty list مش loading
 
   Future<void> loadNotifications() async {
+    state = const AsyncLoading();
+    try {
+      final notifications = await getNotificationsUseCase();
+      state = AsyncData(notifications);
 
-    final notifications = await getNotificationsUseCase();
+      // ✅ حدّث الـ unread count من الـ API
+      final count = await getUnreadCountUseCase();
+      ref.read(unreadNotificationsProvider.notifier).state = count;
+    } catch (e, st) {
+      print('❌ ERROR: $e'); // ← هنا
+      print('❌ STACK: $st'); // ← وهنا
 
-    state = notifications;
-  }
-
-  Future<int> getUnreadCount() async {
-
-    return await getUnreadCountUseCase();
+      state = AsyncError(e, st);
+    }
   }
 
   Future<void> markAllAsRead() async {
-
-    await markAllAsReadUseCase();
-
-    state = [
-      for (final n in state)
-        n.copyWith(isRead: true)
-    ];
-
-    final repo = NotificationsRepositoryImpl();
-
-    await repo.saveNotifications(state);
+    try {
+      await markAllAsReadUseCase();
+      state = state.whenData(
+        (list) => list.map((n) => n.copyWith(isRead: true)).toList(),
+      );
+      ref.read(unreadNotificationsProvider.notifier).state = 0;
+    } catch (_) {}
   }
 
-
-  /// Clear All
-  void clearAll() async {
-
-    state = [];
-
-    final repo = NotificationsRepositoryImpl();
-
-    await repo.saveNotifications([]);
+  void clearAll() {
+    state = const AsyncData([]);
   }
-///لتجربة فقط
-  void addFakeNotification() async {
-
-    final fake = AppNotification(
-
-      id: DateTime.now().millisecondsSinceEpoch,
-
-
-      title: "New Message",
-
-      body: "Teacher sent you a new task",
-
-      type: NotificationType.message,
-
-      isRead: false,
-
-      createdAt: DateTime.now(),
-    );
-
-    state = [fake, ...state];
-
-    final repo = NotificationsRepositoryImpl();
-
-    await repo.saveNotifications(state);
-  }
-
 }
 
-/// Provider الأساسي
-
-final notificationsControllerProvider =
-StateNotifierProvider<NotificationsController, List<AppNotification>>((ref) {
-
-  final getNotifications = ref.watch(getNotificationsUseCaseProvider);
-
-  final getUnread = ref.watch(getUnreadCountUseCaseProvider);
-
-  final markRead = ref.watch(markAllAsReadUseCaseProvider);
-
+final notificationsControllerProvider = StateNotifierProvider<
+    NotificationsController, AsyncValue<List<AppNotification>>>((ref) {
   return NotificationsController(
-    getNotificationsUseCase: getNotifications,
-    getUnreadCountUseCase: getUnread,
-    markAllAsReadUseCase: markRead,
+    getNotificationsUseCase: ref.watch(getNotificationsUseCaseProvider),
+    getUnreadCountUseCase: ref.watch(getUnreadCountUseCaseProvider),
+    markAllAsReadUseCase: ref.watch(markAllAsReadUseCaseProvider),
+    ref: ref,
   );
 });

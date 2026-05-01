@@ -1,67 +1,64 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/notification_model.dart';
-import '../../domain/entities/notification.dart';
 import 'notification_remote_datasource.dart';
 
-class NotificationRemoteDataSourceImpl
-    implements NotificationRemoteDataSource {
+class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
+  final String baseUrl = 'http://192.168.1.11:5000/api';
 
-  final List<NotificationModel> _mockNotifications = [
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token'); // ← نفس الـ key اللي بتحفظ فيه الـ token
+  }
 
-    NotificationModel(
-      id: 1,
-      type: NotificationType.message,
-      title: "New Message",
-      body: "You received a message from Ahmed's parent",
-      isRead: false,
-      createdAt: DateTime.now(),
-    ),
-
-    NotificationModel(
-      id: 2,
-      type: NotificationType.schedule,
-      title: "Schedule Updated",
-      body: "Your Math class moved to Room 3B",
-      isRead: false,
-      createdAt: DateTime.now(),
-    ),
-
-    NotificationModel(
-      id: 3,
-      type: NotificationType.admin,
-      title: "Staff Meeting",
-      body: "Staff meeting tomorrow at 10 AM",
-      isRead: true,
-      createdAt: DateTime.now(),
-    ),
-  ];
+  Future<Map<String, String>> _headers() async {
+    final token = await _getToken();
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+  }
 
   @override
-  Future<List<NotificationModel>> getNotifications() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    return _mockNotifications;
+  Future<List<NotificationModel>> getNotifications(
+      {int page = 1, int pageSize = 50}) async {
+    final headers = await _headers();
+    final uri =
+        Uri.parse('$baseUrl/notifications?page=$page&pageSize=$pageSize');
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
+      return data.map((e) => NotificationModel.fromJson(e)).toList();
+    }
+    throw Exception('Failed to load notifications: ${response.statusCode}');
   }
 
   @override
   Future<int> getUnreadCount() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    return _mockNotifications.where((n) => !n.isRead).length;
+    final headers = await _headers();
+    final uri = Uri.parse('$baseUrl/notifications/unread-count');
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['count'] as int;
+    }
+    throw Exception('Failed to get unread count');
   }
 
   @override
   Future<void> markAllAsRead() async {
+    final headers = await _headers();
+    final uri = Uri.parse('$baseUrl/notifications/read-all');
+    await http.patch(uri, headers: headers);
+  }
 
-    for (int i = 0; i < _mockNotifications.length; i++) {
-
-      final n = _mockNotifications[i];
-
-      _mockNotifications[i] = NotificationModel(
-        id: n.id,
-        type: n.type,
-        title: n.title,
-        body: n.body,
-        isRead: true,
-        createdAt: n.createdAt,
-      );
-    }
+  @override
+  Future<void> markAsRead(int id) async {
+    final headers = await _headers();
+    final uri = Uri.parse('$baseUrl/notifications/$id/read');
+    await http.patch(uri, headers: headers);
   }
 }

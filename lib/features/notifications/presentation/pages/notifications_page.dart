@@ -1,214 +1,3 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../shared/widgets/app_main_appbar.dart';
-import '../../domain/entities/notification.dart';
-import '../providers/notifications_provider.dart';
-import '../widgets/notification_tile.dart';
-
-class NotificationsPage extends ConsumerStatefulWidget {
-  const NotificationsPage({super.key});
-
-  @override
-  ConsumerState<NotificationsPage> createState() =>
-      _NotificationsPageState();
-}
-
-class _NotificationsPageState
-    extends ConsumerState<NotificationsPage> {
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() async {
-      final controller =
-      ref.read(notificationsControllerProvider.notifier);
-
-      await controller.loadNotifications();
-      await controller.markAllAsRead();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    final notifications =
-    ref.watch(notificationsControllerProvider);
-
-    final controller =
-    ref.read(notificationsControllerProvider.notifier);
-
-    final today = <AppNotification>[];
-    final yesterday = <AppNotification>[];
-    final earlier = <AppNotification>[];
-
-    final now = DateTime.now();
-
-    /// تقسيم الإشعارات
-    for (final n in notifications) {
-
-      final diff = now.difference(n.createdAt);
-
-      if (diff.inDays == 0) {
-        today.add(n);
-      } else if (diff.inDays == 1) {
-        yesterday.add(n);
-      } else {
-        earlier.add(n);
-      }
-    }
-
-    return Scaffold(
-
-      appBar: AppMainAppBar(
-        title: "Notifications",
-        centerTitle: false,
-        showBackButton: false,
-        disableDefaultLeading: true,
-
-        leadingWidget: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Icon(
-            Icons.notifications,
-            size: 26.sp,
-          ),
-        ),
-      ),
-
-      ///للتجربة
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref
-              .read(notificationsControllerProvider.notifier)
-              .addFakeNotification();
-        },
-
-        ////
-        child: const Icon(Icons.add),
-      ),
-
-      body: notifications.isEmpty
-          ? const Center(
-        child: Text("No Notifications"),
-      )
-
-          : ListView(
-        padding: EdgeInsets.all(16.w),
-        children: [
-
-          /// Header Row (Clear All هنا)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-
-              Text(
-                "Recent",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              GestureDetector(
-                onTap: () {
-                  controller.clearAll();
-                },
-
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-
-                  decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-
-                  child: const Text(
-                    "Clear All",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-
-          SizedBox(height: 18.h),
-
-          /// Today
-          if (today.isNotEmpty)
-            _buildSection(
-              "Today",
-              today,
-            ),
-
-          /// Yesterday
-          if (yesterday.isNotEmpty)
-            _buildSection(
-              "Yesterday",
-              yesterday,
-            ),
-
-          /// Earlier
-          if (earlier.isNotEmpty)
-            _buildSection(
-              "Earlier",
-              earlier,
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSection(
-      String title,
-      List<AppNotification> notifications,
-      ) {
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-
-          child: Text(
-            title,
-
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        ...notifications.map(
-              (n) => AnimatedContainer(
-
-            duration: const Duration(milliseconds: 300),
-
-            curve: Curves.easeInOut,
-
-            child: NotificationTile(
-              notification: n,
-            ),
-          ),
-        ),
-
-
-        SizedBox(height: 12.h),
-      ],
-    );
-  }
-}
-*/
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -222,21 +11,15 @@ class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
 
   @override
-  ConsumerState<NotificationsPage> createState() =>
-      _NotificationsPageState();
+  ConsumerState<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationsPageState
-    extends ConsumerState<NotificationsPage> {
-
+class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   void initState() {
     super.initState();
-
     Future.microtask(() async {
-      final controller =
-      ref.read(notificationsControllerProvider.notifier);
-
+      final controller = ref.read(notificationsControllerProvider.notifier);
       await controller.loadNotifications();
       await controller.markAllAsRead();
     });
@@ -244,35 +27,11 @@ class _NotificationsPageState
 
   @override
   Widget build(BuildContext context) {
-
     final loc = AppLocalizations.of(context)!;
-
-    final notifications =
-    ref.watch(notificationsControllerProvider);
-
-    final controller =
-    ref.read(notificationsControllerProvider.notifier);
-
-    final today = <AppNotification>[];
-    final yesterday = <AppNotification>[];
-    final earlier = <AppNotification>[];
-
-    final now = DateTime.now();
-
-    for (final n in notifications) {
-      final diff = now.difference(n.createdAt);
-
-      if (diff.inDays == 0) {
-        today.add(n);
-      } else if (diff.inDays == 1) {
-        yesterday.add(n);
-      } else {
-        earlier.add(n);
-      }
-    }
+    final controller = ref.read(notificationsControllerProvider.notifier);
+    final notificationsState = ref.watch(notificationsControllerProvider);
 
     return Scaffold(
-
       appBar: AppMainAppBar(
         title: loc.notifications,
         centerTitle: false,
@@ -280,96 +39,112 @@ class _NotificationsPageState
         disableDefaultLeading: true,
         leadingWidget: Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: Icon(
-            Icons.notifications,
-            size: 26.sp,
-          ),
+          child: Icon(Icons.notifications, size: 26.sp),
         ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref
-              .read(notificationsControllerProvider.notifier)
-              .addFakeNotification();
-        },
-        child: const Icon(Icons.add),
-      ),
+      // ✅ شلنا الـ floatingActionButton لأنه كان للتجربة بس
 
-      body: notifications.isEmpty
-          ? Center(
-        child: Text(loc.noNotifications),
-      )
-          : ListView(
-        padding: EdgeInsets.all(16.w),
-        children: [
+      body: notificationsState.when(
+        // ✅ شاشة loading
+        loading: () => const Center(child: CircularProgressIndicator()),
 
-          /// Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // ✅ شاشة error
+        error: (e, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 12),
               Text(
-                loc.recent,
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                'حدث خطأ، حاول مرة أخرى',
+                style: TextStyle(fontSize: 16.sp),
               ),
-
-              GestureDetector(
-                onTap: () {
-                  controller.clearAll();
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    loc.clearAll,
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              )
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: () => controller.loadNotifications(),
+                child: const Text('إعادة المحاولة'),
+              ),
             ],
           ),
+        ),
 
-          SizedBox(height: 18.h),
+        // ✅ شاشة data
+        data: (notifications) {
+          if (notifications.isEmpty) {
+            return Center(child: Text(loc.noNotifications));
+          }
 
-          /// Today
-          if (today.isNotEmpty)
-            _buildSection(loc.today, today),
+          final today = <AppNotification>[];
+          final yesterday = <AppNotification>[];
+          final earlier = <AppNotification>[];
+          final now = DateTime.now();
 
-          /// Yesterday
-          if (yesterday.isNotEmpty)
-            _buildSection(loc.yesterday, yesterday),
+          for (final n in notifications) {
+            final diff = now.difference(n.createdAt);
+            if (diff.inDays == 0) {
+              today.add(n);
+            } else if (diff.inDays == 1) {
+              yesterday.add(n);
+            } else {
+              earlier.add(n);
+            }
+          }
 
-          /// Earlier
-          if (earlier.isNotEmpty)
-            _buildSection(loc.earlier, earlier),
-        ],
+          return ListView(
+            padding: EdgeInsets.all(16.w),
+            children: [
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    loc.recent,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => controller.clearAll(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        loc.clearAll,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 18.h),
+
+              if (today.isNotEmpty) _buildSection(loc.today, today),
+              if (yesterday.isNotEmpty) _buildSection(loc.yesterday, yesterday),
+              if (earlier.isNotEmpty) _buildSection(loc.earlier, earlier),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildSection(
-      String title,
-      List<AppNotification> notifications,
-      ) {
-
+  Widget _buildSection(String title, List<AppNotification> notifications) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10.h),
           child: Text(
@@ -380,17 +155,13 @@ class _NotificationsPageState
             ),
           ),
         ),
-
         ...notifications.map(
-              (n) => AnimatedContainer(
+          (n) => AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            child: NotificationTile(
-              notification: n,
-            ),
+            child: NotificationTile(notification: n),
           ),
         ),
-
         SizedBox(height: 12.h),
       ],
     );

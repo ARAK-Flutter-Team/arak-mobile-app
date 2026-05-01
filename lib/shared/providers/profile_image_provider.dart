@@ -2,43 +2,44 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'current_user_provider.dart';
 import 'image_picker_provider.dart';
+import '../../features/profile/data/upload_repository.dart';
 
-class ProfileImageNotifier extends StateNotifier<void> {
+class ProfileImageNotifier extends StateNotifier<AsyncValue<void>> {
   final Ref ref;
-
-  ProfileImageNotifier(this.ref) : super(null);
+  ProfileImageNotifier(this.ref) : super(const AsyncData(null));
 
   Future<void> pickFromGallery() async {
-    final picker = ref.read(imagePickerProvider);
-    final path = await picker.pickFromGallery();
-
+    final path = await ref.read(imagePickerProvider).pickFromGallery();
     if (path == null) return;
-
-    await _saveImage(path);
+    await _uploadAndSave(path);
   }
 
   Future<void> pickFromCamera() async {
-    final picker = ref.read(imagePickerProvider);
-    final path = await picker.pickFromCamera();
-
+    final path = await ref.read(imagePickerProvider).pickFromCamera();
     if (path == null) return;
-
-    await _saveImage(path);
+    await _uploadAndSave(path);
   }
 
-  Future<void> _saveImage(String path) async {
-    final user = ref.read(currentUserProvider);
-    if (user == null) return;
+  Future<void> _uploadAndSave(String localPath) async {
+    state = const AsyncLoading();
+    try {
+      // 1️⃣ ارفع على السيرفر واجيب الـ URL
+      final serverUrl =
+          await ref.read(uploadRepositoryProvider).uploadPhoto(localPath);
 
-    ref.read(currentUserProvider.notifier).updateAvatar(path);
+      // 2️⃣ حدّث الـ user في الـ state
+      final user = ref.read(currentUserProvider);
+      if (user == null) return;
+      ref.read(currentUserProvider.notifier).updateAvatar(serverUrl);
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        "user_avatar_${user.id}", path); // ✅ مفتاح خاص لكل user
+      state = const AsyncData(null);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 }
 
 final profileImageProvider =
-    StateNotifierProvider<ProfileImageNotifier, void>((ref) {
+    StateNotifierProvider<ProfileImageNotifier, AsyncValue<void>>((ref) {
   return ProfileImageNotifier(ref);
 });
