@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../../../../core/config/app_config.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../domain/params/login_params.dart';
 import '../models/user_model.dart';
@@ -9,7 +10,7 @@ import 'auth_remote_data_source.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio dio;
-  final String baseUrl = "http://192.168.1.11:7000/api/Auth";
+  final String baseUrl = "${AppConfig.baseUrl}/Auth";
 
   AuthRemoteDataSourceImpl({required this.dio});
 

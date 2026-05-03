@@ -14,7 +14,7 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
   Future<List<ScheduleItemModel>> getTeacherSchedule(int teacherId) async {
     // استخدام الـ Endpoint والـ Query Parameters الصحيحة
     final response = await apiService.dio.get(
-      '/api/Schedules',
+      '/Schedules',
       queryParameters: {'teacherId': teacherId},
     );
 

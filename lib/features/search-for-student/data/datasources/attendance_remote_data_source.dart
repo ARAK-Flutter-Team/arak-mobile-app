@@ -20,7 +20,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     final targetYear = year ?? now.year;
 
     final response = await dio.get(
-      '/api/Attendance/student/$studentId',
+      '/Attendance/student/$studentId',
       queryParameters: {
         'month': targetMonth,
         'year': targetYear,

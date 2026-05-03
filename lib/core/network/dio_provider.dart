@@ -70,9 +70,10 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../config/app_config.dart';
 
 class DioProvider {
-  static const String _baseUrl = "http://192.168.1.11:7000";
+  static const String _baseUrl = AppConfig.baseUrl;
 
   static Dio getDio() {
     final dio = Dio(BaseOptions(

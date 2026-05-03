@@ -14,7 +14,7 @@ class UploadRepository {
 
 // ✅ الصح — حط /api صريح
     final response = await _dio.post(
-      '/api/Upload/photo',
+      '/Upload/photo',
       data: formData,
       options: Options(contentType: 'multipart/form-data'),
     );

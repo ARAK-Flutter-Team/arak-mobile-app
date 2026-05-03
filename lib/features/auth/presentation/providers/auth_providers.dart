@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 
 import 'auth_notifier.dart';
 import 'auth_state.dart';
+import '../../../../core/config/app_config.dart';
+import '../../../../shared/providers/current_user_provider.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
 import '../../data/datasources/auth_remote_data_source_impl.dart';
@@ -13,7 +15,7 @@ import '../../../profile/domain/usecases/get_current_user.dart';
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
-      baseUrl: "http://192.168.1.11:7000/api",
+      baseUrl: AppConfig.baseUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {

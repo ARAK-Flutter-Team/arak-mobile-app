@@ -47,7 +47,7 @@ final teacherClassesProvider = FutureProvider<List<String>>((ref) async {
   final dio = ref.watch(dioProvider);
   try {
     AppLogger.logInfo('🟡 Fetching classes from API...');
-    final response = await dio.get("/api/Classes");
+    final response = await dio.get("/Classes");
     AppLogger.logInfo('🟡 Classes response status: ${response.statusCode}');
 
     if (response.statusCode == 200 && response.data is List) {

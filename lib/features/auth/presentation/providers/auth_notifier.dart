@@ -143,7 +143,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         headers: {"Authorization": "Bearer $token"},
       ));
 
-      final response = await dio.get('/api/Teachers/me');
+      final response = await dio.get('/Teachers/me');
       print(" [TEACHER ID] Response: ${response.data}");
 
       if (response.statusCode == 200 && response.data['teacherId'] != null) {

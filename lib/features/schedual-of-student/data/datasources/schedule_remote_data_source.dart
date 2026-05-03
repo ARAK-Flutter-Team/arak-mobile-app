@@ -17,7 +17,7 @@ class ScheduleRemoteDataSource {
     if (teacherId != null) queryParams['teacherId'] = teacherId;
 
     final response = await _dio.get(
-      '/api/Schedules',
+      '/Schedules',
       queryParameters: queryParams,
     );
 

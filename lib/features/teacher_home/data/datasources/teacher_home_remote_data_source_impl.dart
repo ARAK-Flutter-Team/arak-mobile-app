@@ -33,7 +33,7 @@ class TeacherHomeRemoteDataSourceImpl
   @override
   Future<TeacherHomeModel> getTeacherHomeData() async {
 
-    final response = await dio.get('/api/teachers');
+    final response = await dio.get('/teachers');
 
     final teacher = response.data[0]; // مؤقت
 

@@ -14,13 +14,13 @@ class ParentHomeRemoteDataSourceImpl implements ParentHomeRemoteDataSource {
 
   @override
   Future<ParentHomeModel> getParentHomeData() async {
-    final response = await dio.get('/api/Parents/me');
+    final response = await dio.get('/Parents/me');
     return ParentHomeModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   @override
   Future<List<ActivityModel>> getRecentActivities() async {
-    final response = await dio.get('/api/Parents/me/activities');
+    final response = await dio.get('/Parents/me/activities');
     final List data = response.data as List? ?? [];
     return data
         .map((a) => ActivityModel(

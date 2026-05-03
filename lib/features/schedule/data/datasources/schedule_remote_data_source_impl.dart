@@ -60,10 +60,10 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
         queryParams['teacherId'] = teacherId;
       }
 
-      print('GET /api/Schedules?$queryParams');
+      print('GET /Schedules?$queryParams');
 
       final response = await dio.get(
-        '/api/Schedules',
+        '/Schedules',
         queryParameters: queryParams,
       );
 

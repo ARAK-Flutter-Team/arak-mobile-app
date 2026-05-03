@@ -12,7 +12,7 @@ class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
 
   @override
   Future<List<StudentModel>> getStudents() async {
-    final response = await dio.get('/api/students/SearchStudentsByClassId/0');
+    final response = await dio.get('/students/SearchStudentsByClassId/0');
 
     final List<dynamic> data =
         response.data is List ? response.data as List : [];

@@ -10,7 +10,7 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
 
   @override
   Future<List<Map<String, dynamic>>> getClasses() async {
-    final response = await dio.get("/api/Classes");
+    final response = await dio.get("/Classes");
     if (response.statusCode == 200 && response.data is List) {
       return List<Map<String, dynamic>>.from(response.data);
     }

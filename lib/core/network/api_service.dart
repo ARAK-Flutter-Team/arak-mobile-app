@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart'; // اختياري للتتبع
+import '../config/app_config.dart';
 
 /*class ApiService {
   late final Dio dio;
@@ -33,7 +34,7 @@ class ApiService {
 
   ApiService() {
     dio = Dio(BaseOptions(
-      baseUrl: "http://192.168.1.11:7000", // رابط الكمبيوتر
+      baseUrl: AppConfig.baseUrl, // رابط الكمبيوتر
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
     ));

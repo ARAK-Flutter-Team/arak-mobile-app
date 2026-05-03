@@ -42,6 +42,7 @@ StateNotifierProvider<ScheduleNotifier, ScheduleState>((ref) {
 });*/
 /*import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/config/app_config.dart';
 import '../../data/datasources/schedule_remote_data_source.dart';
 import '../../data/repositories/schedule_repository_impl.dart';
 import '../../domain/repositories/schedule_repository.dart';
@@ -52,7 +53,7 @@ import 'schedule_state.dart';
 //  1. Dio Provider (مش ApiService - عشان متوافق مع باقي المشروع)
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: "http://192.168.1.9:5000",
+    baseUrl: AppConfig.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

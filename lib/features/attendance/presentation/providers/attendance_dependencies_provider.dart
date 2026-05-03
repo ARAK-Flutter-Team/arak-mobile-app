@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/config/app_config.dart';
 
 import '../../data/datasources/attendance_remote_data_source_impl.dart';
 import '../../data/datasources/attendance_remote_datasource.dart';
@@ -11,7 +12,7 @@ import '../../domain/usecases/submit_attendance_usecase.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: "http://192.168.1.11:7000",
+    baseUrl: AppConfig.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

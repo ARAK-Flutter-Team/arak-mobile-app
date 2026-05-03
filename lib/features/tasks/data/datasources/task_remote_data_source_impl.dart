@@ -23,7 +23,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     required int classId,
   }) async {
     final response = await dio.get(
-      "/api/Tasks",
+      "/Tasks",
       queryParameters: {
         "teacherId": teacherId,
         "classId": classId,
@@ -42,18 +42,18 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   Future<void> addTask(TaskModel task) async {
     final data = task.toJson();
     data['entity'] = {};
-    await dio.post("/api/Tasks", data: data);
+    await dio.post("/Tasks", data: data);
   }
 
   @override
   Future<void> deleteTask(String taskId) async {
-    await dio.delete("/api/Tasks/$taskId");
+    await dio.delete("/Tasks/$taskId");
   }
 
   @override
   Future<void> updateTaskStatus(String taskId, TaskStatus status) async {
     await dio.put(
-      "/api/Tasks/$taskId",
+      "/Tasks/$taskId",
       data: {
         "id": int.tryParse(taskId) ?? 0,
         "state": status == TaskStatus.completed ? "Completed" : "Pending",
@@ -69,7 +69,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   @override
   Future<List<TaskModel>> getStudentTasks(String studentId) async {
     final response = await dio.get(
-      '/api/Tasks',
+      '/Tasks',
       queryParameters: {'studentId': int.tryParse(studentId) ?? 0},
     );
 
@@ -83,7 +83,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   @override
   Future<List<Task>> getParentTasks({required String studentId}) async {
     final response = await dio.get(
-      '/api/Tasks',
+      '/Tasks',
       queryParameters: {'studentId': int.tryParse(studentId) ?? 0},
     );
 
@@ -97,7 +97,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 // ==================== New Methods ====================
   @override
   Future<List<TaskStudentStatus>> getTaskStatus(int taskId) async {
-    final response = await dio.get("/api/Tasks/$taskId/status");
+    final response = await dio.get("/Tasks/$taskId/status");
 
     if (response.data is List) {
       return (response.data as List)
@@ -109,6 +109,6 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   @override
   Future<void> updateTaskStudentStatus(int taskId, List<Map<String, dynamic>> updates) async {
-    await dio.put("/api/Tasks/$taskId/status", data: updates);
+    await dio.put("/Tasks/$taskId/status", data: updates);
   }
 }

@@ -7,7 +7,7 @@ import 'notification_remote_datasource.dart';
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   // ✅ Uses the central ApiConstants so the IP is changed in one place only
-  final String baseUrl = '${ApiConstants.baseUrl}/api';
+  final String baseUrl = ApiConstants.baseUrl;
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();

@@ -18,7 +18,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
 
     try {
       final response = await dio.get(
-        "/api/Attendance/class/${int.parse(classId)}",
+        "/Attendance/class/${int.parse(classId)}",
         queryParameters: {
           "date": date.toIso8601String().split('T').first,
         },
@@ -62,7 +62,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       print(" Body: $body");
 
       await dio.post(
-        "/api/Attendance/bulk",
+        "/Attendance/bulk",
         data: body,
       );
 
