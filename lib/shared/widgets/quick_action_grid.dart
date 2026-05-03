@@ -182,7 +182,7 @@ class QuickActionsGrid extends ConsumerWidget {
             /// ===== TASKS =====
             if (isTasks) {
               await context.push('/teacher/tasks');
-              await ref.read(notificationProvider.notifier).markTasksAsSeen();
+              // Badge clears automatically when NotificationsPage calls markAllAsRead()
             }
 
             /// ===== SCHEDULE =====
@@ -210,9 +210,6 @@ class QuickActionsGrid extends ConsumerWidget {
 
             /// ===== MESSAGES =====
             else if (isMessages) {
-              await ref
-                  .read(notificationProvider.notifier)
-                  .markMessagesAsSeen();
 
               final authState = ref.read(authProvider);
               final currentUser = authState.user!;

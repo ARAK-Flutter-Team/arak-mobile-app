@@ -79,25 +79,18 @@ class ParentHomeScreen extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(height: 24.h),
-                notificationAsync.when(
-                  loading: () => const SizedBox(),
-                  error: (_, __) => const SizedBox(),
-                  data: (state) => QuickActionsGrid(
+                QuickActionsGrid(
                     items: _buildQuickActions(
-                        selectedStudent?.id ?? '', l10n), // ✅ بنمرر l10n
-                    hasNewTasks: state.hasNewTasks,
-                    hasNewMessages: state.hasNewMessages,
+                        selectedStudent?.id ?? '', l10n),
+                    hasNewTasks: notificationAsync.hasNewTasks,
+                    hasNewMessages: notificationAsync.hasNewMessages,
                     onTasksOpened: () async {
                       await context.push(
                         '/parent-home/tasks',
                         extra: selectedStudent?.id ?? '',
                       );
-                      await ref
-                          .read(notificationProvider.notifier)
-                          .markTasksAsSeen();
                     },
                   ),
-                ),
                 SizedBox(height: 24.h),
                 const ParentRecentActivitiesSection(),
               ],

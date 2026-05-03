@@ -52,7 +52,7 @@ import 'schedule_state.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   return Dio(BaseOptions(
-    baseUrl: "http://192.168.1.11:5000",
+    baseUrl: "http://192.168.1.11:7000",
     connectTimeout: const Duration(seconds: 60),
     receiveTimeout: const Duration(seconds: 60),
     headers: {"Content-Type": "application/json"},

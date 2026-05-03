@@ -18,10 +18,8 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      final controller = ref.read(notificationsControllerProvider.notifier);
-      await controller.loadNotifications();
-      await controller.markAllAsRead();
+    Future.microtask(() {
+      ref.read(notificationsControllerProvider.notifier).loadNotifications();
     });
   }
 
@@ -59,6 +57,16 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
               Text(
                 'حدث خطأ، حاول مرة أخرى',
                 style: TextStyle(fontSize: 16.sp),
+              ),
+              const SizedBox(height: 6),
+              // ✅ Show actual error for easier debugging
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  e.toString(),
+                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
@@ -106,7 +114,12 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => controller.clearAll(),
+                    onTap: () async {
+                      // ✅ Call API to mark all as read + reset badge count
+                      await controller.markAllAsRead();
+                      // ✅ Then clear the local UI list
+                      controller.clearAll();
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,

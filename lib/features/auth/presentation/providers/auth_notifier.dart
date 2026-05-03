@@ -2,12 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import '../../../../shared/providers/current_user_provider.dart';
+import '../../../../core/entities/user.dart';
 import '../../../profile/domain/usecases/get_current_user.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/logout.dart';
 import '../../domain/params/login_params.dart';
 import 'auth_state.dart';
 import 'auth_providers.dart';
+import '../../../../core/constants/api_constants.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final Login loginUseCase;
@@ -110,7 +112,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
           await _saveToken(user.token!);
         }
 
-        int? teacherId = await _fetchTeacherId(user.token ?? '');
+        int? teacherId = user.teacherId;
+        if (teacherId == null && user.role == UserRole.teacher) {
+          teacherId = await _fetchTeacherId(user.token ?? '');
+        }
 
         if (teacherId != null) {
           ref.read(currentTeacherIdProvider.notifier).state = teacherId;
@@ -134,7 +139,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<int?> _fetchTeacherId(String token) async {
     try {
       final dio = Dio(BaseOptions(
-        baseUrl: "http://192.168.1.11:5000",
+        baseUrl: ApiConstants.baseUrl,
         headers: {"Authorization": "Bearer $token"},
       ));
 

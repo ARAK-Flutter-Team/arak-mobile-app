@@ -128,8 +128,9 @@ class TeacherHomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final performanceAsync = ref.watch(teacherPerformanceProvider);
-    final notificationAsync = ref.watch(notificationProvider);
+    final notificationState = ref.watch(notificationProvider);
     final user = ref.watch(currentUserProvider);
+    final quickActions = ref.watch(quickActionsProvider);
 
     /// لو المستخدم لسه بيحمل
     if (user == null) {
@@ -137,9 +138,6 @@ class TeacherHomeScreen extends ConsumerWidget {
         body: Center(child: CircularProgressIndicator()),
       );
     }
-
-    final quickActions = ref.watch(quickActionsProvider);
-    final notificationState = notificationAsync.asData?.value;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -193,13 +191,9 @@ class TeacherHomeScreen extends ConsumerWidget {
                 QuickActionsGrid(
                   items: quickActions,
                   hasNewTasks: false,
-                  hasNewMessages:
-                  notificationState?.hasNewMessages ?? false,
+                  hasNewMessages: notificationState.hasNewMessages,
                   onTasksOpened: () async {
                     await context.push('/teacher/tasks');
-                    await ref
-                        .read(notificationProvider.notifier)
-                        .markTasksAsSeen();
                   },
                 ),
 

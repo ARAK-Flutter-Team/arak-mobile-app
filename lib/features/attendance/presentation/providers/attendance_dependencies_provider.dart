@@ -11,7 +11,7 @@ import '../../domain/usecases/submit_attendance_usecase.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: "http://192.168.1.11:5000",
+    baseUrl: "http://192.168.1.11:7000",
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

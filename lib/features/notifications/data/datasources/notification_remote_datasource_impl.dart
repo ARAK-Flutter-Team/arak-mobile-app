@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../models/notification_model.dart';
 import 'notification_remote_datasource.dart';
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
-  final String baseUrl = 'http://192.168.1.11:5000/api';
+  // ✅ Uses the central ApiConstants so the IP is changed in one place only
+  final String baseUrl = '${ApiConstants.baseUrl}/api';
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -43,7 +45,8 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['count'] as int;
+      // ✅ Safe cast — handles int, long, or double from the JSON serializer
+      return (data['count'] as num).toInt();
     }
     throw Exception('Failed to get unread count');
   }

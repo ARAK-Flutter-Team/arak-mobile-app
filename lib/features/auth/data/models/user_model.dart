@@ -13,6 +13,7 @@ class UserModel extends User {
     super.avatarUrl,
     super.subject,
     super.token,
+    super.teacherId,
     this.roleId,
   });
 
@@ -28,6 +29,7 @@ class UserModel extends User {
           ? avatar
           : null,
       subject: json['subject'],
+      teacherId: json['teacherId'],
       roleId: json['roleId'],
       token: json['token'],
     );
@@ -45,6 +47,7 @@ class UserModel extends User {
       avatarUrl:
           (avatar.startsWith('http') || avatar.startsWith('/')) ? avatar : null,
       subject: userJson['subject'],
+      teacherId: userJson['teacherId'],
       roleId: userJson['roleId'],
       token: token,
     );

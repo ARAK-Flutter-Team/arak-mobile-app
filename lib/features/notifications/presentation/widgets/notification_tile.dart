@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/notification.dart';
+import '../../../../shared/providers/current_user_provider.dart';
 
-class NotificationTile extends StatelessWidget {
+class NotificationTile extends ConsumerWidget {
 
   final AppNotification notification;
 
@@ -13,30 +16,44 @@ class NotificationTile extends StatelessWidget {
   IconData _iconForType(NotificationType type) {
 
     switch (type) {
-
       case NotificationType.message:
         return Icons.message;
-
       case NotificationType.schedule:
         return Icons.schedule;
-
       case NotificationType.admin:
         return Icons.campaign;
+      case NotificationType.task:
+        return Icons.task_alt;
+      case NotificationType.attendance:
+        return Icons.how_to_reg;
+      case NotificationType.announcement:
+        return Icons.announcement;
+      case NotificationType.general:
+      case NotificationType.unknown:
+      default:
+        return Icons.notifications;
     }
   }
 
   Color _colorForType(NotificationType type) {
 
     switch (type) {
-
       case NotificationType.message:
         return Colors.blue;
-
       case NotificationType.schedule:
         return Colors.orange;
-
       case NotificationType.admin:
         return Colors.purple;
+      case NotificationType.task:
+        return Colors.teal;
+      case NotificationType.attendance:
+        return Colors.green;
+      case NotificationType.announcement:
+        return Colors.deepOrange;
+      case NotificationType.general:
+      case NotificationType.unknown:
+      default:
+        return Colors.grey;
     }
   }
 
@@ -48,8 +65,41 @@ class NotificationTile extends StatelessWidget {
     return "$hour:$minute";
   }
 
+  /// Navigate based on notification type
+  void _handleTap(BuildContext context, WidgetRef ref) {
+    switch (notification.type) {
+      case NotificationType.message:
+        final userId = ref.read(currentUserProvider)?.id.toString() ?? '';
+        context.push('/chat-users', extra: {
+          'currentUserId': userId,
+          'users': [],
+        });
+        break;
+      case NotificationType.schedule:
+        context.push('/parent-home/schedule');
+        break;
+      case NotificationType.task:
+        context.push('/parent-home/tasks');
+        break;
+      case NotificationType.attendance:
+        context.push('/parent-home/attendance');
+        break;
+      case NotificationType.admin:
+      case NotificationType.general:
+      case NotificationType.announcement:
+      case NotificationType.unknown:
+        break; // info-only, no navigation
+    }
+  }
+
+  bool get _isTappable =>
+      notification.type == NotificationType.message ||
+      notification.type == NotificationType.schedule ||
+      notification.type == NotificationType.task ||
+      notification.type == NotificationType.attendance;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final color = _colorForType(notification.type);
 
@@ -70,6 +120,9 @@ class NotificationTile extends StatelessWidget {
       ),
 
       child: ListTile(
+
+        onTap: _isTappable ? () => _handleTap(context, ref) : null,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
 
         /// icon
 

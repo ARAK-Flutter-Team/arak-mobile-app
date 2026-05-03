@@ -2,6 +2,13 @@ enum NotificationType {
   message,
   schedule,
   admin,
+  // Additional types the backend may return
+  task,
+  attendance,
+  general,
+  announcement,
+  // Fallback for any unknown value from the server
+  unknown,
 }
 
 class AppNotification {
