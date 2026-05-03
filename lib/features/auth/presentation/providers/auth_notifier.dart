@@ -50,23 +50,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(passwordError: null);
   }
 
-  void validateRole(String? role) {
-    if (role == null) {
-      state = state.copyWith(accountError: "Select account type");
-      return;
-    }
-    state = state.copyWith(accountError: null);
-  }
+
 
   Future<void> login({
     required String email,
     required String password,
-    required String? role,
   }) async {
     state = state.copyWith(
       emailError: null,
       passwordError: null,
-      accountError: null,
       generalError: null,
       isSuccess: false,
     );
@@ -89,10 +81,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return;
     }
-    if (role == null) {
-      state = state.copyWith(accountError: "Select account type");
-      return;
-    }
+
 
     state = state.copyWith(isLoadingLogin: true);
 

@@ -7,7 +7,6 @@ import '../../../../core/entities/user.dart';
 import '../providers/auth_providers.dart';
 import '../providers/auth_state.dart';
 import '../widgets/auth_text_field.dart';
-import '../widgets/account_type_dropdown.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -20,8 +19,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String? selectedAccountType;
-  final List<String> accountTypes = ['Teacher', 'Parent'];
   bool _obscurePassword = true;
 
   @override
@@ -137,17 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           onChanged: notifier.validatePassword,
                         ),
                         SizedBox(height: 16.h),
-                        AccountTypeDropdown(
-                          value: selectedAccountType,
-                          items: accountTypes,
-                          errorText: state.accountError,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedAccountType = value;
-                            });
-                            notifier.validateRole(value);
-                          },
-                        ),
+                        SizedBox(height: 16.h),
                         SizedBox(height: 20.h),
                         if (state.generalError != null)
                           Container(
@@ -170,18 +157,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           onTap: state.isLoadingLogin
                               ? null
                               : () {
-                            if (selectedAccountType == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please select account type"),
-                                ),
-                              );
-                              return;
-                            }
                             notifier.login(
                               email: _emailController.text.trim(),
                               password: _passwordController.text.trim(),
-                              role: selectedAccountType,
                             );
                           },
                           child: Container(

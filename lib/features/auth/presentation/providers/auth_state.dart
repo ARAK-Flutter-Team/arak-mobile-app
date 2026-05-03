@@ -7,7 +7,6 @@ class AuthState extends Equatable {
 
   final String? emailError;
   final String? passwordError;
-  final String? accountError;
   final String? generalError;
 
   final User? user;
@@ -17,7 +16,6 @@ class AuthState extends Equatable {
     required this.isSuccess,
     this.emailError,
     this.passwordError,
-    this.accountError,
     this.generalError,
     this.user,
   });
@@ -27,7 +25,6 @@ class AuthState extends Equatable {
     isSuccess: false,
     emailError: null,
     passwordError: null,
-    accountError: null,
     generalError: null,
     user: null,
   );
@@ -37,7 +34,6 @@ class AuthState extends Equatable {
     bool? isSuccess,
     String? emailError,
     String? passwordError,
-    String? accountError,
     String? generalError,
     User? user,
   }) {
@@ -46,7 +42,6 @@ class AuthState extends Equatable {
       isSuccess: isSuccess ?? this.isSuccess,
       emailError: emailError,
       passwordError: passwordError,
-      accountError: accountError,
       generalError: generalError ?? this.generalError,
       user: user ?? this.user,
     );
@@ -58,7 +53,6 @@ class AuthState extends Equatable {
     isSuccess,
     emailError,
     passwordError,
-    accountError,
     generalError,
     user,
   ];
