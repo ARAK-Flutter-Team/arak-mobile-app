@@ -19,10 +19,12 @@ class ScheduleFilterController {
 
   void updateFilter({
     int? classId,
+    int? teacherId,
   }) {
     final current = _ref.read(scheduleFiltersProvider);
     _ref.read(scheduleFiltersProvider.notifier).state = current.copyWith(
       classId: classId,
+      teacherId: teacherId,
     );
   }
 

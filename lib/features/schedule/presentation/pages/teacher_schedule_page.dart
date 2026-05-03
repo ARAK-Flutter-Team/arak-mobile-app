@@ -1,164 +1,3 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-// 1. ملف اللغات
-import '../../../../l10n/app_localizations.dart';
-// 2. الـ AppBar المشترك
-import '../../../../shared/widgets/app_main_appbar.dart';
-// 3. الـ Auth Provider عشان نجيب الـ ID بتاع المستخدم
-import '../../../auth/presentation/providers/auth_providers.dart';
-// 4. الانتيتي الخاص بجدول المعلم (تأكدي إن المسار فيه /schedule/ وليس schedual-of-student)
-import '../../domain/entities/schedule_item.dart';
-// 5. الـ Providers الخاص بالمعلم
-import '../providers/schedule_providers.dart';
-import '../providers/schedule_state.dart';
-// 6. الودجتس الخاصة بجدول المعلم
-import '../widgets/schedule_day_section.dart';
-import '../widgets/schedule_header.dart';
-
-class TeacherSchedulePage extends ConsumerStatefulWidget {
-  const TeacherSchedulePage({super.key});
-
-  @override
-  ConsumerState<TeacherSchedulePage> createState() =>
-      _TeacherSchedulePageState();
-}
-
-class _TeacherSchedulePageState
-    extends ConsumerState<TeacherSchedulePage> {
-
-  // ترتيب الأيام بالإنجليزي (زي ما هي قادمة من الباك)
-  final List<String> daysOrder = const [
-    'Sunday', 'Monday', 'Tuesday', 'Wednesday',
-    'Thursday', 'Friday', 'Saturday',
-  ];
-
-  // دالة الترجمة للعرض فقط
-  String getTranslatedDay(String day) {
-    final loc = AppLocalizations.of(context)!;
-
-    switch (day) {
-      case 'Sunday': return loc.sunday;
-      case 'Monday': return loc.monday;
-      case 'Tuesday': return loc.tuesday;
-      case 'Wednesday': return loc.wednesday;
-      case 'Thursday': return loc.thursday;
-      case 'Friday': return loc.friday;
-      case 'Saturday': return loc.saturday;
-      default: return day;
-    }
-  }
-
-  /*@override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      // جلب بيانات المستخدم الحالي
-      final user = ref.read(authProvider).user;
-
-      // التأكد من وجود ID وطلب البيانات من الباك
-      if (user != null && user.id != null) {
-        // استخدام teacherScheduleNotifierProvider لضمان عدم التعارض
-        ref
-            .read(teacherScheduleNotifierProvider.notifier)
-            .loadSchedule(int.parse(user.id.toString()));
-      }
-    });
-  }*/
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      final user = ref.read(authProvider).user;
-
-      if (user != null) {
-        // محاولة تحويل الـ ID لرقم
-        int? teacherId;
-
-        // 1. الـ ID موجود وهو رقم؟
-        if (user.id != null && RegExp(r'^\d+$').hasMatch(user.id!)) {
-          teacherId = int.parse(user.id!);
-        }
-        // 2. لو الـ ID نص (من التوكن)، هنستخدم HashCode مؤقت عشان ما يبقاش فاضي
-        else if (user.id != null) {
-          teacherId = user.id!.hashCode;
-          print("Warning: Using ID HashCode for Request: $teacherId");
-        }
-
-        if (teacherId != null) {
-          ref
-              .read(teacherScheduleNotifierProvider.notifier)
-              .loadSchedule(teacherId);
-        }
-      }
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
-    // مراقبة حالة البيانات (Loading, Loaded, Error)
-    final state = ref.watch(teacherScheduleNotifierProvider);
-
-    return Scaffold(
-      body: Column(
-        children: [
-          AppMainAppBar(
-            title: AppLocalizations.of(context)!.myWeeklySchedule,
-            showBackButton: true,
-          ),
-          Expanded(
-            child: _buildBody(state),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBody(ScheduleState state) {
-    if (state is ScheduleLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state is ScheduleError) {
-      return Center(child: Text(state.message));
-    }
-
-    if (state is ScheduleLoaded) {
-      final schedule = state.schedule;
-
-      // تجميع الدروس حسب اليوم (بالإنجليزي)
-      final Map<String, List<ScheduleItem>> grouped = {};
-
-      for (var item in schedule) {
-        grouped.putIfAbsent(item.day, () => []);
-        grouped[item.day]!.add(item);
-      }
-
-      return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const ScheduleHeader(),
-
-            // عرض الأيام حسب الترتيب المحدد
-            ...daysOrder.map((day) {
-              final items = grouped[day] ?? [];
-              if (items.isEmpty) return const SizedBox.shrink();
-
-              return ScheduleDaySection(
-                day: getTranslatedDay(day), // ترجمة العنوان
-                items: items,
-              );
-            }),
-          ],
-        ),
-      );
-    }
-
-    return const SizedBox();
-  }
-}*/
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -263,10 +102,10 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
   }
 
   Widget _buildBody(
-      ScheduleState state,
-      ScheduleFilters filters,
-      AppLocalizations loc,
-      ) {
+    ScheduleState state,
+    ScheduleFilters filters,
+    AppLocalizations loc,
+  ) {
     if (state is ScheduleLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -351,7 +190,7 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
   }
 
   bool _hasActiveFilters(ScheduleFilters filters) {
-    return filters.classId != null;
+    return filters.classId != null || filters.teacherId != null;
   }
 
   Widget _buildActiveFiltersChips(ScheduleFilters filters, AppLocalizations loc) {
@@ -387,6 +226,16 @@ class _TeacherSchedulePageState extends ConsumerState<TeacherSchedulePage> {
                     style: TextStyle(color: textColor),
                   ),
                   onDeleted: () => controller.updateFilter(classId: null),
+                  deleteIconColor: textColor,
+                ),
+              if (filters.teacherId != null)
+                Chip(
+                  backgroundColor: chipColor,
+                  label: Text(
+                    'Teacher ID: ${filters.teacherId}',
+                    style: TextStyle(color: textColor),
+                  ),
+                  onDeleted: () => controller.updateFilter(teacherId: null),
                   deleteIconColor: textColor,
                 ),
             ],

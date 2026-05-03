@@ -49,15 +49,14 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
         print('No token found. User may not be logged in.');
       }
 
-      final queryParams = <String, dynamic>{};
-
-      if (filters.classId != null) {
-        queryParams['classId'] = filters.classId;
-      }
-
-      final teacherId = await _getTeacherIdFromToken();
-      if (teacherId != null) {
-        queryParams['teacherId'] = teacherId;
+      final queryParams = filters.toQueryParams();
+      
+      // If teacherId is not in filters, try to get it from token (for Teachers viewing their own schedule)
+      if (queryParams['teacherId'] == null) {
+        final teacherIdFromToken = await _getTeacherIdFromToken();
+        if (teacherIdFromToken != null) {
+          queryParams['teacherId'] = teacherIdFromToken;
+        }
       }
 
       print('GET /Schedules?$queryParams');
