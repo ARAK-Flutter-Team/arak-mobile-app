@@ -1112,17 +1112,239 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retry;
 
-  /// Label for last updated time
-  ///
-  /// In en, this message translates to:
-  /// **'Last Updated'**
-  String lastUpdated(Object time);
-
   /// No description provided for @noScheduleAvailable.
   ///
   /// In en, this message translates to:
   /// **'No schedule available'**
   String get noScheduleAvailable;
+
+  /// No description provided for @failedToLoadConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load conversations'**
+  String get failedToLoadConversations;
+
+  /// No description provided for @noConversationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get noConversationsYet;
+
+  /// No description provided for @startNewConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new conversation'**
+  String get startNewConversation;
+
+  /// No description provided for @chatWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with {name}'**
+  String chatWith(Object name);
+
+  /// No description provided for @typeMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get typeMessageHint;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// No description provided for @typing.
+  ///
+  /// In en, this message translates to:
+  /// **'Typing...'**
+  String get typing;
+
+  /// No description provided for @messageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Message deleted'**
+  String get messageDeleted;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error'**
+  String get connectionError;
+
+  /// No description provided for @unauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Unauthorized, please login again'**
+  String get unauthorized;
+
+  /// No description provided for @serverError.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error'**
+  String get serverError;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @searchByEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by email...'**
+  String get searchByEmail;
+
+  /// No description provided for @enterEmailToSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter email to search'**
+  String get enterEmailToSearch;
+
+  /// No description provided for @accessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Denied'**
+  String get accessDenied;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get userNotFound;
+
+  /// No description provided for @tryDifferentEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different email address'**
+  String get tryDifferentEmail;
+
+  /// No description provided for @tapSearchToFindUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap search to find a user'**
+  String get tapSearchToFindUser;
+
+  /// No description provided for @typeAtLeast2Characters.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least 2 characters'**
+  String get typeAtLeast2Characters;
+
+  /// No description provided for @chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chat;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// No description provided for @failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failed;
+
+  /// No description provided for @warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get warning;
+
+  /// No description provided for @info.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get info;
+
+  /// No description provided for @superAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Super Admin'**
+  String get superAdmin;
+
+  /// No description provided for @todayClasses.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Classes'**
+  String get todayClasses;
+
+  /// No description provided for @assignedClasses.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned Classes'**
+  String get assignedClasses;
 }
 
 class _AppLocalizationsDelegate

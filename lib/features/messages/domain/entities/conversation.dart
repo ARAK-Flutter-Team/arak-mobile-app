@@ -1,17 +1,27 @@
-import 'message.dart';
+// lib/features/conversations/domain/entities/conversation.dart
+import 'package:equatable/equatable.dart';
 
-class Conversation {
-  final String id;
-  final List<String> participants;
-  final Message? lastMessage;
-  final DateTime? lastMessageTime;
+class Conversation extends Equatable {
+  final String otherPartyId;
+  final String otherPartyName;
+  final String lastMessage;
+  final DateTime lastMessageTime;
   final int unreadCount;
 
   const Conversation({
-    required this.id,
-    required this.participants,
-    this.lastMessage,
-    this.lastMessageTime,
-    this.unreadCount = 0,
+    required this.otherPartyId,
+    required this.otherPartyName,
+    required this.lastMessage,
+    required this.lastMessageTime,
+    required this.unreadCount,
   });
+
+  @override
+  List<Object?> get props => [
+    otherPartyId,
+    otherPartyName,
+    lastMessage,
+    lastMessageTime,
+    unreadCount,
+  ];
 }

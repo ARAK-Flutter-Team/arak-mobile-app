@@ -530,10 +530,121 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retry => 'إعادة المحاولة';
 
   @override
-  String lastUpdated(Object time) {
-    return 'آخر تحديث: $time';
+  String get noScheduleAvailable => 'لا يوجد جدول متاح';
+
+  @override
+  String get failedToLoadConversations => 'فشل في تحميل المحادثات';
+
+  @override
+  String get noConversationsYet => 'لا توجد محادثات بعد';
+
+  @override
+  String get startNewConversation => 'ابدأ محادثة جديدة';
+
+  @override
+  String chatWith(Object name) {
+    return 'محادثة مع $name';
   }
 
   @override
-  String get noScheduleAvailable => 'لا يوجد جدول متاح';
+  String get typeMessageHint => 'اكتب رسالة...';
+
+  @override
+  String get send => 'إرسال';
+
+  @override
+  String get online => 'متصل';
+
+  @override
+  String get offline => 'غير متصل';
+
+  @override
+  String get typing => 'يكتب...';
+
+  @override
+  String get messageDeleted => 'تم حذف الرسالة';
+
+  @override
+  String get loading => 'جاري التحميل...';
+
+  @override
+  String get connectionError => 'خطأ في الاتصال';
+
+  @override
+  String get unauthorized => 'غير مصرح به، يرجى تسجيل الدخول مرة أخرى';
+
+  @override
+  String get serverError => 'خطأ في الخادم';
+
+  @override
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get searchByEmail => 'ابحث بالبريد الإلكتروني...';
+
+  @override
+  String get enterEmailToSearch => 'أدخل البريد الإلكتروني للبحث';
+
+  @override
+  String get accessDenied => 'غير مصرح بالوصول';
+
+  @override
+  String get userNotFound => 'لم يتم العثور على مستخدم';
+
+  @override
+  String get tryDifferentEmail => 'جرب بريداً إلكترونياً مختلفاً';
+
+  @override
+  String get tapSearchToFindUser => 'اضغط على أيقونة البحث للعثور على مستخدم';
+
+  @override
+  String get typeAtLeast2Characters => 'اكتب حرفين على الأقل';
+
+  @override
+  String get chat => 'محادثة';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get submit => 'إرسال';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get address => 'العنوان';
+
+  @override
+  String get role => 'الدور';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get yes => 'نعم';
+
+  @override
+  String get no => 'لا';
+
+  @override
+  String get success => 'نجاح';
+
+  @override
+  String get failed => 'فشل';
+
+  @override
+  String get warning => 'تحذير';
+
+  @override
+  String get info => 'معلومات';
+
+  @override
+  String get superAdmin => 'مدير عام';
+
+  @override
+  String get todayClasses => 'حصص اليوم';
+
+  @override
+  String get assignedClasses => 'الفصول المخصصة';
 }

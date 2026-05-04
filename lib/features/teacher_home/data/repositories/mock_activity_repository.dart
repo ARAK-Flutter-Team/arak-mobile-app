@@ -1,4 +1,4 @@
-import '../../../../shared/models/activity_model.dart';
+/*import '../../../../shared/models/activity_model.dart';
 import '../../domain/repositories/activity_repository.dart';
 
 class MockActivityRepository implements ActivityRepository {
@@ -32,4 +32,4 @@ class MockActivityRepository implements ActivityRepository {
       ];
     }
   }
-}
+}*/

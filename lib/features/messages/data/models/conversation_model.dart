@@ -1,108 +1,95 @@
+// lib/features/conversations/data/models/conversation_model.dart
 /*import '../../domain/entities/conversation.dart';
-import '../../domain/entities/message.dart';
-import 'message_model.dart';
 
 class ConversationModel extends Conversation {
-
   const ConversationModel({
-    required super.id,
-    required super.participants,
-    super.lastMessage,
-    super.lastMessageTime,
-    super.unreadCount,
+    required super.otherPartyId,
+    required super.otherPartyName,
+    required super.lastMessage,
+    required super.lastMessageTime,
+    required super.unreadCount,
   });
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
+    final participant = json['participant'] as Map<String, dynamic>?;
 
+    // ✅ important: use participantId directly from json
+    final otherPartyId = json['participantId']?.toString() ?? '';
+    final otherPartyName = participant?['name']?.toString() ?? 'Unknown';
+
+    // ✅ skip conversation with self
     return ConversationModel(
-      id: json['id'],
-
-      participants: List<String>.from(json['participants']),
-
-      lastMessage: json['lastMessage'] != null
-          ? MessageModel.fromJson(json['lastMessage'])
-          : null,
-
+      otherPartyId: otherPartyId,
+      otherPartyName: otherPartyName,
+      lastMessage: json['lastMessage']?.toString() ?? '',
       lastMessageTime: json['lastMessageTime'] != null
           ? DateTime.parse(json['lastMessageTime'])
-          : null,
-
-      unreadCount: json['unreadCount'] ?? 0,
+          : DateTime.now(),
+      unreadCount: json['unreadCount'] as int? ?? 0,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-
-    return {
-      "id": id,
-      "participants": participants,
-      "lastMessage":
-      (lastMessage as MessageModel?)?.toJson(),
-      "lastMessageTime":
-      lastMessageTime?.toIso8601String(),
-      "unreadCount": unreadCount,
-    };
   }
 }*/
 import '../../domain/entities/conversation.dart';
-import '../../domain/entities/message.dart';
-import 'message_model.dart';
 
 class ConversationModel extends Conversation {
   const ConversationModel({
-    required super.id,
-    required super.participants,
-    super.lastMessage,
-    super.lastMessageTime,
-    super.unreadCount,
+    required super.otherPartyId,
+    required super.otherPartyName,
+    required super.lastMessage,
+    required super.lastMessageTime,
+    required super.unreadCount,
   });
 
-  factory ConversationModel.fromJson(
-      Map<String, dynamic> json) {
+  factory ConversationModel.fromJson(Map<String, dynamic> json) {
+    final participant = json['participant'] as Map<String, dynamic>?;
+
+    final otherPartyId = json['participantId']?.toString() ?? '';
+    final otherPartyName = participant?['name']?.toString() ?? 'Unknown';
+
     return ConversationModel(
-      id: json['id'],
-
-      participants:
-      List<String>.from(json['participants']),
-
-      lastMessage: json['lastMessage'] != null
-          ? MessageModel.fromJson(json['lastMessage'])
-          : null,
-
-      lastMessageTime:
-      json['lastMessageTime'] != null
+      otherPartyId: otherPartyId,
+      otherPartyName: otherPartyName,
+      lastMessage: json['lastMessage']?.toString() ?? '',
+      lastMessageTime: json['lastMessageTime'] != null
           ? DateTime.parse(json['lastMessageTime'])
-          : null,
-
-      unreadCount: json['unreadCount'] ?? 0,
+          : DateTime.now(),
+      unreadCount: json['unreadCount'] as int? ?? 0,
     );
   }
 
+  /// ✅ دالة copyWith لتحديث البيانات
+  ConversationModel copyWith({
+    String? otherPartyId,
+    String? otherPartyName,
+    String? lastMessage,
+    DateTime? lastMessageTime,
+    int? unreadCount,
+  }) {
+    return ConversationModel(
+      otherPartyId: otherPartyId ?? this.otherPartyId,
+      otherPartyName: otherPartyName ?? this.otherPartyName,
+      lastMessage: lastMessage ?? this.lastMessage,
+      lastMessageTime: lastMessageTime ?? this.lastMessageTime,
+      unreadCount: unreadCount ?? this.unreadCount,
+    );
+  }
+
+  /// ✅ تحويل إلى JSON
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-
-      "participants": participants,
-
-      "lastMessage": lastMessage != null
-          ? MessageModel(
-        id: lastMessage!.id,
-        senderId: lastMessage!.senderId,
-        receiverId: lastMessage!.receiverId,
-        text: lastMessage!.text,
-        fileUrl: lastMessage!.fileUrl,
-        type: lastMessage!.type,
-        status: lastMessage!.status,
-        createdAt: lastMessage!.createdAt,
-        deletedForEveryone:
-        lastMessage!.deletedForEveryone,
-      ).toJson()
-          : null,
-
-      "lastMessageTime":
-      lastMessageTime?.toIso8601String(),
-
-      "unreadCount": unreadCount,
+      'participantId': otherPartyId,
+      'participant': {
+        'name': otherPartyName,
+        'avatar': '',
+      },
+      'lastMessage': lastMessage,
+      'lastMessageTime': lastMessageTime.toIso8601String(),
+      'unreadCount': unreadCount,
     };
+  }
+
+  @override
+  String toString() {
+    return 'ConversationModel(otherPartyId: $otherPartyId, otherPartyName: $otherPartyName, lastMessage: $lastMessage, unreadCount: $unreadCount)';
   }
 }

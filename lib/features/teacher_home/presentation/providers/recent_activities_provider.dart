@@ -1,4 +1,4 @@
-import 'package:arak_app/features/teacher_home/presentation/providers/role_provider.dart';
+/*import 'package:arak_app/features/teacher_home/presentation/providers/role_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/models/activity_model.dart';
 import '../../domain/repositories/activity_repository.dart';
@@ -15,4 +15,4 @@ FutureProvider<List<ActivityModel>>((ref) async {
   final repo = ref.watch(activityRepositoryProvider);
 
   return repo.getRecentActivities(role.name);
-});
+});*/

@@ -1,4 +1,4 @@
-import '../models/teacher_home_model.dart';
+/*import '../models/teacher_home_model.dart';
 import 'teacher_home_remote_data_source.dart';
 
 class TeacherHomeMockDataSource
@@ -29,4 +29,4 @@ class TeacherHomeMockDataSource
       ],
     );
   }
-}
+}*/

@@ -1,4 +1,4 @@
-import 'dart:io';
+/*import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/message.dart';
@@ -91,4 +91,4 @@ class ImageMessageBubble extends StatelessWidget {
       ),
     );
   }
-}
+}*/
