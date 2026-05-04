@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'features/evaluation/presentation/pages/evaluation_page.dart';
-import 'package:arak_app/features/search-for-student/presentation/pages/attendance_page.dart';
+import 'package:arak_app/features/parent_attendance/presentation/pages/attendance_page.dart';
 import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
 import 'core/entities/user.dart';
 import 'features/auth/presentation/providers/auth_providers.dart';
@@ -14,7 +14,7 @@ import 'features/notifications/presentation/pages/notifications_page.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
 import 'package:arak_app/features/contact_page/presentation/pages/contact_page.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
-import 'features/schedual-of-student/presentation/pages/schedule_screen.dart';
+import 'features/schedule-of-student/presentation/pages/schedule_screen.dart';
 import 'features/search/presentation/pages/teacher_search_page.dart';
 import 'features/settings/presentation/pages/privacy_policy_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
@@ -226,7 +226,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'features/evaluation/presentation/pages/evaluation_page.dart';
-import 'package:arak_app/features/search-for-student/presentation/pages/attendance_page.dart';
+import 'package:arak_app/features/parent_attendance/presentation/pages/attendance_page.dart';
 import 'features/attendance/presentation/teacher/pages/teacher_attendance_screen.dart';
 import 'core/entities/user.dart';
 import 'features/auth/presentation/providers/auth_providers.dart';
@@ -236,7 +236,7 @@ import 'features/notifications/presentation/pages/notifications_page.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
 import 'package:arak_app/features/contact_page/presentation/pages/contact_page.dart';
 import 'features/schedule/presentation/pages/teacher_schedule_page.dart';
-import 'features/schedual-of-student/presentation/pages/schedule_screen.dart';
+import 'features/schedule-of-student/presentation/pages/schedule_screen.dart';
 import 'features/search/presentation/pages/teacher_search_page.dart';
 import 'features/settings/presentation/pages/privacy_policy_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
@@ -351,11 +351,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
 
           // ==================== Search Routes ====================
-          GoRoute(
-            path: '/search-for-student',
-            name: 'search-for-student',
-            builder: (context, state) => const AttendancePage(),
-          ),
+
           GoRoute(
             path: '/search',
             name: 'search',

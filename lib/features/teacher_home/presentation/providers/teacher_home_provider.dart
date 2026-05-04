@@ -64,10 +64,8 @@ import '../../domain/repositories/teacher_home_repository.dart';
 import '../../domain/usecases/get_teacher_home_data.dart';
 import '../../domain/entities/teacher_home_entity.dart';
 
-// Provider لدالة الـ Dio
-final dioProvider = Provider<Dio>((ref) {
-  return DioProvider.getDio();
-});
+// Provider لدالة الـ Dio يتم استخدامه من core/network/dio_provider.dart
+
 
 // Provider لـ Remote Data Source
 final teacherHomeRemoteDataSourceProvider = Provider<TeacherHomeRemoteDataSource>((ref) {

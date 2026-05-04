@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
+import '../../../../core/network/dio_provider.dart';
 
 import 'auth_notifier.dart';
 import 'auth_state.dart';
-import '../../../../core/config/app_config.dart';
 import '../../../../shared/providers/current_user_provider.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
@@ -11,19 +10,6 @@ import '../../data/datasources/auth_remote_data_source_impl.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/logout.dart';
 import '../../../profile/domain/usecases/get_current_user.dart';
-
-final dioProvider = Provider<Dio>((ref) {
-  return Dio(
-    BaseOptions(
-      baseUrl: AppConfig.baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    ),
-  );
-});
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
   return AuthRemoteDataSourceImpl(

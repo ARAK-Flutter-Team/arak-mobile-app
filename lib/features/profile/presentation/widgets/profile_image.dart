@@ -7,7 +7,7 @@ import '../../../../shared/providers/current_user_provider.dart';
 import '../../../../shared/providers/profile_image_provider.dart';
 
 // ✅ حط الـ IP بتاعك هنا
-const String _baseUrl = 'http://YOUR_IP:7000';
+const String _baseUrl = 'http://YOUR_IP:5000';
 
 class ProfileImage extends ConsumerWidget {
   const ProfileImage({super.key, this.radius = 50});

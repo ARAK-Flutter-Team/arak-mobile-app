@@ -11,14 +11,14 @@ class ContactMethodModel extends ContactMethod {
   });
 
   // ده mapper بسيط عشان نرجع الـ Icon المناسب
-  IconData get iconData {
+  String get iconPath {
     switch (type) {
       case ContactType.phone:
-        return Icons.phone_in_talk_rounded;
+        return 'assets/icons/contact.svg';
       case ContactType.email:
-        return Icons.email_outlined;
+        return 'assets/icons/message-outline.svg';
       case ContactType.chat:
-        return Icons.smart_toy_outlined;
+        return 'assets/icons/chatbot.svg';
     }
   }
 

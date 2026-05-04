@@ -7,7 +7,7 @@ import 'package:arak_app/features/parent_home/domain/usecases/get_parent_home_da
 import 'package:arak_app/features/parent_home/domain/usecases/get_parent_recent_activities_usecase.dart';
 import 'package:arak_app/shared/models/activity_model.dart';
 import 'package:arak_app/core/usecase/no_params.dart';
-import 'package:arak_app/core/network/dio_provider.dart'; // أضف الـ import ده
+import 'package:arak_app/core/network/dio_provider.dart';
 
 final _dataSourceProvider = Provider<ParentHomeRemoteDataSource>(
   (ref) => ParentHomeRemoteDataSourceImpl(ref.watch(dioProvider)),
@@ -50,12 +50,11 @@ final parentRecentActivitiesProvider =
   final usecase = ref.watch(_activitiesUseCaseProvider);
   final result = await usecase(const NoParams());
   return result.fold(
-    (failure) => throw Exception(failure.message),
+    (failure) => [], // Return empty list on failure for "Empty State" UI
     (activities) => activities,
   );
 });
 
-// في نهاية الملف بعد باقي الـ providers
 final parentNameProvider = Provider<String>((ref) {
   final homeAsync = ref.watch(parentHomeProvider);
   return homeAsync.whenData((d) => d.parentName).value ?? '';

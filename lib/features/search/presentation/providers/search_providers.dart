@@ -13,69 +13,13 @@ final searchQueryProvider = StateProvider<String>((ref) {
 });
 
 
-///  mock students
 final studentsProvider = Provider<List<Student>>((ref) {
-
-  return [
-
-    Student(
-      id: "1",
-      name: "Ahmed Ali",
-      avatarUrl: null,
-    ),
-
-    Student(
-      id: "2",
-      name: "Sara Mohamed",
-      avatarUrl: null,
-    ),
-
-    Student(
-      id: "3",
-      name: "Mohamed Hassan",
-      avatarUrl: null,
-    ),
-
-  ];
-
+  return [];
 });
 
-
-/// 📚 mock tasks
+/// 📚 mock tasks removed
 final tasksProvider = Provider<List<Task>>((ref) {
-  return [
-
-    /*Task(
-      id: "1",
-      title: "Math Homework",
-      subject: "Math",
-      status: TaskStatus.pending,
-      dueDate: DateTime.now().add(const Duration(days: 2)),
-      description: "Solve exercises 1 to 10",
-      assignedTo: "1",
-    ),*/
-
-    /*Task(
-      id: "2",
-      title: "Science Project",
-      subject: "Science",
-      status: TaskStatus.pending,
-      dueDate: DateTime.now().add(const Duration(days: 4)),
-      description: "Prepare volcano model",
-      assignedTo: "2",
-    ),*/
-
-    /*Task(
-      id: "3",
-      title: "English Essay",
-      subject: "English",
-      status: TaskStatus.completed,
-      dueDate: DateTime.now().add(const Duration(days: 1)),
-      description: "Write essay about environment",
-      assignedTo: "3",
-    ),*/
-
-  ];
+  return [];
 });
 
 
