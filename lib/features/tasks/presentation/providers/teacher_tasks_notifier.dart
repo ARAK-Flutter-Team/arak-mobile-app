@@ -65,7 +65,12 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
       return;
     }
 
-    state = state.copyWith(isLoading: true, error: null, selectedClass: classId);
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      selectedClass: classId,
+      tasks: [],
+    );
 
     try {
       final result = await getTeacherTasks(
@@ -77,6 +82,7 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
         tasks: result.tasks,
         isLoading: false,
         lastUpdated: DateTime.now(),
+        error: null,
       );
       print('Got ${result.tasks.length} tasks');
     } catch (e) {
@@ -84,6 +90,7 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
+        tasks: [],
       );
     }
   }
@@ -97,14 +104,21 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
   }
 
   Future<void> deleteTask(String taskId) async {
+    final originalTasks = [...state.tasks];
+    // ✅ Optimistic Update: Remove from list immediately
+    state = state.copyWith(
+      tasks: state.tasks.where((t) => t.id != taskId).toList(),
+    );
+
     try {
       await ref.read(taskRepositoryProvider).deleteTask(taskId);
-      final teacherId = ref.read(currentTeacherIdProvider);
-      if (teacherId != 0 && state.selectedClass != 0) {
-        await fetchTasks(teacherId: teacherId, classId: state.selectedClass);
-      }
+      print('Task $taskId deleted successfully');
     } catch (e) {
-      state = state.copyWith(error: e.toString());
+      print('Delete task error: $e');
+      // ✅ Rollback on failure
+      state = state.copyWith(tasks: originalTasks);
+      // ✅ Re-throw so UI can show SnackBar
+      rethrow;
     }
   }
 }

@@ -5,7 +5,7 @@ class ApiConstants {
   static const String baseUrl = AppConfig.baseUrl;
 
   //  (لـ Auth, Users, Conversations)
-  static const String apiBaseUrl = "http://192.168.1.9:5000/api";
+  static const String apiBaseUrl = AppConfig.baseUrl;
 
   // Auth
   static String login() => "$apiBaseUrl/Auth/login";

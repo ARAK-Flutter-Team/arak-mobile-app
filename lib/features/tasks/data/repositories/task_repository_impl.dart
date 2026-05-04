@@ -29,6 +29,7 @@ class TaskRepositoryImpl implements TaskRepository {
       title: task.title,
       description: task.description,
       dueDate: task.dueDate,
+      createdDate: task.createdDate,
       status: task.status,
       assignedTo: task.assignedTo,
       teacherId: task.teacherId,

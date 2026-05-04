@@ -123,6 +123,7 @@ class AddTaskNotifier extends StateNotifier<AddTaskState> {
       title: title.trim(),
       description: description.trim(),
       dueDate: state.deadline ?? DateTime.now().add(const Duration(days: 7)),
+      createdDate: DateTime.now(),
       status: TaskStatus.pending,
       assignedTo: classIdStr,
       teacherId: teacherIdInt.toString(),

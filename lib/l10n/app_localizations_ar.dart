@@ -647,4 +647,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get assignedClasses => 'الفصول المخصصة';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get unableToLoadTasks => 'تعذّر تحميل المهام. يرجى المحاولة مرة أخرى.';
 }

@@ -20,7 +20,7 @@ class TeacherHomeRemoteDataSourceImpl implements TeacherHomeRemoteDataSource {
   @override
   Future<TeacherHomeModel> getTeacherHomeData() async {
     try {
-      final response = await dio.get('/api/Teachers/me');
+      final response = await dio.get('/Teachers/me');
 
       if (response.statusCode == 200) {
         return TeacherHomeModel.fromJson(response.data);

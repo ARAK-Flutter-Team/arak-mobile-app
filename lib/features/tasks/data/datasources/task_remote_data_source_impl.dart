@@ -40,9 +40,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   @override
   Future<void> addTask(TaskModel task) async {
-    final data = task.toJson();
-    data['entity'] = {};
-    await dio.post("/Tasks", data: data);
+    await dio.post("/Tasks", data: task.toJson());
   }
 
   @override

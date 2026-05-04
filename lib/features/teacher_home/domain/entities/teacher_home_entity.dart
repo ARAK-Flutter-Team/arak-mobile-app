@@ -57,6 +57,7 @@ class TeacherHomeEntity {
   final List<String> assignedClasses;
   final int todayClassesCount;
   final bool hasNewTasks;
+  final double performance;
 
   TeacherHomeEntity({
     required this.teacherId,
@@ -67,5 +68,6 @@ class TeacherHomeEntity {
     required this.assignedClasses,
     required this.todayClassesCount,
     required this.hasNewTasks,
+    required this.performance,
   });
 }

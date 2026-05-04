@@ -209,6 +209,9 @@
     "info": "معلومات",
     "superAdmin": "مدير عام",
     "todayClasses": "حصص اليوم",
-    "assignedClasses": "الفصول المخصصة"
+    "assignedClasses": "الفصول المخصصة",
+    "somethingWentWrong": "حدث خطأ ما",
+    "unableToLoadTasks": "تعذّر تحميل المهام. يرجى المحاولة مرة أخرى."
+
 
 }

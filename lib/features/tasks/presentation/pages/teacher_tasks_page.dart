@@ -10,6 +10,7 @@ import '../providers/providers.dart';
 import '../providers/teacher_tasks_notifier.dart';
 import '../widgets/task_item_card.dart';
 import '../widgets/add_task_button.dart';
+import '../widgets/error_view.dart';
 
 class TeacherTasksScreen extends ConsumerStatefulWidget {
   const TeacherTasksScreen({Key? key}) : super(key: key);
@@ -21,10 +22,14 @@ class TeacherTasksScreen extends ConsumerStatefulWidget {
 
 class _TeacherTasksScreenState extends ConsumerState<TeacherTasksScreen> {
   bool _initialLoadDone = false;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
+    if (_initialized) return;
+    _initialized = true;
+
     print(' TEACHER TASKS SCREEN INITSTATE ');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print(' PostFrameCallback triggered');
@@ -191,41 +196,28 @@ class _TeacherTasksScreenState extends ConsumerState<TeacherTasksScreen> {
 
                   if (tasksState.error != null) {
                     print(' Showing error: ${tasksState.error}');
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.error_outline, size: 48, color: Colors.red.shade300),
-                          const SizedBox(height: 12),
-                          Text(
-                            tasksState.error!,
-                            style: const TextStyle(color: Colors.red),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () async {
-                              print(' Retry button pressed');
-                              final currentClass = tasksState.selectedClass;
-                              if (currentClass != 0 && teacherId != 0) {
-                                await notifier.fetchTasks(
-                                  teacherId: teacherId,
-                                  classId: currentClass,
-                                );
-                              } else if (classesAsync.hasValue && classesAsync.value!.isNotEmpty) {
-                                final firstClassId = int.tryParse(classesAsync.value!.first) ?? 0;
-                                if (firstClassId != 0) {
-                                  await notifier.fetchTasks(
-                                    teacherId: teacherId,
-                                    classId: firstClassId,
-                                  );
-                                }
-                              }
-                            },
-                            child: Text(loc.tryAgain),
-                          ),
-                        ],
-                      ),
+                    return ErrorView(
+                      message: tasksState.error!,
+                      onRetry: () async {
+                        print(' Retry triggered from ErrorView');
+                        final currentClass = tasksState.selectedClass;
+                        if (currentClass != 0 && teacherId != 0) {
+                          await notifier.fetchTasks(
+                            teacherId: teacherId,
+                            classId: currentClass,
+                          );
+                        } else if (classesAsync.hasValue &&
+                            classesAsync.value!.isNotEmpty) {
+                          final firstClassId =
+                              int.tryParse(classesAsync.value!.first) ?? 0;
+                          if (firstClassId != 0) {
+                            await notifier.fetchTasks(
+                              teacherId: teacherId,
+                              classId: firstClassId,
+                            );
+                          }
+                        }
+                      },
                     );
                   }
 
@@ -283,6 +275,7 @@ class _TeacherTasksScreenState extends ConsumerState<TeacherTasksScreen> {
 
             try {
               final result = await context.push('/teacher/add-task');
+              if (!mounted) return;
               print(' Navigation returned with result: $result');
 
               if (result == true) {

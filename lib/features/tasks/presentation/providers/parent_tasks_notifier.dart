@@ -45,7 +45,7 @@ class ParentTasksNotifier extends StateNotifier<ParentTasksState> {
       : super(ParentTasksState.initial());
 
   Future<void> fetchTasks({required String studentId}) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, tasks: []);
 
     try {
       final tasks = await getParentTasks(studentId: studentId);

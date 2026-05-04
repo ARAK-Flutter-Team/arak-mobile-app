@@ -19,9 +19,9 @@ class ParentTasksPage extends ConsumerStatefulWidget {
 
 class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
   @override
-  void initState() {
-    super.initState();
-    print('🔥 studentId = ${widget.studentId}');
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Re-fetch tasks every time this screen is shown to ensure data sync
     Future.microtask(
       () => ref
           .read(parentTasksNotifierProvider.notifier)
@@ -75,7 +75,12 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
               child: state.isLoading
                   ? const LoadingView()
                   : state.error != null
-                      ? ErrorView(message: state.error!)
+                      ? ErrorView(
+                          message: state.error!,
+                          onRetry: () => ref
+                              .read(parentTasksNotifierProvider.notifier)
+                              .fetchTasks(studentId: widget.studentId),
+                        )
                       : state.tasks.isEmpty
                           ? const EmptyView()
                           : RefreshIndicator(

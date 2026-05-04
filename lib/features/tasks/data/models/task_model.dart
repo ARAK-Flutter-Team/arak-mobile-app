@@ -6,6 +6,7 @@ class TaskModel extends Task {
     required super.title,
     required super.description,
     required super.dueDate,
+    required super.createdDate,
     required super.status,
     required super.assignedTo,
     super.teacherId,
@@ -18,6 +19,9 @@ class TaskModel extends Task {
       description: json['description'] ?? "",
       dueDate: json['deadLine'] != null
           ? DateTime.parse(json['deadLine'])
+          : DateTime.now(),
+      createdDate: json['createdDate'] != null
+          ? DateTime.parse(json['createdDate'])
           : DateTime.now(),
       status: (json['state']?.toString().toLowerCase() == "completed")
           ? TaskStatus.completed
@@ -32,10 +36,7 @@ class TaskModel extends Task {
       "title": title,
       "description": description,
       "deadLine": dueDate.toIso8601String(),
-      "state": status == TaskStatus.completed ? "Completed" : "Pending",
       "classId": int.tryParse(assignedTo) ?? 0,
-      "teacherId": int.tryParse(teacherId ?? "0") ?? 0,
-      "entity": {},
     };
   }
 }

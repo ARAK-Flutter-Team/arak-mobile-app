@@ -121,6 +121,7 @@ class TeacherHomeModel {
   final List<String> assignedClasses;
   final int todayClassesCount;
   final bool hasNewTasks;
+  final double performance;
 
   TeacherHomeModel({
     required this.teacherId,
@@ -131,6 +132,7 @@ class TeacherHomeModel {
     required this.assignedClasses,
     required this.todayClassesCount,
     required this.hasNewTasks,
+    required this.performance,
   });
 
   // من JSON إلى Model
@@ -146,6 +148,7 @@ class TeacherHomeModel {
           : [],
       todayClassesCount: json['todayClassesCount'] ?? 0,
       hasNewTasks: json['hasNewTasks'] ?? false,
+      performance: (json['performance'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -160,6 +163,7 @@ class TeacherHomeModel {
       assignedClasses: assignedClasses,
       todayClassesCount: todayClassesCount,
       hasNewTasks: hasNewTasks,
+      performance: performance,
     );
   }
 }

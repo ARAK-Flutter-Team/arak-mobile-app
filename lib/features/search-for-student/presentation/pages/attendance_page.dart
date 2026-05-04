@@ -361,12 +361,18 @@ class AttendanceCalendar extends StatefulWidget {
 
 class _AttendanceCalendarState extends State<AttendanceCalendar> {
   late DateTime _currentMonth;
+  DateTime? _selectedDay;
 
   @override
   void initState() {
     super.initState();
     _currentMonth =
         DateTime(widget.initialMonth.year, widget.initialMonth.month, 1);
+    // Initialize selected day as today if it's within the current month
+    final now = DateTime.now();
+    if (now.month == _currentMonth.month && now.year == _currentMonth.year) {
+      _selectedDay = DateTime(now.year, now.month, now.day);
+    }
   }
 
   @override
@@ -381,21 +387,81 @@ class _AttendanceCalendarState extends State<AttendanceCalendar> {
   Map<String, String> get _recordMap {
     return {
       for (final r in widget.records)
-        '${r.date.year}-${r.date.month}-${r.date.day}': r.status
+        '${r.date.year}-${r.date.month}-${r.date.day}': r.status.toLowerCase()
     };
   }
 
-  Color _statusColor(String? status) {
-    switch (status) {
-      case 'Present':
+  Color _getAttendanceColor(String? status) {
+    if (status == null) return Colors.transparent;
+    switch (status.toLowerCase()) {
+      case 'present':
         return Colors.green;
-      case 'Absent':
+      case 'absent':
         return Colors.red;
-      case 'Late':
+      case 'late':
         return Colors.orange;
       default:
         return Colors.transparent;
     }
+  }
+
+  BoxDecoration _buildDayDecoration({
+    required bool isSelected,
+    required bool isToday,
+    required String? status,
+    required Color statusColor,
+  }) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    // 1. Determine base color (Priority: Status fill > Selection tint)
+    Color bgColor = Colors.transparent;
+    if (status != null && statusColor != Colors.transparent) {
+      bgColor = statusColor.withOpacity(0.15);
+    } else if (isSelected) {
+      bgColor = colorScheme.primary.withOpacity(0.1);
+    }
+
+    return BoxDecoration(
+      color: bgColor,
+      borderRadius: BorderRadius.circular(8),
+      // 2. Borders (Priority: Today border > Status border)
+      border: isToday
+          ? Border.all(color: colorScheme.primary, width: 1.5)
+          : (isSelected
+              ? Border.all(color: colorScheme.primary.withOpacity(0.5), width: 1)
+              : (status != null && statusColor != Colors.transparent
+                  ? Border.all(color: statusColor.withOpacity(0.3), width: 1)
+                  : null)),
+    );
+  }
+
+  TextStyle _buildDayTextStyle({
+    required bool isSelected,
+    required bool isToday,
+    required String? status,
+    required Color statusColor,
+  }) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    // Use status color only if it's a valid semantic color
+    final bool hasValidStatus = status != null && statusColor != Colors.transparent;
+
+    return TextStyle(
+      fontSize: 14,
+      fontWeight: (hasValidStatus || isToday || isSelected)
+          ? FontWeight.bold
+          : FontWeight.normal,
+      // Color priority: Status > Today > Selection > Default
+      color: hasValidStatus
+          ? statusColor
+          : isToday
+              ? colorScheme.primary
+              : isSelected
+                  ? colorScheme.primary
+                  : colorScheme.onSurface,
+    );
   }
 
   String _getMonthName(int month) {
@@ -517,64 +583,66 @@ class _AttendanceCalendarState extends State<AttendanceCalendar> {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
-              crossAxisSpacing: 6,
-              mainAxisSpacing: 6,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
             ),
             itemCount: totalCells,
             itemBuilder: (context, index) {
               final day = index - firstDayVisualOffset + 1;
               if (day < 1 || day > totalDaysInMonth) return Container();
 
+              final dayDate = DateTime(_currentMonth.year, _currentMonth.month, day);
               final now = DateTime.now();
               final isToday = day == now.day &&
                   _currentMonth.month == now.month &&
                   _currentMonth.year == now.year;
 
+              final isSelected = _selectedDay != null &&
+                  _selectedDay!.day == day &&
+                  _selectedDay!.month == _currentMonth.month &&
+                  _selectedDay!.year == _currentMonth.year;
+
               final key = '${_currentMonth.year}-${_currentMonth.month}-$day';
               final status = recordMap[key];
-              final statusColor = _statusColor(status);
-              final hasRecord = status != null;
+              final statusColor = _getAttendanceColor(status);
 
-              // ✅ hasRecord دايما هياخد أولوية على isToday
-              final bgColor = hasRecord
-                  ? statusColor.withOpacity(0.15)
-                  : Colors.transparent;
-
-              final textColor = hasRecord
-                  ? statusColor
-                  : isToday
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurface;
-
-              // ✅ الـ border بيتكيف مع الحالة
-              Border? border;
-              if (isToday && !hasRecord) {
-                border = Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 1.5,
-                );
-              } else if (isToday && hasRecord) {
-                border = Border.all(
-                  color: statusColor,
-                  width: 1.5,
-                );
-              }
-
-              return Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(8),
-                  border: border,
-                ),
-                child: Text(
-                  '$day',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: textColor,
-                    fontWeight: (hasRecord || isToday)
-                        ? FontWeight.bold
-                        : FontWeight.normal,
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedDay = dayDate;
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: _buildDayDecoration(
+                    isSelected: isSelected,
+                    isToday: isToday,
+                    status: status,
+                    statusColor: statusColor,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '$day',
+                        style: _buildDayTextStyle(
+                          isSelected: isSelected,
+                          isToday: isToday,
+                          status: status,
+                          statusColor: statusColor,
+                        ),
+                      ),
+                      if (status != null && statusColor != Colors.transparent)
+                        Container(
+                          margin: const EdgeInsets.only(top: 2),
+                          width: 4,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: statusColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               );

@@ -163,6 +163,8 @@ import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/widgets/app_snackbar.dart';
+import '../../../../core/entities/user.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../task_status/presentation/screens/task_status_screen.dart';
 import '../../domain/entities/task.dart';
 import '../providers/teacher_tasks_notifier.dart';
@@ -178,6 +180,9 @@ class TaskItemCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final userRole = ref.watch(authProvider).user?.role;
+    final isTeacher = userRole == UserRole.teacher;
+    final isParent = userRole == UserRole.parent;
 
     String formattedDate = 'No date';
     try {
@@ -223,40 +228,54 @@ class TaskItemCard extends ConsumerWidget {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 20),
-                  onPressed: () async {
-                    final confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(AppLocalizations.of(context)?.confirmDelete ?? 'Delete Task'),
-                        content: Text(AppLocalizations.of(context)?.deleteTaskMessage ?? 'This action cannot be undone.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
-                          ),
-                        ],
-                      ),
-                    );
-
-                    if (confirm == true) {
-                      await ref
-                          .read(teacherTasksNotifierProvider.notifier)
-                          .deleteTask(task.id);
-
-                      AppSnackBar.show(
-                        context,
-                        message: AppLocalizations.of(context)?.taskDeleted ?? 'Task deleted',
-                        type: AppSnackBarType.error,
+                if (isTeacher)
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline, size: 20),
+                    onPressed: () async {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)?.confirmDelete ?? 'Delete Task'),
+                          content: Text(AppLocalizations.of(context)?.deleteTaskMessage ?? 'This action cannot be undone.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
+                            ),
+                          ],
+                        ),
                       );
-                    }
-                  },
-                ),
+
+                      if (confirm == true) {
+                        try {
+                          await ref
+                              .read(teacherTasksNotifierProvider.notifier)
+                              .deleteTask(task.id);
+
+                          if (!context.mounted) return;
+
+                          AppSnackBar.show(
+                            context,
+                            message: AppLocalizations.of(context)?.taskDeleted ?? 'Task deleted',
+                            type: AppSnackBarType.success,
+                          );
+                        } catch (e) {
+                          if (!context.mounted) return;
+
+                          AppSnackBar.show(
+                            context,
+                            message: 'Failed to delete task. Please try again.',
+                            type: AppSnackBarType.error,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                if (isParent) _buildStatusBadge(context, task.status),
               ],
             ),
             const SizedBox(height: 10),
@@ -266,48 +285,81 @@ class TaskItemCard extends ConsumerWidget {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 14),
-            Align(
-              alignment: Alignment.centerRight,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => TaskStatusScreen(task: task),
+            if (isTeacher) ...[
+              const SizedBox(height: 14),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TaskStatusScreen(task: task),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.visibility_outlined,
-                        size: 16,
-                        color: theme.colorScheme.primary,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        AppLocalizations.of(context)?.checkStatus ?? 'Check Status',
-                        style: theme.textTheme.bodySmall?.copyWith(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.visibility_outlined,
+                          size: 16,
                           color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 6),
+                        Text(
+                          AppLocalizations.of(context)?.checkStatus ?? 'Check Status',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge(BuildContext context, TaskStatus status) {
+    final isCompleted = status == TaskStatus.completed;
+    final color = isCompleted ? Colors.green : Colors.orange;
+    final text = isCompleted ? 'Completed' : 'Pending';
+    final icon = isCompleted ? '✅' : '🟡';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 12)),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

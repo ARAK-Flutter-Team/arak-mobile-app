@@ -1345,6 +1345,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Assigned Classes'**
   String get assignedClasses;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @unableToLoadTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load tasks. Please try again.'**
+  String get unableToLoadTasks;
 }
 
 class _AppLocalizationsDelegate

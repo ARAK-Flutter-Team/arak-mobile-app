@@ -647,4 +647,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assignedClasses => 'Assigned Classes';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get unableToLoadTasks => 'Unable to load tasks. Please try again.';
 }

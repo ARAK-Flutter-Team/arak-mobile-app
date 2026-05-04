@@ -115,6 +115,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
 import '../../../../shared/widgets/user_header_card.dart';
+import '../../../../shared/widgets/performance_indicator.dart';
 import '../../../../shared/models/quick_action_item.dart';
 import '../providers/teacher_home_provider.dart';
 
@@ -150,30 +151,33 @@ class TeacherHomeScreen extends ConsumerWidget {
             ],
           ),
         ),
-        error: (error, stack) => Center(
-          child: Padding(
-            padding: EdgeInsets.all(24.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
-                SizedBox(height: 16.h),
-                Text(
-                  tr.error,
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  error.toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                ),
-                SizedBox(height: 24.h),
-                ElevatedButton(
-                  onPressed: () => ref.invalidate(teacherHomeProvider),
-                  child: Text(tr.retry),
-                ),
-              ],
+        error: (error, stack) => SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(24.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
+                  SizedBox(height: 16.h),
+                  Text(
+                    tr.error,
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    error.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                  ),
+                  SizedBox(height: 24.h),
+                  ElevatedButton(
+                    onPressed: () => ref.invalidate(teacherHomeProvider),
+                    child: Text(tr.retry),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -199,6 +203,14 @@ class TeacherHomeScreen extends ConsumerWidget {
                   ),
 
                   SizedBox(height: 30.h),
+
+                  // Performance Indicator
+                  AppPerformanceIndicator(
+                    percentage: teacherData.performance,
+                    title: tr.teacherPerformance,
+                  ),
+
+                  SizedBox(height: 24.h),
 
                   // Today Classes Card
                   Container(

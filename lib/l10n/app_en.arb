@@ -208,6 +208,9 @@
     "info": "Info",
     "superAdmin": "Super Admin",
     "todayClasses": "Today's Classes",
-    "assignedClasses": "Assigned Classes"
+    "assignedClasses": "Assigned Classes",
+      "somethingWentWrong": "Something went wrong",
+  "unableToLoadTasks": "Unable to load tasks. Please try again."
+
 
 }
