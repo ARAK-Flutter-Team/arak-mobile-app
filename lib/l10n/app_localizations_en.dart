@@ -530,10 +530,121 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
-  String lastUpdated(Object time) {
-    return 'Last Updated';
+  String get noScheduleAvailable => 'No schedule available';
+
+  @override
+  String get failedToLoadConversations => 'Failed to load conversations';
+
+  @override
+  String get noConversationsYet => 'No conversations yet';
+
+  @override
+  String get startNewConversation => 'Start a new conversation';
+
+  @override
+  String chatWith(Object name) {
+    return 'Chat with $name';
   }
 
   @override
-  String get noScheduleAvailable => 'No schedule available';
+  String get typeMessageHint => 'Type a message...';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get offline => 'Offline';
+
+  @override
+  String get typing => 'Typing...';
+
+  @override
+  String get messageDeleted => 'Message deleted';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get connectionError => 'Connection error';
+
+  @override
+  String get unauthorized => 'Unauthorized, please login again';
+
+  @override
+  String get serverError => 'Server error';
+
+  @override
+  String get noInternetConnection => 'No internet connection';
+
+  @override
+  String get searchByEmail => 'Search by email...';
+
+  @override
+  String get enterEmailToSearch => 'Enter email to search';
+
+  @override
+  String get accessDenied => 'Access Denied';
+
+  @override
+  String get userNotFound => 'User not found';
+
+  @override
+  String get tryDifferentEmail => 'Try a different email address';
+
+  @override
+  String get tapSearchToFindUser => 'Tap search to find a user';
+
+  @override
+  String get typeAtLeast2Characters => 'Type at least 2 characters';
+
+  @override
+  String get chat => 'Chat';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get role => 'Role';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get info => 'Info';
+
+  @override
+  String get superAdmin => 'Super Admin';
+
+  @override
+  String get todayClasses => 'Today\'s Classes';
+
+  @override
+  String get assignedClasses => 'Assigned Classes';
 }

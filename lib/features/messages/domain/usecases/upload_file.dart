@@ -1,4 +1,4 @@
-import '../repositories/chat_repository.dart';
+/*import '../repositories/chat_repository.dart';
 
 class UploadFile {
   final ChatRepository repository;
@@ -8,4 +8,4 @@ class UploadFile {
   Future<String> call(String path) {
     return repository.uploadFile(path);
   }
-}
+}*/

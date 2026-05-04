@@ -1,102 +1,62 @@
+// lib/features/conversations/data/repositories/conversation_repository_impl.dart
+import '../../domain/entities/conversation.dart';
 import '../../domain/entities/message.dart';
-import '../../domain/enums/user_status.dart';
-import '../../domain/repositories/chat_repository.dart';
-
+import '../../domain/repositories/conversation_repository.dart';
 import '../datasource/chat_remote_datasource.dart';
-import '../models/message_model.dart';
 
-class ChatRepositoryImpl implements ChatRepository {
+class ConversationRepositoryImpl implements ConversationRepository {
+  final ConversationRemoteDataSource remoteDataSource;
 
-  final ChatRemoteDataSource remoteDataSource;
-
-  ChatRepositoryImpl(this.remoteDataSource);
+  ConversationRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<List<Message>> getMessages(
-      String currentUserId,
-      String otherUserId,
-      ) async {
+  Future<List<Conversation>> getConversations() async {
+    final models = await remoteDataSource.getConversations();
+    return models;
+  }
 
-    return await remoteDataSource.getMessages(
-      currentUserId,
-      otherUserId,
+  @override
+  Future<List<Message>> getMessages({
+    required String userId,
+    int page = 1,
+    int pageSize = 50,
+  }) async {
+    final models = await remoteDataSource.getMessages(
+      userId: userId,
+      page: page,
+      pageSize: pageSize,
+    );
+    return models;
+  }
+
+  @override
+  Future<Message> sendMessage({
+    required String senderId,
+    required String receiverId,
+    required String content,
+  }) async {
+    return await remoteDataSource.sendMessage(
+      senderId: senderId,
+      receiverId: receiverId,
+      content: content,
     );
   }
 
   @override
-  Future<void> sendMessage(Message message) async {
-
-    final model = MessageModel(
-      id: message.id,
-      senderId: message.senderId,
-      receiverId: message.receiverId,
-
-      text: message.text,
-      fileUrl: message.fileUrl,
-
-      duration: message.duration, // مهم للصوت
-
-      type: message.type,
-      status: message.status,
-
-      createdAt: message.createdAt,
-
-      deletedForEveryone: message.deletedForEveryone,
-    );
-
-    await remoteDataSource.sendMessage(model);
-  }
-
-  @override
-  Future<void> deleteMessageForMe(String messageId) async {
-    await remoteDataSource.deleteMessageForMe(messageId);
-  }
-
-  @override
-  Future<void> deleteMessageForEveryone(String messageId) async {
-    await remoteDataSource.deleteMessageForEveryone(messageId);
-  }
-
-  @override
-  Future<void> markAsSeen(String messageId) async {
-    await remoteDataSource.markAsSeen(messageId);
-  }
-
-  @override
-  Stream<List<Message>> listenMessages(
-      String currentUserId,
-      String otherUserId,
-      ) async* {
-
-    while (true) {
-
-      final messages =
-      await remoteDataSource.getMessages(
-        currentUserId,
-        otherUserId,
-      );
-
-      yield messages;
-
-      await Future.delayed(
-        const Duration(seconds: 2),
-      );
-    }
-  }
-
-  @override
-  Future<void> updateUserStatus(
-      String userId,
-      UserStatus status,
-      ) async {
-
-    await remoteDataSource.updateUserStatus(
-      userId,
-      status.name,
+  Future<void> markMessageAsRead({
+    required String userId,
+    required int messageId,
+  }) async {
+    await remoteDataSource.markMessageAsRead(
+      userId: userId,
+      messageId: messageId,
     );
   }
+
   @override
-  Future<String> uploadFile(String path) {
-    return remoteDataSource.uploadFile(path);
+  Future<void> markAllMessagesAsRead({
+    required String userId,
+  }) async {
+    await remoteDataSource.markAllMessagesAsRead(userId: userId);
   }
 }

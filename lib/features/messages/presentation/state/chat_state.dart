@@ -1,33 +1,31 @@
+// lib/features/conversations/presentation/state/chat_state.dart
 import '../../domain/entities/message.dart';
 
 class ChatState {
   final Map<String, List<Message>> messagesMap;
   final bool isLoading;
   final bool isTyping;
-  final String? replyingToMessageId;
 
   const ChatState({
     this.messagesMap = const {},
     this.isLoading = false,
     this.isTyping = false,
-    this.replyingToMessageId,
   });
 
   ChatState copyWith({
     Map<String, List<Message>>? messagesMap,
     bool? isLoading,
     bool? isTyping,
-    String? replyingToMessageId,
   }) {
     return ChatState(
       messagesMap: messagesMap ?? this.messagesMap,
       isLoading: isLoading ?? this.isLoading,
       isTyping: isTyping ?? this.isTyping,
-      replyingToMessageId: replyingToMessageId,
     );
   }
 
-  List<Message> messagesForChat(String chatId) {
-    return messagesMap[chatId] ?? [];
+  @override
+  String toString() {
+    return 'ChatState(messagesMap: ${messagesMap.length} chats, isLoading: $isLoading, isTyping: $isTyping)';
   }
 }

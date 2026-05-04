@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../auth/presentation/providers/auth_notifier.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -52,39 +52,48 @@ final teacherPerformanceProvider = FutureProvider<double>((ref) async {
   await Future.delayed(const Duration(milliseconds: 400));
   return 82.0;
 
-  /*
-  // ================= Teacher Performance Provider (Real API) =================
-  final api = ref.read(apiClientProvider); // API Client
-  final response = await api.get('/teacher/performance');
+});*/
+// lib/features/teacher_home/presentation/providers/teacher_home_provider.dart
 
-  return response.data['performance'].toDouble();
-  */
-});
-/*import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:arak_app/core/network/api_provider.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dio/dio.dart';
+import '../../../../core/network/dio_provider.dart';
 import '../../data/datasources/teacher_home_remote_data_source.dart';
-import '../../data/datasources/teacher_home_remote_data_source_impl.dart';
 import '../../data/repositories/teacher_home_repository_impl.dart';
+import '../../domain/repositories/teacher_home_repository.dart';
 import '../../domain/usecases/get_teacher_home_data.dart';
+import '../../domain/entities/teacher_home_entity.dart';
 
-final teacherHomeRepositoryProvider = Provider((ref) {
-  final api = ref.read(apiClientProvider);
-
-  final remote = TeacherHomeRemoteDataSourceImpl(api.dio);
-
-  return TeacherHomeRepositoryImpl(remote);
+// Provider لدالة الـ Dio
+final dioProvider = Provider<Dio>((ref) {
+  return DioProvider.getDio();
 });
 
-final teacherHomeProvider =
-FutureProvider((ref) async {
-  final repo = ref.read(teacherHomeRepositoryProvider);
-  final usecase = GetTeacherHomeData(repo);
+// Provider لـ Remote Data Source
+final teacherHomeRemoteDataSourceProvider = Provider<TeacherHomeRemoteDataSource>((ref) {
+  final dio = ref.watch(dioProvider);
+  return TeacherHomeRemoteDataSourceImpl(dio);
+});
 
+// Provider لـ Repository
+final teacherHomeRepositoryProvider = Provider<TeacherHomeRepository>((ref) {
+  final remoteDataSource = ref.watch(teacherHomeRemoteDataSourceProvider);
+  return TeacherHomeRepositoryImpl(remoteDataSource);
+});
+
+// Provider لـ Usecase
+final getTeacherHomeDataProvider = Provider<GetTeacherHomeData>((ref) {
+  final repository = ref.watch(teacherHomeRepositoryProvider);
+  return GetTeacherHomeData(repository);
+});
+
+// الـ Provider النهائي للشاشة
+final teacherHomeProvider = FutureProvider<TeacherHomeEntity>((ref) async {
+  final usecase = ref.watch(getTeacherHomeDataProvider);
   final result = await usecase();
 
   return result.fold(
-        (l) => throw Exception(l.message),
-        (r) => r,
+        (failure) => throw Exception(failure.message),
+        (data) => data,
   );
-});*/
+});

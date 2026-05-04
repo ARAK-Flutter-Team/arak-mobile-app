@@ -1,19 +1,18 @@
-import '../enums/user_status.dart';
+import 'package:equatable/equatable.dart';
 
-class ChatUser {
+class ChatUser extends Equatable {
   final String id;
   final String name;
-  final String avatarUrl;
   final String role;
-  final UserStatus status;
-  final DateTime? lastSeen;
+  final String avatarUrl;
 
   const ChatUser({
     required this.id,
     required this.name,
-    required this.avatarUrl,
     required this.role,
-    required this.status,
-    this.lastSeen,
+    required this.avatarUrl,
   });
+
+  @override
+  List<Object?> get props => [id, name, role, avatarUrl];
 }

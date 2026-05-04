@@ -1,4 +1,4 @@
-import '../../domain/entities/teacher_home_entity.dart';
+/*import '../../domain/entities/teacher_home_entity.dart';
 
 class TeacherHomeModel {
   final String teacherName;
@@ -105,6 +105,61 @@ class ActivityModel {
     return ActivityEntity(
       iconPath: iconPath,
       title: title,
+    );
+  }
+}*/
+// lib/features/teacher_home/data/models/teacher_home_model.dart
+
+import '../../domain/entities/teacher_home_entity.dart';
+
+class TeacherHomeModel {
+  final int teacherId;
+  final String teacherName;
+  final String email;
+  final String subject;
+  final int subjectId;
+  final List<String> assignedClasses;
+  final int todayClassesCount;
+  final bool hasNewTasks;
+
+  TeacherHomeModel({
+    required this.teacherId,
+    required this.teacherName,
+    required this.email,
+    required this.subject,
+    required this.subjectId,
+    required this.assignedClasses,
+    required this.todayClassesCount,
+    required this.hasNewTasks,
+  });
+
+  // من JSON إلى Model
+  factory TeacherHomeModel.fromJson(Map<String, dynamic> json) {
+    return TeacherHomeModel(
+      teacherId: json['teacherId'] ?? 0,
+      teacherName: json['name'] ?? '',
+      email: json['email'] ?? '',
+      subject: json['subject'] ?? '',
+      subjectId: json['subjectId'] ?? 0,
+      assignedClasses: json['assignedClasses'] != null
+          ? List<String>.from(json['assignedClasses'].map((e) => e.toString()))
+          : [],
+      todayClassesCount: json['todayClassesCount'] ?? 0,
+      hasNewTasks: json['hasNewTasks'] ?? false,
+    );
+  }
+
+  // من Model إلى Entity
+  TeacherHomeEntity toEntity() {
+    return TeacherHomeEntity(
+      teacherId: teacherId,
+      teacherName: teacherName,
+      email: email,
+      subject: subject,
+      subjectId: subjectId,
+      assignedClasses: assignedClasses,
+      todayClassesCount: todayClassesCount,
+      hasNewTasks: hasNewTasks,
     );
   }
 }

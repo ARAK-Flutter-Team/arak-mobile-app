@@ -1,4 +1,4 @@
-import '../repositories/chat_repository.dart';
+/*import '../repositories/chat_repository.dart';
 
 class DeleteForEveryone {
   final ChatRepository repository;
@@ -7,4 +7,4 @@ class DeleteForEveryone {
   Future<void> call(String messageId) {
     return repository.deleteMessageForEveryone(messageId);
   }
-}
+}*/

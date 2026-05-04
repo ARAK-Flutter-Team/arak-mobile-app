@@ -1,4 +1,4 @@
-import '../../domain/entities/chat_user.dart';
+/*import '../../domain/entities/chat_user.dart';
 import '../../domain/enums/user_status.dart';
 
 class ChatUserModel extends ChatUser {
@@ -41,4 +41,4 @@ class ChatUserModel extends ChatUser {
       "lastSeen": lastSeen?.toIso8601String(),
     };
   }
-}
+}*/

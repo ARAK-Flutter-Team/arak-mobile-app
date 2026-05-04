@@ -1,11 +1,21 @@
+// lib/features/conversations/domain/usecases/send_message.dart
+import '../repositories/conversation_repository.dart';
 import '../entities/message.dart';
-import '../repositories/chat_repository.dart';
 
-class SendMessage {
-  final ChatRepository repository;
-  SendMessage(this.repository);
+class SendMessageUseCase {
+  final ConversationRepository repository;
 
-  Future<void> call(Message message) {
-    return repository.sendMessage(message);
+  SendMessageUseCase(this.repository);
+
+  Future<Message> call({
+    required String senderId,
+    required String receiverId,
+    required String content,
+  }) {
+    return repository.sendMessage(
+      senderId: senderId,
+      receiverId: receiverId,
+      content: content,
+    );
   }
 }

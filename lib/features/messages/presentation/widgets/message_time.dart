@@ -1,7 +1,7 @@
+// lib/features/conversations/presentation/widgets/message_time.dart
 import 'package:flutter/material.dart';
 
 class MessageTime extends StatelessWidget {
-
   final DateTime time;
   final bool isMe;
 
@@ -13,19 +13,15 @@ class MessageTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
-
     final formatted = "$hour:$minute";
 
     return Text(
       formatted,
       style: TextStyle(
         fontSize: 11,
-        color: isMe
-            ? Colors.white70
-            : Colors.black54,
+        color: isMe ? Colors.white70 : Colors.black54,
       ),
     );
   }

@@ -1,323 +1,494 @@
-import 'package:flutter/cupertino.dart';
+/*import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/message.dart';
-import '../../domain/enums/message_status.dart';
-import '../../domain/enums/message_type.dart';
 import '../../domain/usecases/get_messages.dart';
 import '../../domain/usecases/send_message.dart';
-import '../../domain/usecases/upload_file.dart';
-import '../../data/local/chat_local_datasource.dart';
-import '../../data/models/message_model.dart';
-
+import '../../domain/usecases/mark_message_read.dart';
+import '../../domain/usecases/mark_all_messages_read.dart';
 import '../state/chat_state.dart';
 
 class ChatController extends StateNotifier<ChatState> {
-  final GetMessages getMessages;
-  final SendMessage sendMessage;
-  final UploadFile uploadFile;
-  final ChatLocalDatasource localDatasource;
+  final GetMessagesUseCase getMessages;
+  final SendMessageUseCase sendMessage;
+  final MarkMessageReadUseCase markMessageRead;
+  final MarkAllMessagesReadUseCase markAllMessagesRead;
 
-  ChatController(
-      this.getMessages,
-      this.sendMessage,
-      this.uploadFile,
-      this.localDatasource,
-      ) : super(const ChatState());
+  ChatController({
+    required this.getMessages,
+    required this.sendMessage,
+    required this.markMessageRead,
+    required this.markAllMessagesRead,
+  }) : super(const ChatState());
 
+  Future<void> loadMessages({
+    required String currentUserId,
+    required String otherUserId,
+    int page = 1,
+    int pageSize = 50,
+    bool showLoading = true,
+  }) async {
+    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    debugPrint('🔄 [LOAD MESSAGES] Starting...');
+    debugPrint('👤 Current User ID: $currentUserId');
+    debugPrint('👤 Other User ID: $otherUserId');
 
-  /// إنشاء chatId ثابت
-  String chatId(String userA, String userB) {
-    final ids = [userA, userB]..sort();
-    return ids.join('_');
+    if (currentUserId == otherUserId) {
+      debugPrint('❌ Cannot load messages with self');
+      if (showLoading) {
+        state = state.copyWith(isLoading: false);
+      }
+      return;
+    }
+
+    if (showLoading) {
+      state = state.copyWith(isLoading: true);
+    }
+
+    final chatId = _chatId(currentUserId, otherUserId);
+
+    try {
+      final messages = await getMessages(
+        userId: otherUserId,
+        page: page,
+        pageSize: pageSize,
+      );
+
+      final filteredMessages = messages.where((msg) {
+        return (msg.senderId == currentUserId && msg.receiverId == otherUserId) ||
+            (msg.senderId == otherUserId && msg.receiverId == currentUserId);
+      }).toList();
+
+      final sortedMessages = List.of(filteredMessages)
+        ..sort((a, b) => a.sentAt.compareTo(b.sentAt));
+
+      state = state.copyWith(
+        messagesMap: {
+          ...state.messagesMap,
+          chatId: sortedMessages,
+        },
+        isLoading: false,
+      );
+
+      debugPrint('✅ State updated: ${sortedMessages.length} messages in chat $chatId');
+
+      await _markMessagesAsRead(currentUserId, sortedMessages);
+    } catch (e) {
+      debugPrint('❌ Error loading messages: $e');
+      if (showLoading) {
+        state = state.copyWith(isLoading: false);
+      }
+    }
   }
 
-  /// تحميل الرسائل
-  Future<void> loadMessages(
-      String currentUserId,
-      String otherUserId,
-      ) async {
-    state = state.copyWith(isLoading: true);
-    final id = chatId(currentUserId, otherUserId);
+  Future<void> _markMessagesAsRead(String currentUserId, List<Message> messages) async {
+    final unreadMessages = messages.where((msg) =>
+    !msg.isRead && msg.receiverId == currentUserId
+    ).toList();
 
-    final localMessages = await localDatasource.loadMessages(id);
+    if (unreadMessages.isEmpty) return;
 
-    if (localMessages.isNotEmpty) {
+    debugPrint('📖 Marking ${unreadMessages.length} messages as read');
 
-      final messages = localMessages
-          .map((e) => MessageModel.fromJson(e))
+    for (var msg in unreadMessages) {
+      try {
+        await markMessageRead(
+          userId: currentUserId,
+          messageId: msg.id,
+        );
+        _updateMessageReadStatus(currentUserId, msg.id, true);
+      } catch (e) {
+        debugPrint('❌ Error marking message ${msg.id} as read: $e');
+      }
+    }
+  }
+
+  Future<Message?> sendTextMessage({
+    required String senderId,
+    required String receiverId,
+    required String text,
+  }) async {
+    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    debugPrint('📤 [SEND MESSAGE] Starting...');
+    debugPrint('👤 Sender ID: $senderId');
+    debugPrint('👤 Receiver ID: $receiverId');
+
+    if (senderId == receiverId || text.trim().isEmpty) {
+      return null;
+    }
+
+    final chatId = _chatId(senderId, receiverId);
+
+    // ✅ إنشاء رسالة مؤقتة
+    final tempMessage = Message(
+      id: DateTime.now().millisecondsSinceEpoch,
+      senderId: senderId,
+      senderName: '',
+      receiverId: receiverId,
+      receiverName: '',
+      content: text,
+      sentAt: DateTime.now(),
+      isRead: false,
+    );
+
+    // ✅ إضافة الرسالة المؤقتة للواجهة مباشرة (بدون إعادة تحميل)
+    final currentMessages = List<Message>.from(state.messagesMap[chatId] ?? []);
+
+    state = state.copyWith(
+      messagesMap: {
+        ...state.messagesMap,
+        chatId: [...currentMessages, tempMessage],
+      },
+    );
+
+    debugPrint('✅ Temp message added to UI');
+
+    try {
+      final sentMessage = await sendMessage(
+        senderId: senderId,
+        receiverId: receiverId,
+        content: text,
+      );
+
+      // ✅ استبدال الرسالة المؤقتة بالرسالة الحقيقية
+      final updatedMessages = state.messagesMap[chatId]!.map((msg) {
+        if (msg.id == tempMessage.id) {
+          return sentMessage;
+        }
+        return msg;
+      }).toList();
+
+      state = state.copyWith(
+        messagesMap: {
+          ...state.messagesMap,
+          chatId: updatedMessages,
+        },
+      );
+
+      debugPrint('✅ Real message added to UI (no reload needed)');
+      return sentMessage;
+    } catch (e) {
+      // ✅ لو فشل الإرسال، شيل الرسالة المؤقتة
+      final updatedMessages = state.messagesMap[chatId]!
+          .where((msg) => msg.id != tempMessage.id)
           .toList();
 
       state = state.copyWith(
         messagesMap: {
           ...state.messagesMap,
-          id: messages,
+          chatId: updatedMessages,
         },
       );
+
+      debugPrint('❌ Message failed, temp message removed');
+      return null;
     }
+  }
 
-    try {
-      final messages = await getMessages(currentUserId, otherUserId);
+  Future<void> refreshMessages({
+    required String currentUserId,
+    required String otherUserId,
+  }) async {
+    debugPrint('🔄 [REFRESH] Pull to refresh triggered');
+    await loadMessages(
+      currentUserId: currentUserId,
+      otherUserId: otherUserId,
+      showLoading: false,
+    );
+  }
 
-      final filteredMessages = messages.where((msg) {
-        return (msg.senderId == currentUserId &&
-            msg.receiverId == otherUserId) ||
-            (msg.senderId == otherUserId &&
-                msg.receiverId == currentUserId);
+  void _updateMessageReadStatus(String userId, int messageId, bool isRead) {
+    final newMessagesMap = Map<String, List<Message>>.from(state.messagesMap);
+
+    for (final entry in newMessagesMap.entries) {
+      final updatedMessages = entry.value.map((msg) {
+        if (msg.id == messageId && msg.receiverId == userId) {
+          return Message(
+            id: msg.id,
+            senderId: msg.senderId,
+            senderName: msg.senderName,
+            receiverId: msg.receiverId,
+            receiverName: msg.receiverName,
+            content: msg.content,
+            sentAt: msg.sentAt,
+            isRead: isRead,
+          );
+        }
+        return msg;
       }).toList();
 
-      final id = chatId(currentUserId, otherUserId);
+      newMessagesMap[entry.key] = updatedMessages;
+    }
+
+    state = state.copyWith(messagesMap: newMessagesMap);
+  }
+
+  void setTyping(bool isTyping) {
+    state = state.copyWith(isTyping: isTyping);
+  }
+
+  void clearMessages(String userA, String userB) {
+    final chatId = _chatId(userA, userB);
+    final newMessagesMap = Map<String, List<Message>>.from(state.messagesMap);
+    newMessagesMap.remove(chatId);
+    state = state.copyWith(messagesMap: newMessagesMap);
+  }
+
+  void clearAllMessages() {
+    state = state.copyWith(messagesMap: {});
+  }
+
+  String _chatId(String userA, String userB) {
+    final ids = [userA, userB]..sort();
+    return ids.join('_');
+  }
+}*/
+// lib/features/conversations/presentation/controller/chat_controller.dart
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/entities/message.dart';
+import '../../domain/usecases/get_messages.dart';
+import '../../domain/usecases/send_message.dart';
+import '../../domain/usecases/mark_message_read.dart';
+import '../../domain/usecases/mark_all_messages_read.dart';
+import '../state/chat_state.dart';
+
+class ChatController extends StateNotifier<ChatState> {
+  final GetMessagesUseCase getMessages;
+  final SendMessageUseCase sendMessage;
+  final MarkMessageReadUseCase markMessageRead;
+  final MarkAllMessagesReadUseCase markAllMessagesRead;
+
+  ChatController({
+    required this.getMessages,
+    required this.sendMessage,
+    required this.markMessageRead,
+    required this.markAllMessagesRead,
+  }) : super(const ChatState());
+
+  Future<void> loadMessages({
+    required String currentUserId,
+    required String otherUserId,
+    int page = 1,
+    int pageSize = 50,
+    bool showLoading = true,
+  }) async {
+    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    debugPrint('🔄 [LOAD MESSAGES] Starting...');
+    debugPrint('👤 Current User ID: $currentUserId');
+    debugPrint('👤 Other User ID: $otherUserId');
+
+    if (currentUserId == otherUserId) {
+      debugPrint('❌ Cannot load messages with self');
+      if (showLoading) {
+        state = state.copyWith(isLoading: false);
+      }
+      return;
+    }
+
+    if (showLoading) {
+      state = state.copyWith(isLoading: true);
+    }
+
+    final chatId = _chatId(currentUserId, otherUserId);
+
+    try {
+      final messages = await getMessages(
+        userId: otherUserId,
+        page: page,
+        pageSize: pageSize,
+      );
+
+      final filteredMessages = messages.where((msg) {
+        return (msg.senderId == currentUserId && msg.receiverId == otherUserId) ||
+            (msg.senderId == otherUserId && msg.receiverId == currentUserId);
+      }).toList();
+
+      // ✅ ✅ ✅ التعديل هنا ✅ ✅ ✅
+      final sortedMessages = List.of(filteredMessages)
+        ..sort((a, b) => b.sentAt.compareTo(a.sentAt)); // تنازلي (جديد لقديم)
 
       state = state.copyWith(
         messagesMap: {
           ...state.messagesMap,
-          id: filteredMessages,
+          chatId: sortedMessages,
         },
         isLoading: false,
       );
+
+      debugPrint('✅ State updated: ${sortedMessages.length} messages in chat $chatId');
+
+      await _markMessagesAsRead(currentUserId, sortedMessages);
     } catch (e) {
-      state = state.copyWith(isLoading: false);
+      debugPrint('❌ Error loading messages: $e');
+      if (showLoading) {
+        state = state.copyWith(isLoading: false);
+      }
     }
   }
 
-  /// إرسال رسالة عامة
-  Future<void> _sendMessageToChat(
-      String senderId,
-      String receiverId,
-      Message message,
-      ) async {
-    final id = chatId(senderId, receiverId);
+  Future<void> _markMessagesAsRead(String currentUserId, List<Message> messages) async {
+    final unreadMessages = messages.where((msg) =>
+    !msg.isRead && msg.receiverId == currentUserId
+    ).toList();
 
-    final currentMessages =
-    List<Message>.from(state.messagesMap[id] ?? []);
+    if (unreadMessages.isEmpty) return;
 
-    /// إضافة الرسالة فوراً
-    state = state.copyWith(
-      messagesMap: {
-        ...state.messagesMap,
-        id: [message, ...currentMessages],
-      },
-    );
-    final newMessages = [message, ...currentMessages];
+    debugPrint('📖 Marking ${unreadMessages.length} messages as read');
 
-    await localDatasource.saveMessages(
-      id,
-      newMessages
-          .map((e) => MessageModel(
-        id: e.id,
-        senderId: e.senderId,
-        receiverId: e.receiverId,
-        text: e.text,
-        fileUrl: e.fileUrl,
-        duration: e.duration,
-        type: e.type,
-        status: e.status,
-        createdAt: e.createdAt,
-        deletedForEveryone: e.deletedForEveryone,
-        replyToMessageId: e.replyToMessageId,
-      ).toJson())
-          .toList(),
-    );
-
-
-    try {
-      await sendMessage(message);
-
-      final updatedMessages =
-      List<Message>.from(state.messagesMap[id] ?? []).map((m) {
-        if (m.id == message.id) {
-          return m.copyWith(status: MessageStatus.sent);
-        }
-        return m;
-      }).toList();
-
-      state = state.copyWith(
-        messagesMap: {
-          ...state.messagesMap,
-          id: updatedMessages,
-        },
-      );
-    } catch (e) {
-      final updatedMessages =
-      List<Message>.from(state.messagesMap[id] ?? []).map((m) {
-        if (m.id == message.id) {
-          return m.copyWith(status: MessageStatus.failed);
-        }
-        return m;
-      }).toList();
-
-      state = state.copyWith(
-        messagesMap: {
-          ...state.messagesMap,
-          id: updatedMessages,
-        },
-      );
+    for (var msg in unreadMessages) {
+      try {
+        await markMessageRead(
+          userId: currentUserId,
+          messageId: msg.id,
+        );
+        _updateMessageReadStatus(currentUserId, msg.id, true);
+      } catch (e) {
+        debugPrint('❌ Error marking message ${msg.id} as read: $e');
+      }
     }
   }
 
-  /// إرسال نص
-  Future<void> sendTextMessage({
+  Future<Message?> sendTextMessage({
     required String senderId,
     required String receiverId,
     required String text,
   }) async {
-    final message = Message(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    debugPrint('📤 [SEND MESSAGE] Starting...');
+    debugPrint('👤 Sender ID: $senderId');
+    debugPrint('👤 Receiver ID: $receiverId');
+
+    if (senderId == receiverId || text.trim().isEmpty) {
+      return null;
+    }
+
+    final chatId = _chatId(senderId, receiverId);
+
+    final tempMessage = Message(
+      id: DateTime.now().millisecondsSinceEpoch,
       senderId: senderId,
+      senderName: '',
       receiverId: receiverId,
-      text: text,
-      fileUrl: null,
-      type: MessageType.text,
-      status: MessageStatus.sending,
-      createdAt: DateTime.now(),
-      deletedForEveryone: false,
+      receiverName: '',
+      content: text,
+      sentAt: DateTime.now(),
+      isRead: false,
     );
 
-    await _sendMessageToChat(senderId, receiverId, message);
-  }
+    final currentMessages = List<Message>.from(state.messagesMap[chatId] ?? []);
 
-  /// إرسال صورة
-  Future<void> sendImageMessage({
-    required String senderId,
-    required String receiverId,
-    required String filePath,
-  }) async {
-
-    try {
-//final uploadedUrl = await uploadFile(filePath);
-      final uploadedUrl = filePath;
-
-      final message = Message(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        senderId: senderId,
-        receiverId: receiverId,
-        text: null,
-        fileUrl: uploadedUrl,
-        type: MessageType.image,
-        status: MessageStatus.sending,
-        createdAt: DateTime.now(),
-        deletedForEveryone: false,
-      );
-
-      await _sendMessageToChat(senderId, receiverId, message);
-
-    } catch (e) {
-      debugPrint("IMAGE SEND ERROR: $e");
-    }
-  }
-
-  /// إرسال ملف
-  Future<void> sendFileMessage({
-    required String senderId,
-    required String receiverId,
-    required String filePath,
-  }) async {
-
-    try {
-//final uploadedUrl = await uploadFile(filePath);
-      final uploadedUrl = filePath;
-
-      final message = Message(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        senderId: senderId,
-        receiverId: receiverId,
-        text: null,
-        fileUrl: uploadedUrl,
-        type: MessageType.file,
-        status: MessageStatus.sending,
-        createdAt: DateTime.now(),
-        deletedForEveryone: false,
-      );
-
-      await _sendMessageToChat(senderId, receiverId, message);
-
-    } catch (e) {
-      debugPrint("FILE SEND ERROR: $e");
-    }
-  }
-
-  /// إرسال صوت
-  Future<void> sendVoiceMessage({
-    required String senderId,
-    required String receiverId,
-    required String filePath,
-    required int duration,
-  }) async {
-
-    try {
-
-      //final uploadedUrl = await uploadFile(filePath);
-      final uploadedUrl = filePath;
-      final message = Message(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        senderId: senderId,
-        receiverId: receiverId,
-        text: null,
-        fileUrl: uploadedUrl,
-        duration: duration,
-        type: MessageType.voice,
-        status: MessageStatus.sending,
-        createdAt: DateTime.now(),
-        deletedForEveryone: false,
-      );
-
-      await _sendMessageToChat(senderId, receiverId, message);
-
-    } catch (e) {
-      debugPrint("VOICE SEND ERROR: $e");
-    }
-  }
-
-  /// حذف لي فقط
-  void deleteForMe(
-      String senderId,
-      String receiverId,
-      String messageId,
-      ) {
-    final id = chatId(senderId, receiverId);
-
-    final updated =
-    List<Message>.from(state.messagesMap[id] ?? [])
-        .where((m) => m.id != messageId)
-        .toList();
-
+    // ✅ ✅ ✅ التعديل هنا ✅ ✅ ✅
+    // بنضيف الرسالة الجديدة في أول الليست (Index 0) عشان الليست مرتبة تنازلياً
     state = state.copyWith(
       messagesMap: {
         ...state.messagesMap,
-        id: updated,
+        chatId: [tempMessage, ...currentMessages],
       },
+    );
+
+    debugPrint('✅ Temp message added to UI (at index 0)');
+
+    try {
+      final sentMessage = await sendMessage(
+        senderId: senderId,
+        receiverId: receiverId,
+        content: text,
+      );
+
+      // استبدال الرسالة المؤقتة بالرسالة الحقيقية
+      final updatedMessages = state.messagesMap[chatId]!.map((msg) {
+        if (msg.id == tempMessage.id) {
+          return sentMessage;
+        }
+        return msg;
+      }).toList();
+
+      state = state.copyWith(
+        messagesMap: {
+          ...state.messagesMap,
+          chatId: updatedMessages,
+        },
+      );
+
+      debugPrint('✅ Real message added to UI');
+      return sentMessage;
+    } catch (e) {
+      // لو فشل الإرسال نشيل الرسالة المؤقتة
+      final updatedMessages = state.messagesMap[chatId]!
+          .where((msg) => msg.id != tempMessage.id)
+          .toList();
+
+      state = state.copyWith(
+        messagesMap: {
+          ...state.messagesMap,
+          chatId: updatedMessages,
+        },
+      );
+
+      debugPrint('❌ Message failed, temp message removed');
+      return null;
+    }
+  }
+
+  Future<void> refreshMessages({
+    required String currentUserId,
+    required String otherUserId,
+  }) async {
+    debugPrint('🔄 [REFRESH] Pull to refresh triggered');
+    await loadMessages(
+      currentUserId: currentUserId,
+      otherUserId: otherUserId,
+      showLoading: false,
     );
   }
 
-  /// حذف للجميع
-  void deleteForEveryone(
-      String senderId,
-      String receiverId,
-      String messageId,
-      ) {
-    final id = chatId(senderId, receiverId);
+  void _updateMessageReadStatus(String userId, int messageId, bool isRead) {
+    final newMessagesMap = Map<String, List<Message>>.from(state.messagesMap);
 
-    final messages =
-    List<Message>.from(state.messagesMap[id] ?? []);
+    for (final entry in newMessagesMap.entries) {
+      final updatedMessages = entry.value.map((msg) {
+        if (msg.id == messageId && msg.receiverId == userId) {
+          return Message(
+            id: msg.id,
+            senderId: msg.senderId,
+            senderName: msg.senderName,
+            receiverId: msg.receiverId,
+            receiverName: msg.receiverName,
+            content: msg.content,
+            sentAt: msg.sentAt,
+            isRead: isRead,
+          );
+        }
+        return msg;
+      }).toList();
 
-    final index =
-    messages.indexWhere((m) => m.id == messageId);
-
-    if (index != -1) {
-      final message = messages[index];
-
-      messages[index] = message.copyWith(
-        text: "This message was deleted",
-        fileUrl: null,
-        deletedForEveryone: true,
-      );
+      newMessagesMap[entry.key] = updatedMessages;
     }
 
-    state = state.copyWith(
-      messagesMap: {
-        ...state.messagesMap,
-        id: messages,
-      },
-    );
+    state = state.copyWith(messagesMap: newMessagesMap);
+  }
+
+  void setTyping(bool isTyping) {
+    state = state.copyWith(isTyping: isTyping);
+  }
+
+  void clearMessages(String userA, String userB) {
+    final chatId = _chatId(userA, userB);
+    final newMessagesMap = Map<String, List<Message>>.from(state.messagesMap);
+    newMessagesMap.remove(chatId);
+    state = state.copyWith(messagesMap: newMessagesMap);
+    debugPrint('🗑️ Cleared messages for chat: $chatId');
+  }
+
+  void clearAllMessages() {
+    state = state.copyWith(messagesMap: {});
+    debugPrint('🗑️ Cleared all messages');
+  }
+
+  String _chatId(String userA, String userB) {
+    final ids = [userA, userB]..sort();
+    return ids.join('_');
   }
 }

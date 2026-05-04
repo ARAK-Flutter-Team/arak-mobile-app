@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/entities/message.dart';
-import '../providers/chat_provider.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../providers/conversation_providers.dart';
 import 'message_bubble.dart';
 
 class MessageList extends ConsumerWidget {
@@ -17,8 +16,7 @@ class MessageList extends ConsumerWidget {
     required this.scrollController,
   });
 
-  // توليد chatId ثابت بين المستخدمين
-  String chatId(String userA, String userB) {
+  String _chatId(String userA, String userB) {
     final ids = [userA, userB]..sort();
     return ids.join('_');
   }
@@ -26,53 +24,140 @@ class MessageList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(chatControllerProvider);
-    final controller = ref.read(chatControllerProvider.notifier);
+    final chatId = _chatId(currentUserId, otherUserId);
+    final allMessages = state.messagesMap[chatId] ?? [];
 
-    final id = chatId(currentUserId, otherUserId);
+    final messages = allMessages.where((msg) {
+      return (msg.senderId == currentUserId && msg.receiverId == otherUserId) ||
+          (msg.senderId == otherUserId && msg.receiverId == currentUserId);
+    }).toList();
 
-    // الرسائل الخاصة بهذا الشات فقط
-    final List<Message> messages = state.messagesMap[id] ?? [];
+    final sortedMessages = List.of(messages)
+      ..sort((a, b) => a.sentAt.compareTo(b.sentAt));
 
-    if (state.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+    final loc = AppLocalizations.of(context)!;
+
+    if (state.isLoading && messages.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (messages.isEmpty) {
-      return const SizedBox();
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey.shade400),
+            const SizedBox(height: 16),
+            Text(
+              loc.noMessages,
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              loc.typeMessageHint,
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+            ),
+          ],
+        ),
+      );
     }
+
     return ListView.builder(
       controller: scrollController,
       reverse: true,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      itemCount: messages.length,
+      itemCount: sortedMessages.length,
       itemBuilder: (context, index) {
-        final Message message = messages[index];
-
-        final bool isMe = message.senderId == currentUserId;
+        final message = sortedMessages[index];
+        final isMe = message.senderId == currentUserId;
 
         return MessageBubble(
           message: message,
           isMe: isMe,
+        );
+      },
+    );
+  }
+}*/
+// lib/features/conversations/presentation/widgets/message_list.dart
 
-          // حذف الرسالة عندي فقط
-          onDeleteForMe: () {
-            controller.deleteForMe(
-              currentUserId,
-              otherUserId,
-              message.id,
-            );
-          },
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../providers/conversation_providers.dart';
+import 'message_bubble.dart';
 
-          // حذف الرسالة للجميع
-          onDeleteForEveryone: () {
-            controller.deleteForEveryone(
-              currentUserId,
-              otherUserId,
-              message.id,
-            );
-          },
+class MessageList extends ConsumerWidget {
+  final String currentUserId;
+  final String otherUserId;
+  final ScrollController scrollController;
+
+  const MessageList({
+    super.key,
+    required this.currentUserId,
+    required this.otherUserId,
+    required this.scrollController,
+  });
+
+  String _chatId(String userA, String userB) {
+    final ids = [userA, userB]..sort();
+    return ids.join('_');
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(chatControllerProvider);
+    final chatId = _chatId(currentUserId, otherUserId);
+    final allMessages = state.messagesMap[chatId] ?? [];
+
+    final messages = allMessages.where((msg) {
+      return (msg.senderId == currentUserId && msg.receiverId == otherUserId) ||
+          (msg.senderId == otherUserId && msg.receiverId == currentUserId);
+    }).toList();
+
+    // بنرتب تنازلي (جديد -> قديم) عشان يتوافق مع reverse: true
+    final sortedMessages = List.of(messages)
+      ..sort((a, b) => b.sentAt.compareTo(a.sentAt));
+
+    final loc = AppLocalizations.of(context)!;
+
+    if (state.isLoading && messages.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (messages.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey.shade400),
+            const SizedBox(height: 16),
+            Text(
+              loc.noMessages,
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              loc.typeMessageHint,
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      controller: scrollController,
+      reverse: true,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      itemCount: sortedMessages.length,
+      itemBuilder: (context, index) {
+        final message = sortedMessages[index];
+        final isMe = message.senderId == currentUserId;
+
+        return MessageBubble(
+          message: message,
+          isMe: isMe,
         );
       },
     );

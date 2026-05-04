@@ -1,103 +1,9 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-
-class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
-
-  final String name;
-  final String role;
-  final String avatarUrl;
-
-  const ChatAppBar({
-    super.key,
-    required this.name,
-    required this.role,
-    required this.avatarUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-
-    final theme = Theme.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return AppBar(
-      backgroundColor: isDark ? Colors.black : Colors.white,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
-
-      automaticallyImplyLeading: false,
-      centerTitle: false,
-      toolbarHeight: 60.h,
-      titleSpacing: 10.w,
-
-      leading: IconButton(
-        onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/home');
-          }
-        },
-        icon: SvgPicture.asset(
-          'assets/icons/arrow.svg',
-          width: 24.w,
-          height: 24.h,
-          colorFilter: ColorFilter.mode(
-            theme.iconTheme.color ?? theme.colorScheme.onSurface,
-            BlendMode.srcIn,
-          ),
-        ),
-      ),
-
-      title: Row(
-        children: [
-
-          /// الصورة
-          CircleAvatar(
-            radius: 18.r,
-            backgroundImage: NetworkImage(avatarUrl),
-          ),
-
-          SizedBox(width: 10.w),
-
-          /// الاسم + الرول
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              Text(
-                name,
-                style: theme.textTheme.titleMedium,
-              ),
-
-              Text(
-                role == "parent" ? "Parent" : "Teacher",
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(60.h);
-}*/
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   final String name;
   final String role;
   final String avatarUrl;
@@ -109,37 +15,21 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.avatarUrl,
   });
 
-  /// ✅ ترجمة الـ role
-  String getRoleName(BuildContext context, String role) {
-    final loc = AppLocalizations.of(context)!;
-
-    switch (role) {
-      case "parent":
-        return loc.parent;
-      case "teacher":
-        return loc.teacher;
-      default:
-        return role;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = theme.brightness == Brightness.dark;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return AppBar(
       backgroundColor: isDark ? Colors.black : Colors.white,
       elevation: 0,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
-
       automaticallyImplyLeading: false,
       centerTitle: false,
       toolbarHeight: 60.h,
       titleSpacing: 10.w,
-
       leading: IconButton(
         onPressed: () {
           if (context.canPop()) {
@@ -150,9 +40,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
         icon: Transform(
           alignment: Alignment.center,
-          transform: Directionality.of(context) == TextDirection.rtl
-              ? Matrix4.rotationY(3.1416)
-              : Matrix4.identity(),
+          transform: isRtl ? Matrix4.rotationY(3.1416) : Matrix4.identity(),
           child: SvgPicture.asset(
             'assets/icons/arrow.svg',
             width: 24.w,
@@ -163,42 +51,25 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        /*icon: SvgPicture.asset(
-          'assets/icons/arrow.svg',
-          width: 24.w,
-          height: 24.h,
-          colorFilter: ColorFilter.mode(
-            theme.iconTheme.color ?? theme.colorScheme.onSurface,
-            BlendMode.srcIn,
-          ),
-        ),*/
       ),
-
       title: Row(
         children: [
-
-          /// الصورة
           CircleAvatar(
             radius: 18.r,
-            backgroundImage: NetworkImage(avatarUrl),
+            backgroundImage: avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+            child: avatarUrl.isEmpty ? Icon(Icons.person, size: 18.r) : null,
           ),
-
           SizedBox(width: 10.w),
-
-          /// الاسم + الرول
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Text(
                 name,
                 style: theme.textTheme.titleMedium,
               ),
-
-              /// ✅ مترجم
               Text(
-                getRoleName(context, role),
+                role,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

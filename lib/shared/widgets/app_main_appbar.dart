@@ -74,15 +74,6 @@ class AppMainAppBar extends StatelessWidget
             ),
           ),
         ),
-        /*icon: SvgPicture.asset(
-          'assets/icons/arrow.svg',
-          width: 24.w,
-          height: 24.h,
-          colorFilter: ColorFilter.mode(
-            theme.iconTheme.color ?? theme.colorScheme.onSurface,
-            BlendMode.srcIn,
-          ),
-        ),*/
       )
           : null,
 

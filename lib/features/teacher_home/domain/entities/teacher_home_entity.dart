@@ -1,4 +1,4 @@
-class TeacherHomeEntity {
+/*class TeacherHomeEntity {
   final String teacherName;
   final String subjectName;
   final double performance;
@@ -44,5 +44,28 @@ class ActivityEntity {
   ActivityEntity({
     required this.iconPath,
     required this.title,
+  });
+}*/
+// lib/features/teacher_home/domain/entities/teacher_home_entity.dart
+
+class TeacherHomeEntity {
+  final int teacherId;
+  final String teacherName;
+  final String email;
+  final String subject;
+  final int subjectId;
+  final List<String> assignedClasses;
+  final int todayClassesCount;
+  final bool hasNewTasks;
+
+  TeacherHomeEntity({
+    required this.teacherId,
+    required this.teacherName,
+    required this.email,
+    required this.subject,
+    required this.subjectId,
+    required this.assignedClasses,
+    required this.todayClassesCount,
+    required this.hasNewTasks,
   });
 }
