@@ -2,7 +2,6 @@ import 'package:arak_app/features/tasks/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:arak_app/features/tasks/domain/entities/task.dart';
 import 'package:arak_app/features/tasks/domain/usecases/get_teacher_tasks.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
 
 class TeacherTasksState {
   final List<Task> tasks;
@@ -20,12 +19,12 @@ class TeacherTasksState {
   });
 
   factory TeacherTasksState.initial() => const TeacherTasksState(
-    tasks: [],
-    isLoading: true,
-    selectedClass: 0,
-    error: null,
-    lastUpdated: null,
-  );
+        tasks: [],
+        isLoading: true,
+        selectedClass: 0,
+        error: null,
+        lastUpdated: null,
+      );
 
   TeacherTasksState copyWith({
     List<Task>? tasks,
@@ -123,7 +122,8 @@ class TeacherTasksNotifier extends StateNotifier<TeacherTasksState> {
   }
 }
 
-final teacherTasksNotifierProvider = StateNotifierProvider<TeacherTasksNotifier, TeacherTasksState>((ref) {
+final teacherTasksNotifierProvider =
+    StateNotifierProvider<TeacherTasksNotifier, TeacherTasksState>((ref) {
   return TeacherTasksNotifier(
     getTeacherTasks: ref.watch(getTeacherTasksProvider),
     ref: ref,

@@ -11,11 +11,22 @@ import 'app_router.dart';
 import 'core/di/injection_container.dart';
 import 'l10n/app_localizations.dart';
 
-void main() {
+import 'package:arak_app/shared/providers/shared_preferences_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Pre-initialize SharedPreferences to avoid main thread blocking later
+  final sharedPrefs = await SharedPreferences.getInstance();
+  
   init();
+  
   runApp(
     ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
+      ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
         minTextAdapt: true,

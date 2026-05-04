@@ -4,7 +4,6 @@ import 'package:arak_app/features/tasks/domain/entities/task.dart';
 import 'package:arak_app/features/tasks/domain/entities/teacher_tasks_result.dart';
 import 'package:arak_app/features/tasks/domain/repositories/task_repository.dart';
 import 'package:arak_app/features/tasks/domain/entities/task_student_status.dart';
-import 'package:arak_app/features/tasks/data/models/task_student_status_model.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
   final TaskRemoteDataSource remote;
@@ -69,7 +68,8 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<void> updateTaskStudentStatus(int taskId, List<Map<String, dynamic>> updates) async {
+  Future<void> updateTaskStudentStatus(
+      int taskId, List<Map<String, dynamic>> updates) async {
     await remote.updateTaskStudentStatus(taskId, updates);
   }
 }

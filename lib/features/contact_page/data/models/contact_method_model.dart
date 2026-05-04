@@ -1,5 +1,4 @@
 import '../../domain/entities/contact_method.dart';
-import 'package:flutter/material.dart';
 
 class ContactMethodModel extends ContactMethod {
   const ContactMethodModel({

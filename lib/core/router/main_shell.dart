@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../shared/widgets/app_bottom_navbar.dart';
+import 'package:arak_app/shared/widgets/app_bottom_navbar.dart';
 
 class MainShell extends StatelessWidget {
   final Widget child;
@@ -12,8 +12,9 @@ class MainShell extends StatelessWidget {
 
     if (location.startsWith('/home')) return 0;
     if (location.startsWith('/profile')) return 1;
-    if (location.startsWith('/notifications')) return 2;
-    if (location.startsWith('/settings')) return 3;
+    if (location.startsWith('/conversations')) return 2;
+    if (location.startsWith('/notifications')) return 3;
+    if (location.startsWith('/settings')) return 4;
 
     return 0;
   }

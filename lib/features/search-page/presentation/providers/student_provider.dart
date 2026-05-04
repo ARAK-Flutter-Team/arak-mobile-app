@@ -1,40 +1,37 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/student_remote_data_source.dart';
-import '../../data/repositories/student_repository_impl.dart';
+import 'package:arak_app/features/parent_home/presentation/providers/parent_home_provider.dart';
+import 'package:arak_app/features/parent_home/domain/entities/student_entity.dart';
 import '../../domain/entities/student.dart';
-import '../../domain/repositories/student_repository.dart';
-import 'package:arak_app/core/network/dio_provider.dart';
 
-// 1. Provider للـ DataSource
-final studentRemoteDataSourceProvider =
-    Provider<StudentRemoteDataSource>((ref) {
-  final dio = ref.watch(dioProvider);
-  return StudentRemoteDataSourceImpl(dio);
-});
-
-// 2. Provider للـ Repository
-final studentRepositoryProvider = Provider<StudentRepository>((ref) {
-  return StudentRepositoryImpl(
-      remoteDataSource: ref.watch(studentRemoteDataSourceProvider));
-});
 
 // 3. Notifier للتحكم في البيانات (State Management)
 class StudentListNotifier extends AsyncNotifier<List<Student>> {
   @override
   Future<List<Student>> build() async {
-    // بتجيب الداتا أول ما يشتغل
-    return _fetchStudents();
+    final parentHomeAsync = ref.watch(parentHomeProvider);
+
+    return parentHomeAsync.when(
+      data: (homeData) {
+        return homeData.students.map((StudentEntity s) {
+          return Student(
+            id: s.id,                          // ✅ UUID من StudentEntity
+            name: s.name,
+            grade: s.grade.toString(),
+            status: "Present",
+            date: DateTime.now().toString().split(' ')[0],
+            checkIn: "--:--",
+            checkOut: "--:--",
+            attendanceRate: 0.0,
+          );
+        }).toList();
+      },
+      loading: () => [],
+      error: (_, __) => [],
+    );
   }
 
-  Future<List<Student>> _fetchStudents() async {
-    final repo = ref.read(studentRepositoryProvider);
-    return await repo.getStudents();
-  }
-
-  // فانكشن للـ Refresh
   Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _fetchStudents());
+    ref.invalidate(parentHomeProvider);
   }
 }
 
@@ -49,15 +46,15 @@ final searchQueryProvider = StateProvider<String>((ref) => '');
 
 // 6. Provider لتطبيق الفلترة (Combining Data + Query)
 final filteredStudentsProvider = Provider<List<Student>>((ref) {
-  final query = ref.watch(searchQueryProvider);
+  final query = ref.watch(searchQueryProvider).toLowerCase();
   final studentsAsync = ref.watch(studentListProvider);
 
   return studentsAsync.when(
     data: (students) {
       if (query.isEmpty) return students;
-      return students
-          .where((s) => s.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      return students.where((s) {
+        return s.name.toLowerCase().contains(query);
+      }).toList();
     },
     loading: () => [],
     error: (_, __) => [],

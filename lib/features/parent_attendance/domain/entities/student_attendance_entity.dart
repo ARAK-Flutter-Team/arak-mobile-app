@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class AttendanceDayRecord {
   final DateTime date;
   final String status; // Present, Absent, Late, NotRecorded

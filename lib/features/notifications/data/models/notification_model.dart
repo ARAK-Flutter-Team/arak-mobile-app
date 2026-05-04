@@ -1,8 +1,6 @@
 import '../../domain/entities/notification.dart';
-import '../../../../core/constants/api_constants.dart';
 
 class NotificationModel extends AppNotification {
-
   const NotificationModel({
     required super.id,
     required super.type,
@@ -16,8 +14,8 @@ class NotificationModel extends AppNotification {
     return NotificationModel(
       id: json["id"],
       type: NotificationType.values.firstWhere(
-            (e) => e.name == json["type"],
-            orElse: () => NotificationType.unknown,
+        (e) => e.name == json["type"],
+        orElse: () => NotificationType.unknown,
       ),
       title: json["title"],
       body: json["body"],

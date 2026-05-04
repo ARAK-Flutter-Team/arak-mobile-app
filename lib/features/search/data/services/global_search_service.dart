@@ -1,58 +1,48 @@
-import '../../../../shared/domain/entities/student.dart';
-import '../../../tasks/domain/entities/task.dart';
-import '../../domain/entities/search_result.dart';
+import 'package:dio/dio.dart';
+import 'package:arak_app/features/search/domain/entities/search_result.dart';
+import 'package:arak_app/features/search/data/models/search_result_model.dart';
+import 'package:arak_app/features/tasks/domain/entities/task.dart';
+import 'package:arak_app/features/search-page/domain/entities/student.dart';
 
 class GlobalSearchService {
+  final Dio dio;
+
+  GlobalSearchService(this.dio);
 
   Future<List<SearchResult>> search({
     required String query,
     required List<Student> students,
     required List<Task> tasks,
   }) async {
-
-    /// لو مفيش نص في السيرش
-    if (query.isEmpty) return [];
-
-    final q = query.toLowerCase();
-
     final List<SearchResult> results = [];
+    final lowerQuery = query.toLowerCase();
 
-    /// 🔎 Search students
+    // 1. Filter Students
     for (final student in students) {
-
-      if (student.name.toLowerCase().contains(q)) {
-
-        results.add(
-          SearchResult(
-            id: student.id,
-            title: student.name,
-            subtitle: "Student",
-            type: SearchType.student,
-            route: "/student/${student.id}",
-          ),
-        );
-
+      if (student.name.toLowerCase().contains(lowerQuery)) {
+        results.add(SearchResultModel(
+          id: student.id, // ✅ UUID الحقيقي
+          title: student.name,
+          subtitle: "Student",
+          type: SearchType.student,
+          route: "/teacher/student-details",
+          extra: student,
+        ));
       }
-
     }
 
-    /// 🔎 Search tasks
+    // 2. Filter Tasks
     for (final task in tasks) {
-
-      if (task.title.toLowerCase().contains(q)) {
-
-        results.add(
-          SearchResult(
-            id: task.id,
-            title: task.title,
-            subtitle: "Task",
-            type: SearchType.task,
-            route: "/task/${task.id}",
-          ),
-        );
-
+      if (task.title.toLowerCase().contains(lowerQuery)) {
+        results.add(SearchResultModel(
+          id: task.id,
+          title: task.title,
+          subtitle: "Task",
+          type: SearchType.task,
+          route: "/teacher/task-status",
+          extra: task,
+        ));
       }
-
     }
 
     return results;

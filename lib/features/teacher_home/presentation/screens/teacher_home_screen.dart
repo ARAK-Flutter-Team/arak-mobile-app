@@ -338,7 +338,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                       QuickActionItem(
                         title: tr.messages,
                         iconPath: "assets/icons/messages.svg",
-                        route: "/chat",
+                        route: "/conversations",
                       ),
                     ],
                   ),

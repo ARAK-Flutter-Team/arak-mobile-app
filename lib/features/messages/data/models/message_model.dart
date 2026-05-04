@@ -15,14 +15,16 @@ class MessageModel extends Message {
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
-      id: json['id'] as int,
-      senderId: json['senderId'] as String,
-      senderName: json['senderName'] as String,
-      receiverId: json['receiverId'] as String,
-      receiverName: json['receiverName'] as String,
-      content: json['content'] as String,
-      sentAt: DateTime.parse(json['sentAt'] as String),
-      isRead: json['isRead'] as bool,
+      id: json['id'] is int ? json['id'] : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      senderId: json['senderId']?.toString() ?? '',
+      senderName: json['senderName']?.toString() ?? 'Unknown',
+      receiverId: json['receiverId']?.toString() ?? '',
+      receiverName: json['receiverName']?.toString() ?? 'Unknown',
+      content: json['content']?.toString() ?? '',
+      sentAt: json['sentAt'] != null 
+          ? DateTime.parse(json['sentAt'].toString()) 
+          : DateTime.now(),
+      isRead: json['isRead'] == true,
     );
   }
 

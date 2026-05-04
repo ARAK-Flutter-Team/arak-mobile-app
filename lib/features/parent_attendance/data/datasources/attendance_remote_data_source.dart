@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import '../models/student_attendance_model.dart';
-import '../../domain/entities/student_attendance_entity.dart';
 
 abstract class AttendanceRemoteDataSource {
   Future<StudentAttendanceModel> getAttendance(int studentId,

@@ -4,8 +4,6 @@ import 'package:arak_app/features/parent_home/data/repositories/parent_home_repo
 import 'package:arak_app/features/parent_home/domain/entities/parent_home_entity.dart';
 import 'package:arak_app/features/parent_home/domain/entities/student_entity.dart';
 import 'package:arak_app/features/parent_home/domain/usecases/get_parent_home_data_usecase.dart';
-import 'package:arak_app/features/parent_home/domain/usecases/get_parent_recent_activities_usecase.dart';
-import 'package:arak_app/shared/models/activity_model.dart';
 import 'package:arak_app/core/usecase/no_params.dart';
 import 'package:arak_app/core/network/dio_provider.dart';
 
@@ -18,10 +16,6 @@ final _repositoryProvider = Provider<ParentHomeRepositoryImpl>(
 
 final _useCaseProvider = Provider<GetParentHomeDataUseCase>(
   (ref) => GetParentHomeDataUseCase(ref.watch(_repositoryProvider)),
-);
-
-final _activitiesUseCaseProvider = Provider<GetParentRecentActivitiesUseCase>(
-  (ref) => GetParentRecentActivitiesUseCase(ref.watch(_repositoryProvider)),
 );
 
 final parentHomeProvider = FutureProvider<ParentHomeEntity>((ref) async {
@@ -43,16 +37,6 @@ final selectedStudentProvider = Provider<StudentEntity?>((ref) {
   final homeAsync = ref.watch(parentHomeProvider);
   final index = ref.watch(selectedStudentIndexProvider);
   return homeAsync.whenData((data) => data.students[index]).value;
-});
-
-final parentRecentActivitiesProvider =
-    FutureProvider<List<ActivityModel>>((ref) async {
-  final usecase = ref.watch(_activitiesUseCaseProvider);
-  final result = await usecase(const NoParams());
-  return result.fold(
-    (failure) => [], // Return empty list on failure for "Empty State" UI
-    (activities) => activities,
-  );
 });
 
 final parentNameProvider = Provider<String>((ref) {

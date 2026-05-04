@@ -9,7 +9,6 @@ import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
 import '../../../../shared/widgets/user_header_card.dart';
 import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
-import 'widgets/parent_recent_activities_section.dart';
 import '../providers/parent_home_provider.dart';
 import 'package:arak_app/shared/providers/current_user_provider.dart';
 
@@ -36,7 +35,6 @@ class ParentHomeScreen extends ConsumerWidget {
         child: RefreshIndicator(
           onRefresh: () async {
             ref.invalidate(parentHomeProvider);
-            ref.invalidate(parentRecentActivitiesProvider);
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -80,19 +78,17 @@ class ParentHomeScreen extends ConsumerWidget {
                 ),
                 SizedBox(height: 24.h),
                 QuickActionsGrid(
-                    items: _buildQuickActions(
-                        selectedStudent?.id ?? '', l10n),
-                    hasNewTasks: notificationAsync.hasNewTasks,
-                    hasNewMessages: notificationAsync.hasNewMessages,
-                    onTasksOpened: () async {
-                      await context.push(
-                        '/parent-home/tasks',
-                        extra: selectedStudent?.id ?? '',
-                      );
-                    },
-                  ),
+                  items: _buildQuickActions(selectedStudent?.id ?? '', l10n),
+                  hasNewTasks: notificationAsync.hasNewTasks,
+                  hasNewMessages: notificationAsync.hasNewMessages,
+                  onTasksOpened: () async {
+                    await context.push(
+                      '/parent-home/tasks',
+                      extra: selectedStudent?.id ?? '',
+                    );
+                  },
+                ),
                 SizedBox(height: 24.h),
-                const ParentRecentActivitiesSection(),
               ],
             ),
           ),
@@ -135,6 +131,11 @@ class ParentHomeScreen extends ConsumerWidget {
           route: '/parent-home/chatbot',
           iconPath: 'assets/icons/chatbot.svg',
         ),
+        // QuickActionItem(
+        //   title: l10n.messages,
+        //   route: '/conversations',
+        //   iconPath: 'assets/icons/messages.svg',
+        // ),
       ];
 }
 

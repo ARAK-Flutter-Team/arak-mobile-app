@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart'; // عشان الـ IconData (لو عايزين نبقي pure ممكن نعمل Mapper بس ده اسهل)
-
 enum ContactType { phone, email, chat }
 
 class ContactMethod {

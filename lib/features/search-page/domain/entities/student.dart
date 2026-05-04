@@ -1,4 +1,5 @@
 class Student {
+  final String id; // UUID
   final String name;
   final String grade;
   final String status;
@@ -8,6 +9,7 @@ class Student {
   final double attendanceRate;
 
   const Student({
+    required this.id,
     required this.name,
     required this.grade,
     required this.status,

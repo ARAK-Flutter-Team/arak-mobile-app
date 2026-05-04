@@ -3,7 +3,7 @@ import '../../../tasks/presentation/providers/providers.dart';
 import '../controller/task_status_notifier.dart';
 import '../state/task_status_state.dart';
 
-final taskStatusProvider = StateNotifierProvider<TaskStatusNotifier, TaskStatusState>((ref) {
+final taskStatusProvider = StateNotifierProvider.autoDispose<TaskStatusNotifier, TaskStatusState>((ref) {
   final getTaskStatus = ref.watch(getTaskStatusProvider);
   final updateTaskStudentStatus = ref.watch(updateTaskStudentStatusProvider);
 

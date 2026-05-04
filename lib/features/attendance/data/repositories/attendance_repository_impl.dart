@@ -1,7 +1,6 @@
 import '../../domain/entities/attendance_record.dart';
 import '../../domain/repositories/attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
-import '../models/attendance_student_model.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {
   final AttendanceRemoteDataSource remote;

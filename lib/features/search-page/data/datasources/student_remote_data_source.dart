@@ -12,13 +12,29 @@ class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
 
   @override
   Future<List<StudentModel>> getStudents() async {
-    final response = await dio.get('/students/SearchStudentsByClassId/0');
+    final path = '/students/SearchStudentsByClassId/0';
+    print('DEBUG: Calling Parent Search API: $path');
+    
+    try {
+      final response = await dio.get(path);
+      print('DEBUG: Parent Search Status: ${response.statusCode}');
+      print('DEBUG: Parent Search Response: ${response.data}');
 
-    final List<dynamic> data =
-        response.data is List ? response.data as List : [];
+      final dynamic responseData = response.data;
+      List<dynamic> data = [];
 
-    return data
-        .map((json) => StudentModel.fromJson(json as Map<String, dynamic>))
-        .toList();
+      if (responseData is List) {
+        data = responseData;
+      } else if (responseData is Map && responseData.containsKey('data')) {
+        data = responseData['data'] as List;
+      }
+
+      return data
+          .map((json) => StudentModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('DEBUG: Parent Search Error: $e');
+      return [];
+    }
   }
 }

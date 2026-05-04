@@ -1,151 +1,5 @@
-// lib/features/conversations/presentation/screens/chat_screen.dart
-/*import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/widgets/app_main_appbar.dart';
-import '../../providers/conversation_providers.dart';
-import '../widgets/message_list.dart';
-import '../widgets/chat_input_bar.dart';
-
-class ChatScreen extends ConsumerStatefulWidget {
-  final String currentUserId;
-  final String otherUserId;
-  final String name;
-  final String role;
-  final String avatarUrl;
-
-  const ChatScreen({
-    super.key,
-    required this.currentUserId,
-    required this.otherUserId,
-    required this.name,
-    required this.role,
-    required this.avatarUrl,
-  });
-
-  @override
-  ConsumerState<ChatScreen> createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends ConsumerState<ChatScreen> {
-  final ScrollController _scrollController = ScrollController();
-  bool _isLoading = true;
-
-  void _scrollToBottom() {
-    if (!_scrollController.hasClients) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          0,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    debugPrint('📱 [CHAT SCREEN] Initializing');
-    debugPrint('👤 Current User: ${widget.currentUserId}');
-    debugPrint('👤 Other User: ${widget.otherUserId} (${widget.name})');
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadMessages();
-    });
-  }
-
-  Future<void> _loadMessages() async {
-    debugPrint('🔄 Loading messages...');
-    setState(() => _isLoading = true);
-
-    await ref.read(chatControllerProvider.notifier).loadMessages(
-      currentUserId: widget.currentUserId,
-      otherUserId: widget.otherUserId,
-    );
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-      _scrollToBottom();
-      debugPrint('✅ Messages loaded, scrolling to bottom');
-    }
-  }
-
-  @override
-  void dispose() {
-    debugPrint('📱 [CHAT SCREEN] Disposing');
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(chatControllerProvider);
-    final chatId = _chatId(widget.currentUserId, widget.otherUserId);
-    final messages = state.messagesMap[chatId] ?? [];
-
-    debugPrint('📊 [BUILD] Chat state: ${messages.length} messages in chat $chatId, isLoading=${state.isLoading}');
-
-    ref.listen(chatControllerProvider, (previous, next) {
-      final prevLength = previous?.messagesMap[chatId]?.length ?? 0;
-      final newLength = next.messagesMap[chatId]?.length ?? 0;
-
-      if (newLength > prevLength && !_isLoading) {
-        debugPrint('📨 New message detected, scrolling to bottom');
-        _scrollToBottom();
-      }
-    });
-
-    return Scaffold(
-      appBar: AppMainAppBar(
-        title: widget.name,
-        showBackButton: true,
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-        children: [
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                debugPrint('🔄 Pull to refresh triggered');
-                await ref.read(chatControllerProvider.notifier).refreshMessages(
-                  currentUserId: widget.currentUserId,
-                  otherUserId: widget.otherUserId,
-                );
-                _scrollToBottom();
-              },
-              child: MessageList(
-                currentUserId: widget.currentUserId,
-                otherUserId: widget.otherUserId,
-                scrollController: _scrollController,
-              ),
-            ),
-          ),
-          ChatInputBar(
-            senderId: widget.currentUserId,
-            receiverId: widget.otherUserId,
-            onMessageSent: (message) {
-              debugPrint('📨 Message sent, scrolling to bottom');
-              _scrollToBottom();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _chatId(String userA, String userB) {
-    final ids = [userA, userB]..sort();
-    return ids.join('_');
-  }
-}*/
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../providers/conversation_providers.dart';
 import '../widgets/message_list.dart';
@@ -210,9 +64,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     setState(() => _isLoading = true);
 
     await ref.read(chatControllerProvider.notifier).loadMessages(
-      currentUserId: widget.currentUserId,
-      otherUserId: widget.otherUserId,
-    );
+          currentUserId: widget.currentUserId,
+          otherUserId: widget.otherUserId,
+        );
 
     if (mounted) {
       setState(() => _isLoading = false);
@@ -251,33 +105,35 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
-        children: [
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await ref.read(chatControllerProvider.notifier).refreshMessages(
-                  currentUserId: widget.currentUserId,
-                  otherUserId: widget.otherUserId,
-                );
-                _scrollToBottom();
-              },
-              child: MessageList(
-                currentUserId: widget.currentUserId,
-                otherUserId: widget.otherUserId,
-                scrollController: _scrollController,
-              ),
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await ref
+                          .read(chatControllerProvider.notifier)
+                          .refreshMessages(
+                            currentUserId: widget.currentUserId,
+                            otherUserId: widget.otherUserId,
+                          );
+                      _scrollToBottom();
+                    },
+                    child: MessageList(
+                      currentUserId: widget.currentUserId,
+                      otherUserId: widget.otherUserId,
+                      scrollController: _scrollController,
+                    ),
+                  ),
+                ),
+                ChatInputBar(
+                  senderId: widget.currentUserId,
+                  receiverId: widget.otherUserId,
+                  onMessageSent: (message) {
+                    debugPrint('📨 Message sent, scrolling to bottom');
+                    _scrollToBottom();
+                  },
+                ),
+              ],
             ),
-          ),
-          ChatInputBar(
-            senderId: widget.currentUserId,
-            receiverId: widget.otherUserId,
-            onMessageSent: (message) {
-              debugPrint('📨 Message sent, scrolling to bottom');
-              _scrollToBottom();
-            },
-          ),
-        ],
-      ),
     );
   }
 

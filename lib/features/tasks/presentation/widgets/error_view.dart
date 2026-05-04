@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class ErrorView extends StatelessWidget {
@@ -20,7 +19,8 @@ class ErrorView extends StatelessWidget {
 
     // Map error to friendly message
     String title = loc?.somethingWentWrong ?? "Something went wrong";
-    String subtitle = loc?.unableToLoadTasks ?? "Unable to load tasks. Please try again.";
+    String subtitle =
+        loc?.unableToLoadTasks ?? "Unable to load tasks. Please try again.";
     IconData icon = Icons.error_outline;
 
     if (message.contains("500")) {
@@ -32,7 +32,9 @@ class ErrorView extends StatelessWidget {
     } else if (message.contains("401") || message.contains("403")) {
       subtitle = "You don't have permission to do this.";
       icon = Icons.lock_outline;
-    } else if (message.contains("SocketException") || message.contains("Network") || message.contains("connection")) {
+    } else if (message.contains("SocketException") ||
+        message.contains("Network") ||
+        message.contains("connection")) {
       subtitle = "No internet connection. Check your network.";
       icon = Icons.wifi_off_outlined;
     }

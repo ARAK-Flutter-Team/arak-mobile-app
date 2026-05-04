@@ -11,6 +11,7 @@ class SearchResult {
   final String? subtitle;
   final SearchType type;
   final String route;
+  final Object? extra;
 
   const SearchResult({
     required this.id,
@@ -18,5 +19,6 @@ class SearchResult {
     this.subtitle,
     required this.type,
     required this.route,
+    this.extra,
   });
 }

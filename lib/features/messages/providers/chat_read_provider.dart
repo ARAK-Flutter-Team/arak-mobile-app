@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/entities/conversation.dart';
 import '../presentation/providers/chat_provider.dart';
 
 /// حالت المحادثات التي تم فتحها
-final conversationReadStateProvider = StateProvider<Set<String>>((ref) => Set<String>());
+final conversationReadStateProvider =
+    StateProvider<Set<String>>((ref) => Set<String>());
 
 /// دالة لتحديد أن محادثة معينة تم فتحها
-final markConversationAsReadProvider = Provider<(Function(String), Function(String))>((ref) {
+final markConversationAsReadProvider =
+    Provider<(Function(String), Function(String))>((ref) {
   final notifier = ref.read(conversationReadStateProvider.notifier);
   final conversationsProvider = ref.read(conversationsListProvider);
 
@@ -35,7 +36,8 @@ final markConversationAsReadProvider = Provider<(Function(String), Function(Stri
 });
 
 /// هل المحادثة تم فتحها؟
-final isConversationOpenedProvider = Provider.family<bool, String>((ref, conversationId) {
+final isConversationOpenedProvider =
+    Provider.family<bool, String>((ref, conversationId) {
   final openedConversations = ref.watch(conversationReadStateProvider);
   return openedConversations.contains(conversationId);
 });

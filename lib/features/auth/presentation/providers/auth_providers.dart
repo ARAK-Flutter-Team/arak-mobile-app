@@ -3,7 +3,6 @@ import '../../../../core/network/dio_provider.dart';
 
 import 'auth_notifier.dart';
 import 'auth_state.dart';
-import '../../../../shared/providers/current_user_provider.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
 import '../../data/datasources/auth_remote_data_source_impl.dart';

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
 import '../../../../core/config/app_config.dart';
@@ -14,31 +15,32 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   AuthRemoteDataSourceImpl({required this.dio});
 
-  Map<String, dynamic> _parseJwt(String token) {
-    final parts = token.split('.');
-    if (parts.length != 3) {
-      throw Exception('Invalid token');
-    }
+  Future<Map<String, dynamic>> _parseJwt(String token) async {
+    return await compute((t) {
+      final parts = t.split('.');
+      if (parts.length != 3) {
+        throw Exception('Invalid token');
+      }
 
-    final payload = parts[1];
+      final payload = parts[1];
+      String normalized = payload.replaceAll('-', '+').replaceAll('_', '/');
 
-    String normalized = payload.replaceAll('-', '+').replaceAll('_', '/');
+      switch (normalized.length % 4) {
+        case 0:
+          break;
+        case 2:
+          normalized += '==';
+          break;
+        case 3:
+          normalized += '=';
+          break;
+      }
 
-    switch (normalized.length % 4) {
-      case 0:
-        break;
-      case 2:
-        normalized += '==';
-        break;
-      case 3:
-        normalized += '=';
-        break;
-    }
+      final decodedBytes = base64.decode(normalized);
+      final decodedString = utf8.decode(decodedBytes);
 
-    final decodedBytes = base64.decode(normalized);
-    final decodedString = utf8.decode(decodedBytes);
-
-    return json.decode(decodedString) as Map<String, dynamic>;
+      return json.decode(decodedString) as Map<String, dynamic>;
+    }, token);
   }
 
   String _getUserFriendlyMessage(DioException e) {
@@ -91,7 +93,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         await prefs.setString('token', token);
 
         try {
-          Map<String, dynamic> payload = _parseJwt(token);
+          Map<String, dynamic> payload = await _parseJwt(token);
           String userIdFromToken = payload['sub'];
           print(" User ID from Token: $userIdFromToken");
           userJson['id'] = userIdFromToken;
@@ -101,7 +103,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
         print(" LOGIN SUCCESS");
 
-        return UserModel.fromLoginJson(userJson, token);
+        return await compute((json) => UserModel.fromLoginJson(json, token), userJson);
       } else {
         throw ServerException(data['message'] ?? "Login Failed");
       }
@@ -139,7 +141,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final data = response.data;
       if (response.statusCode == 200) {
-        return UserModel.fromJson(data['user']);
+        return await compute((json) => UserModel.fromJson(json), data['user'] as Map<String, dynamic>);
       } else {
         throw ServerException("Unauthorized");
       }
