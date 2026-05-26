@@ -31,6 +31,7 @@ import 'package:arak_app/features/tasks/domain/entities/task.dart';
 import 'package:arak_app/features/search-page/presentation/pages/details_page.dart';
 import 'package:arak_app/features/search-page/domain/entities/student.dart';
 import 'package:arak_app/features/task_status/presentation/screens/task_status_screen.dart';
+import 'package:arak_app/features/parent_home/presentation/screens/student_details_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -98,6 +99,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            path: '/parent-home/student/:studentId',
+            name: 'parent-student-details',
+            builder: (context, state) {
+              final studentId = state.pathParameters['studentId'] ?? '';
+              return StudentDetailsScreen(studentId: studentId);
+            },
           ),
           GoRoute(
             path: '/parent-home/evaluation',

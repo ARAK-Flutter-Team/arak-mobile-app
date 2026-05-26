@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// مهمين جدًا
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_router.dart';
 import 'core/di/injection_container.dart';
@@ -16,12 +15,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Pre-initialize SharedPreferences to avoid main thread blocking later
   final sharedPrefs = await SharedPreferences.getInstance();
-  
+
   init();
-  
+
   runApp(
     ProviderScope(
       overrides: [
