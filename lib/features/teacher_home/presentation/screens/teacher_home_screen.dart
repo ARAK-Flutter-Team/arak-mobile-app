@@ -1,111 +1,3 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/providers/current_user_provider.dart';
-import '../../../../shared/widgets/app_main_appbar.dart';
-import '../../../../shared/widgets/performance_indicator.dart';
-import '../../../../shared/widgets/quick_action_grid.dart';
-import '../../../../shared/widgets/recent_activities_section.dart';
-import '../../../../shared/widgets/user_header_card.dart';
-import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
-import '../providers/recent_activities_provider.dart';
-import '../providers/teacher_home_provider.dart';
-import '../../../../shared/providers/quick_actions_provider.dart';
-
-class TeacherHomeScreen extends ConsumerWidget {
-  const TeacherHomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final performanceAsync = ref.watch(teacherPerformanceProvider);
-    final notificationState = ref.watch(notificationProvider);
-    final user = ref.watch(currentUserProvider);
-    final quickActions = ref.watch(quickActionsProvider);
-
-    /// لو المستخدم لسه بيحمل
-    if (user == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
-      /// ✅ AppBar
-      appBar: AppMainAppBar(
-        title: AppLocalizations.of(context)!.welcome(user.name),
-        showBackButton: false,
-      ),
-
-      /// ✅ Body
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            ref.invalidate(teacherPerformanceProvider);
-            ref.invalidate(recentActivitiesProvider);
-          },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                /// 1️⃣ User Header
-                UserHeaderCard(
-                  name: user.name,
-                  subtitle: user.subject ?? "",
-                  imageUrl: user.avatarUrl,
-                  showSearch: true,
-                  showVerifiedIcon: true,
-                  searchRoute: '/teacher-search',
-                ),
-
-                SizedBox(height: 30.h),
-
-                /// 2️⃣ Performance
-                performanceAsync.when(
-                  loading: () =>
-                  const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => const SizedBox(),
-                  data: (percentage) => AppPerformanceIndicator(
-                    percentage: percentage,
-                    title: AppLocalizations.of(context)!.teacherPerformance,
-                  ),
-                ),
-
-                SizedBox(height: 24.h),
-
-                /// 3️⃣ Quick Actions
-                QuickActionsGrid(
-                  items: quickActions,
-                  hasNewTasks: false,
-                  hasNewMessages: notificationState.hasNewMessages,
-                  onTasksOpened: () async {
-                    await context.push('/teacher/tasks');
-                  },
-                ),
-
-                SizedBox(height: 24.h),
-
-                /// 4️⃣ Recent Activities
-                const RecentActivitiesSection(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}*/
-// lib/features/teacher_home/presentation/screens/teacher_home_screen.dart
-
-// lib/features/teacher_home/presentation/screens/teacher_home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -130,12 +22,12 @@ class TeacherHomeScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
-      // ✅ AppBar بيستخدم welcome مع name كـ parameter
+      // AppBar بيستخدم welcome مع name كـ parameter
       appBar: AppMainAppBar(
         title: teacherDataAsync.when(
-          data: (teacherData) => tr.welcome(teacherData.teacherName),  // ✅ Welcome Ms. Maria / مرحباً Ms. Maria
-          loading: () => tr.welcome(''),  // ✅ Welcome / مرحباً
-          error: (_, __) => tr.welcome(''),  // ✅ Welcome / مرحباً
+          data: (teacherData) => tr.welcome(teacherData.teacherName),
+          loading: () => tr.welcome(''),
+          error: (_, __) => tr.welcome(''),
         ),
         showBackButton: false,
       ),
@@ -197,7 +89,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                     name: teacherData.teacherName,
                     subtitle: teacherData.subject,
                     imageUrl: null,
-                    showSearch: true,
+                    showSearch: false,
                     showVerifiedIcon: true,
                     searchRoute: '/teacher-search',
                   ),
@@ -205,15 +97,15 @@ class TeacherHomeScreen extends ConsumerWidget {
                   SizedBox(height: 30.h),
 
                   // Performance Indicator
-                  AppPerformanceIndicator(
+                  /*AppPerformanceIndicator(
                     percentage: teacherData.performance,
                     title: tr.teacherPerformance,
-                  ),
+                  ),*/
 
-                  SizedBox(height: 24.h),
+                  //SizedBox(height: 24.h),
 
                   // Today Classes Card
-                  Container(
+                  /*Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
@@ -230,7 +122,7 @@ class TeacherHomeScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              tr.todayClasses,  // ✅ من الترجمة
+                              tr.todayClasses,
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: Colors.grey,
@@ -260,14 +152,14 @@ class TeacherHomeScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
 
-                  SizedBox(height: 24.h),
+                 // SizedBox(height: 24.h),
 
                   // Assigned Classes Card
                   if (teacherData.assignedClasses.isNotEmpty) ...[
                     Text(
-                      tr.assignedClasses,  // ✅ من الترجمة
+                      tr.assignedClasses,
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
