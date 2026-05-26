@@ -18,15 +18,18 @@ class ParentTasksPage extends ConsumerStatefulWidget {
 }
 
 class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
+  // ✅ التغيير 1: شيلنا didChangeDependencies واستبدلناه بـ initState
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Re-fetch tasks every time this screen is shown to ensure data sync
-    Future.microtask(
-      () => ref
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      // ✅ التغيير 2: invalidate بيمسح الكاش القديم أولاً
+      ref.invalidate(parentTasksNotifierProvider);
+      // ✅ التغيير 3: بعدين يجيب الداتا الجديدة من الـ API
+      ref
           .read(parentTasksNotifierProvider.notifier)
-          .fetchTasks(studentId: widget.studentId),
-    );
+          .fetchTasks(studentId: widget.studentId);
+    });
   }
 
   @override
@@ -45,7 +48,6 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Intro
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
@@ -59,7 +61,7 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    l10n.parentTasksSubtitle, // ✅ اتصلحت
+                    l10n.parentTasksSubtitle,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
@@ -67,10 +69,7 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                 ],
               ),
             ),
-
             const SizedBox(height: 24),
-
-            // ── Body
             Expanded(
               child: state.isLoading
                   ? const LoadingView()
@@ -106,8 +105,6 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                               ),
                             ),
             ),
-
-            // ── View Reports Button
             Padding(
               padding: const EdgeInsets.all(16),
               child: SizedBox(
@@ -123,7 +120,6 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
                     ),
                   ),
                   child: Text(
-                    // ✅ شيلنا الـ const
                     l10n.viewReports,
                     style: const TextStyle(
                       fontSize: 15,

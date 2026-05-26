@@ -24,6 +24,7 @@ import 'package:arak_app/features/tasks/presentation/pages/add_task_page.dart';
 import 'package:arak_app/features/tasks/presentation/pages/teacher_tasks_page.dart';
 import 'package:arak_app/features/teacher_home/presentation/screens/teacher_home_screen.dart';
 import 'package:arak_app/features/parent_home/presentation/screens/parent_home_screen.dart';
+import 'package:arak_app/features/parent_home/presentation/providers/parent_home_provider.dart';
 import 'package:arak_app/features/tasks/presentation/pages/parent_tasks_page.dart';
 import 'package:arak_app/features/tasks/presentation/pages/parent_task_details_page.dart';
 import 'package:arak_app/features/tasks/domain/entities/task.dart';
@@ -82,7 +83,9 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/parent-home/tasks',
             name: 'parent-tasks',
             builder: (context, state) {
-              final studentId = state.extra as String? ?? '';
+              final studentId = state.extra?.toString() ??
+                  ref.read(selectedStudentProvider)?.id ??
+                  '';
               return ParentTasksPage(studentId: studentId);
             },
             routes: [

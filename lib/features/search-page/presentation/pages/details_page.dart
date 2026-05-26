@@ -81,6 +81,8 @@ class DetailsPage extends ConsumerWidget {
               fontWeight: FontWeight.bold,
               color: theme.textTheme.bodyLarge?.color,
             ),
+            overflow: TextOverflow.ellipsis, // ✅ fix 1
+            maxLines: 1,
           ),
           SizedBox(height: 5.h),
           Text(
@@ -89,18 +91,26 @@ class DetailsPage extends ConsumerWidget {
               fontSize: 16.sp,
               color: theme.textTheme.bodyMedium?.color,
             ),
+            overflow: TextOverflow.ellipsis, // ✅ fix 2
+            maxLines: 1,
           ),
           Divider(height: 30.h, color: theme.dividerColor),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                student.date,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: theme.textTheme.bodyMedium?.color,
+              Expanded(
+                // ✅ fix 3 — Expanded على التاريخ
+                child: Text(
+                  student.date,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: theme.textTheme.bodyMedium?.color,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
+              SizedBox(width: 8.w), // ✅ فاصلة بين التاريخ والـ Badge
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
                 decoration: BoxDecoration(
@@ -108,13 +118,14 @@ class DetailsPage extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
-                  // ✅ status مترجم من الـ arb الموجود
                   _getLocalizedStatus(l10n, student.status),
                   style: TextStyle(
                     color: _getStatusColor(student.status),
                     fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
+                    fontSize: 14.sp, // ✅ خفضنا شوية علشان ميطلعش من الـ badge
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
@@ -132,7 +143,7 @@ class DetailsPage extends ConsumerWidget {
         Expanded(
           child: _timeBox(
             icon: Icons.login,
-            label: l10n.checkIn, // ✅
+            label: l10n.checkIn,
             time: student.checkIn,
             color: Colors.green,
             theme: theme,
@@ -142,7 +153,7 @@ class DetailsPage extends ConsumerWidget {
         Expanded(
           child: _timeBox(
             icon: Icons.logout,
-            label: l10n.checkOut, // ✅
+            label: l10n.checkOut,
             time: student.checkOut,
             color: Colors.red,
             theme: theme,
@@ -171,25 +182,32 @@ class DetailsPage extends ConsumerWidget {
         children: [
           Icon(icon, color: color, size: 24.sp),
           SizedBox(width: 10.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  color: theme.textTheme.bodySmall?.color,
-                  fontSize: 12.sp,
+          Expanded(
+            // ✅ fix 4 — أهم تعديل — Expanded على الـ Column
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: theme.textTheme.bodySmall?.color,
+                    fontSize: 12.sp,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-              ),
-              Text(
-                time,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: color,
+                Text(
+                  time,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -214,7 +232,7 @@ class DetailsPage extends ConsumerWidget {
             children: [
               SizedBox(
                 width: 80.w,
-                height: 80.h,
+                height: 80.w, // ✅ fix 5 — .w بدل .h للحفاظ على الاستدارة
                 child: CircularProgressIndicator(
                   value: student.attendanceRate / 100,
                   strokeWidth: 8,
@@ -229,7 +247,8 @@ class DetailsPage extends ConsumerWidget {
               Text(
                 "${student.attendanceRate}%",
                 style: TextStyle(
-                  fontSize: 20.sp,
+                  fontSize: 16
+                      .sp, // ✅ fix 6 — من 20.sp لـ 16.sp علشان متطلعش من الدايرة
                   fontWeight: FontWeight.bold,
                   color: theme.textTheme.bodyLarge?.color,
                 ),
@@ -237,33 +256,39 @@ class DetailsPage extends ConsumerWidget {
             ],
           ),
           SizedBox(width: 20.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.attendanceRate, // ✅
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: theme.textTheme.bodyLarge?.color,
+          Expanded(
+            // ✅ fix 7 — Expanded على الـ Column
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.attendanceRate,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: theme.textTheme.bodyLarge?.color,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                l10n.overallPerformance, // ✅
-                style: TextStyle(
-                  color: theme.textTheme.bodySmall?.color,
-                  fontSize: 12.sp,
+                SizedBox(height: 5.h),
+                Text(
+                  l10n.overallPerformance,
+                  style: TextStyle(
+                    color: theme.textTheme.bodySmall?.color,
+                    fontSize: 12.sp,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  // ✅ بدل switch على string — بنترجم حسب الـ enum أو الـ value
   String _getLocalizedStatus(AppLocalizations l10n, String status) {
     switch (status) {
       case 'Present':

@@ -31,7 +31,8 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     );
 
     if (response.data is List) {
-      final tasks = (response.data as List).map((e) => TaskModel.fromJson(e)).toList();
+      final tasks =
+          (response.data as List).map((e) => TaskModel.fromJson(e)).toList();
       return TeacherTasksResult(tasks: tasks, lastUpdated: DateTime.now());
     }
 
@@ -72,6 +73,10 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     );
 
     if (response.data is List) {
+      // ✅ حط السطرين دول
+      for (var item in response.data) {
+        print('🔴 RAW TASK: $item');
+      }
       return (response.data as List).map((e) => TaskModel.fromJson(e)).toList();
     }
 
@@ -99,14 +104,16 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
     if (response.data is List) {
       return (response.data as List)
-          .map((e) => TaskStudentStatusModel.fromJson(e as Map<String, dynamic>))
+          .map(
+              (e) => TaskStudentStatusModel.fromJson(e as Map<String, dynamic>))
           .toList();
     }
     return [];
   }
 
   @override
-  Future<void> updateTaskStudentStatus(int taskId, List<Map<String, dynamic>> updates) async {
+  Future<void> updateTaskStudentStatus(
+      int taskId, List<Map<String, dynamic>> updates) async {
     await dio.put("/Tasks/$taskId/status", data: updates);
   }
 }

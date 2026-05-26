@@ -235,16 +235,24 @@ class TaskItemCard extends ConsumerWidget {
                       final confirm = await showDialog<bool>(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text(AppLocalizations.of(context)?.confirmDelete ?? 'Delete Task'),
-                          content: Text(AppLocalizations.of(context)?.deleteTaskMessage ?? 'This action cannot be undone.'),
+                          title: Text(
+                              AppLocalizations.of(context)?.confirmDelete ??
+                                  'Delete Task'),
+                          content: Text(
+                              AppLocalizations.of(context)?.deleteTaskMessage ??
+                                  'This action cannot be undone.'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context, false),
-                              child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
+                              child: Text(
+                                  AppLocalizations.of(context)?.cancel ??
+                                      'Cancel'),
                             ),
                             TextButton(
                               onPressed: () => Navigator.pop(context, true),
-                              child: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
+                              child: Text(
+                                  AppLocalizations.of(context)?.delete ??
+                                      'Delete'),
                             ),
                           ],
                         ),
@@ -260,7 +268,9 @@ class TaskItemCard extends ConsumerWidget {
 
                           AppSnackBar.show(
                             context,
-                            message: AppLocalizations.of(context)?.taskDeleted ?? 'Task deleted',
+                            message:
+                                AppLocalizations.of(context)?.taskDeleted ??
+                                    'Task deleted',
                             type: AppSnackBarType.success,
                           );
                         } catch (e) {
@@ -300,7 +310,8 @@ class TaskItemCard extends ConsumerWidget {
                     );
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(20),
@@ -315,7 +326,8 @@ class TaskItemCard extends ConsumerWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          AppLocalizations.of(context)?.checkStatus ?? 'Check Status',
+                          AppLocalizations.of(context)?.checkStatus ??
+                              'Check Status',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w500,
@@ -334,32 +346,27 @@ class TaskItemCard extends ConsumerWidget {
   }
 
   Widget _buildStatusBadge(BuildContext context, TaskStatus status) {
-    final isCompleted = status == TaskStatus.completed;
-    final color = isCompleted ? Colors.green : Colors.orange;
-    final text = isCompleted ? 'Completed' : 'Pending';
-    final icon = isCompleted ? '✅' : '🟡';
+    final loc = AppLocalizations.of(context)!;
+
+    final color = status == TaskStatus.completed
+        ? const Color(0xFF4CAF50)
+        : const Color(0xFFFF9800);
+
+    final text = status == TaskStatus.completed ? loc.done : loc.pending;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.5)),
+        color: color,
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 12)),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: TextStyle(
-              color: color,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

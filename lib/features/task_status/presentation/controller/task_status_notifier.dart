@@ -70,6 +70,9 @@ class TaskStatusNotifier extends StateNotifier<TaskStatusState> {
       await updateTaskStudentStatus(taskIdInt, updates);
 
       state = state.copyWith(isSaving: false);
+
+      // ✅ التعديل — بعد الـ save بيعمل load تاني
+      await load(taskId);
     } catch (e) {
       state = state.copyWith(
         isSaving: false,
