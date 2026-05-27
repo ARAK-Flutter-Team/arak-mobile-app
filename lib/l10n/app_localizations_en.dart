@@ -653,4 +653,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unableToLoadTasks => 'Unable to load tasks. Please try again.';
+
+  @override
+  String get teacherQuoteTitle1 => 'Teach, Guide & Inspire';
+
+  @override
+  String get teacherQuoteBody1 =>
+      'A great teacher doesn\'t just teach lessons, but changes lives.';
+
+  @override
+  String get teacherQuoteAuthor1 => 'Educational Quote';
+
+  @override
+  String get teacherQuoteTitle2 => 'Every Lesson Builds a Future';
+
+  @override
+  String get teacherQuoteBody2 =>
+      'Education is the most powerful weapon which you can use to change the world.';
+
+  @override
+  String get teacherQuoteAuthor2 => 'Nelson Mandela';
+
+  @override
+  String get teacherQuoteTitle3 => 'A Teacher\'s Impact Lasts Forever';
+
+  @override
+  String get teacherQuoteBody3 =>
+      'Good teachers open minds and inspire hearts.';
+
+  @override
+  String get teacherQuoteAuthor3 => 'Educational Quote';
+
+  @override
+  String get teacherQuoteTitle4 => 'Make a Difference Every Day';
+
+  @override
+  String get teacherQuoteBody4 => 'Teaching is the greatest act of optimism.';
+
+  @override
+  String get teacherQuoteAuthor4 => 'Colleen Wilcox';
+
+  @override
+  String get teacherQuoteTitle5 => 'Inspire Your Students';
+
+  @override
+  String get teacherQuoteBody5 =>
+      'The best teachers are those who help students believe in themselves.';
+
+  @override
+  String get teacherQuoteAuthor5 => 'Educational Quote';
 }

@@ -98,7 +98,7 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
             child: Container(
               decoration: BoxDecoration(
                 color: isDark ? Colors.grey.shade800 : Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(30.r),
+                borderRadius: BorderRadius.circular(100.r),
               ),
               child: TextField(
                 controller: _controller,

@@ -211,7 +211,26 @@
     "todayClasses": "حصص اليوم",
     "assignedClasses": "الفصول المخصصة",
     "somethingWentWrong": "حدث خطأ ما",
-    "unableToLoadTasks": "تعذّر تحميل المهام. يرجى المحاولة مرة أخرى."
+    "unableToLoadTasks": "تعذّر تحميل المهام. يرجى المحاولة مرة أخرى.",
+    "teacherQuoteTitle1": "علّم، وجّه، وألهم",
+    "teacherQuoteBody1": "المعلم العظيم لا يقدّم المعلومات فقط، بل يصنع فرقاً في حياة طلابه.",
+    "teacherQuoteAuthor1": "مقولة تعليمية",
+
+    "teacherQuoteTitle2": "كل درس يصنع مستقبلاً",
+    "teacherQuoteBody2": "التعليم هو أقوى سلاح يمكنك استخدامه لتغيير العالم.",
+    "teacherQuoteAuthor2": "نيلسون مانديلا",
+
+    "teacherQuoteTitle3": "أثر المعلم لا ينسى",
+    "teacherQuoteBody3": "المعلم الجيد يفتح العقول ويلهم القلوب.",
+    "teacherQuoteAuthor3": "مقولة تعليمية",
+
+    "teacherQuoteTitle4": "اصنع فرقاً كل يوم",
+    "teacherQuoteBody4": "التدريس هو أعظم أعمال الأمل والتفاؤل.",
+    "teacherQuoteAuthor4": "كولين ويلكوكس",
+
+    "teacherQuoteTitle5": "ألهم طلابك",
+    "teacherQuoteBody5": "أفضل المعلمين هم من يجعلون الطلاب يؤمنون بأنفسهم.",
+    "teacherQuoteAuthor5": "مقولة تعليمية"
 
 
 }

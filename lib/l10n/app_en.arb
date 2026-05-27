@@ -210,7 +210,26 @@
     "todayClasses": "Today's Classes",
     "assignedClasses": "Assigned Classes",
       "somethingWentWrong": "Something went wrong",
-  "unableToLoadTasks": "Unable to load tasks. Please try again."
+  "unableToLoadTasks": "Unable to load tasks. Please try again.",
+  "teacherQuoteTitle1": "Teach, Guide & Inspire",
+  "teacherQuoteBody1": "A great teacher doesn't just teach lessons, but changes lives.",
+  "teacherQuoteAuthor1": "Educational Quote",
+
+  "teacherQuoteTitle2": "Every Lesson Builds a Future",
+  "teacherQuoteBody2": "Education is the most powerful weapon which you can use to change the world.",
+  "teacherQuoteAuthor2": "Nelson Mandela",
+
+  "teacherQuoteTitle3": "A Teacher's Impact Lasts Forever",
+  "teacherQuoteBody3": "Good teachers open minds and inspire hearts.",
+  "teacherQuoteAuthor3": "Educational Quote",
+
+  "teacherQuoteTitle4": "Make a Difference Every Day",
+  "teacherQuoteBody4": "Teaching is the greatest act of optimism.",
+  "teacherQuoteAuthor4": "Colleen Wilcox",
+
+  "teacherQuoteTitle5": "Inspire Your Students",
+  "teacherQuoteBody5": "The best teachers are those who help students believe in themselves.",
+  "teacherQuoteAuthor5": "Educational Quote"
 
 
 }

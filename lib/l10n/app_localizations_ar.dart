@@ -653,4 +653,52 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unableToLoadTasks => 'تعذّر تحميل المهام. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get teacherQuoteTitle1 => 'علّم، وجّه، وألهم';
+
+  @override
+  String get teacherQuoteBody1 =>
+      'المعلم العظيم لا يقدّم المعلومات فقط، بل يصنع فرقاً في حياة طلابه.';
+
+  @override
+  String get teacherQuoteAuthor1 => 'مقولة تعليمية';
+
+  @override
+  String get teacherQuoteTitle2 => 'كل درس يصنع مستقبلاً';
+
+  @override
+  String get teacherQuoteBody2 =>
+      'التعليم هو أقوى سلاح يمكنك استخدامه لتغيير العالم.';
+
+  @override
+  String get teacherQuoteAuthor2 => 'نيلسون مانديلا';
+
+  @override
+  String get teacherQuoteTitle3 => 'أثر المعلم لا ينسى';
+
+  @override
+  String get teacherQuoteBody3 => 'المعلم الجيد يفتح العقول ويلهم القلوب.';
+
+  @override
+  String get teacherQuoteAuthor3 => 'مقولة تعليمية';
+
+  @override
+  String get teacherQuoteTitle4 => 'اصنع فرقاً كل يوم';
+
+  @override
+  String get teacherQuoteBody4 => 'التدريس هو أعظم أعمال الأمل والتفاؤل.';
+
+  @override
+  String get teacherQuoteAuthor4 => 'كولين ويلكوكس';
+
+  @override
+  String get teacherQuoteTitle5 => 'ألهم طلابك';
+
+  @override
+  String get teacherQuoteBody5 =>
+      'أفضل المعلمين هم من يجعلون الطلاب يؤمنون بأنفسهم.';
+
+  @override
+  String get teacherQuoteAuthor5 => 'مقولة تعليمية';
 }

@@ -1357,6 +1357,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to load tasks. Please try again.'**
   String get unableToLoadTasks;
+
+  /// No description provided for @teacherQuoteTitle1.
+  ///
+  /// In en, this message translates to:
+  /// **'Teach, Guide & Inspire'**
+  String get teacherQuoteTitle1;
+
+  /// No description provided for @teacherQuoteBody1.
+  ///
+  /// In en, this message translates to:
+  /// **'A great teacher doesn\'t just teach lessons, but changes lives.'**
+  String get teacherQuoteBody1;
+
+  /// No description provided for @teacherQuoteAuthor1.
+  ///
+  /// In en, this message translates to:
+  /// **'Educational Quote'**
+  String get teacherQuoteAuthor1;
+
+  /// No description provided for @teacherQuoteTitle2.
+  ///
+  /// In en, this message translates to:
+  /// **'Every Lesson Builds a Future'**
+  String get teacherQuoteTitle2;
+
+  /// No description provided for @teacherQuoteBody2.
+  ///
+  /// In en, this message translates to:
+  /// **'Education is the most powerful weapon which you can use to change the world.'**
+  String get teacherQuoteBody2;
+
+  /// No description provided for @teacherQuoteAuthor2.
+  ///
+  /// In en, this message translates to:
+  /// **'Nelson Mandela'**
+  String get teacherQuoteAuthor2;
+
+  /// No description provided for @teacherQuoteTitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'A Teacher\'s Impact Lasts Forever'**
+  String get teacherQuoteTitle3;
+
+  /// No description provided for @teacherQuoteBody3.
+  ///
+  /// In en, this message translates to:
+  /// **'Good teachers open minds and inspire hearts.'**
+  String get teacherQuoteBody3;
+
+  /// No description provided for @teacherQuoteAuthor3.
+  ///
+  /// In en, this message translates to:
+  /// **'Educational Quote'**
+  String get teacherQuoteAuthor3;
+
+  /// No description provided for @teacherQuoteTitle4.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a Difference Every Day'**
+  String get teacherQuoteTitle4;
+
+  /// No description provided for @teacherQuoteBody4.
+  ///
+  /// In en, this message translates to:
+  /// **'Teaching is the greatest act of optimism.'**
+  String get teacherQuoteBody4;
+
+  /// No description provided for @teacherQuoteAuthor4.
+  ///
+  /// In en, this message translates to:
+  /// **'Colleen Wilcox'**
+  String get teacherQuoteAuthor4;
+
+  /// No description provided for @teacherQuoteTitle5.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspire Your Students'**
+  String get teacherQuoteTitle5;
+
+  /// No description provided for @teacherQuoteBody5.
+  ///
+  /// In en, this message translates to:
+  /// **'The best teachers are those who help students believe in themselves.'**
+  String get teacherQuoteBody5;
+
+  /// No description provided for @teacherQuoteAuthor5.
+  ///
+  /// In en, this message translates to:
+  /// **'Educational Quote'**
+  String get teacherQuoteAuthor5;
 }
 
 class _AppLocalizationsDelegate
