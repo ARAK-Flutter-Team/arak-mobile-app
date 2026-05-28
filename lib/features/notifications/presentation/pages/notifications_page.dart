@@ -20,6 +20,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     super.initState();
     Future.microtask(() {
       ref.read(notificationsControllerProvider.notifier).loadNotifications();
+      ref.read(unreadNotificationsProvider.notifier).state = 0;
     });
   }
 

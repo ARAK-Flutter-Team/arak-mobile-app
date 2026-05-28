@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:arak_app/core/network/dio_provider.dart';
+import '../../data/datasources/notification_remote_datasource_impl.dart';
 import '../../data/repositories/notification_repository_impl.dart';
 import '../../domain/entities/notification.dart';
 import '../../domain/usecases/get_notifications.dart';
@@ -8,21 +10,35 @@ import '../../domain/usecases/mark_all_as_read.dart';
 // ✅ unread count provider
 final unreadNotificationsProvider = StateProvider<int>((ref) => 0);
 
-// UseCases Providers
+// ── DataSource — uses dioProvider (token interceptor included)
+final _notificationDataSourceProvider =
+    Provider<NotificationRemoteDataSourceImpl>((ref) {
+  return NotificationRemoteDataSourceImpl(ref.watch(dioProvider));
+});
+
+// ── Repository
+// ✅ صح — بيبعت الـ datasource
+final _notificationRepositoryProvider =
+    Provider<NotificationsRepositoryImpl>((ref) {
+  return NotificationsRepositoryImpl(
+      ref.watch(_notificationDataSourceProvider));
+});
+
+// ── UseCases
 final getNotificationsUseCaseProvider =
     Provider<GetNotificationsUseCase>((ref) {
-  return GetNotificationsUseCase(NotificationsRepositoryImpl());
+  return GetNotificationsUseCase(ref.watch(_notificationRepositoryProvider));
 });
 
 final getUnreadCountUseCaseProvider = Provider<GetUnreadCountUseCase>((ref) {
-  return GetUnreadCountUseCase(NotificationsRepositoryImpl());
+  return GetUnreadCountUseCase(ref.watch(_notificationRepositoryProvider));
 });
 
 final markAllAsReadUseCaseProvider = Provider<MarkAllAsReadUseCase>((ref) {
-  return MarkAllAsReadUseCase(NotificationsRepositoryImpl());
+  return MarkAllAsReadUseCase(ref.watch(_notificationRepositoryProvider));
 });
 
-// Controller
+// ── Controller (unchanged)
 class NotificationsController
     extends StateNotifier<AsyncValue<List<AppNotification>>> {
   final GetNotificationsUseCase getNotificationsUseCase;
@@ -35,21 +51,16 @@ class NotificationsController
     required this.getUnreadCountUseCase,
     required this.markAllAsReadUseCase,
     required this.ref,
-  }) : super(const AsyncData([])); // ✅ بدأنا بـ empty list مش loading
+  }) : super(const AsyncData([]));
 
   Future<void> loadNotifications() async {
     state = const AsyncLoading();
     try {
       final notifications = await getNotificationsUseCase();
       state = AsyncData(notifications);
-
-      // ✅ حدّث الـ unread count من الـ API
       final count = await getUnreadCountUseCase();
       ref.read(unreadNotificationsProvider.notifier).state = count;
     } catch (e, st) {
-      print('❌ ERROR: $e'); // ← هنا
-      print('❌ STACK: $st'); // ← وهنا
-
       state = AsyncError(e, st);
     }
   }

@@ -12,15 +12,17 @@ class NotificationModel extends AppNotification {
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json["id"],
+      id: (json["id"] as num?)?.toInt() ?? 0,
       type: NotificationType.values.firstWhere(
-        (e) => e.name == json["type"],
+        (e) => e.name == (json["type"] as String?),
         orElse: () => NotificationType.unknown,
       ),
-      title: json["title"],
-      body: json["body"],
-      isRead: json["isRead"],
-      createdAt: DateTime.parse(json["createdAt"]),
+      title: json["title"] as String? ?? '',
+      body: json["body"] as String? ?? '',
+      isRead: json["isRead"] as bool? ?? false,
+      createdAt: json["createdAt"] != null
+          ? DateTime.tryParse(json["createdAt"] as String) ?? DateTime.now()
+          : DateTime.now(),
     );
   }
 

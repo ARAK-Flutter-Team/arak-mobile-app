@@ -23,7 +23,9 @@ class AppBottomNavBar extends ConsumerWidget {
       width: size,
       height: size,
       colorFilter: ColorFilter.mode(
-        isActive ? const Color(0xFF2979FF) : (isDark ? Colors.white : Colors.black),
+        isActive
+            ? const Color(0xFF2979FF)
+            : (isDark ? Colors.white : Colors.black),
         BlendMode.srcIn,
       ),
     );
@@ -35,7 +37,7 @@ class AppBottomNavBar extends ConsumerWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: isDark ? Colors.black : Colors.white,
-      elevation: 5,
+      elevation: 4,
       currentIndex: currentIndex,
       showSelectedLabels: false,
       showUnselectedLabels: false,
@@ -48,13 +50,9 @@ class AppBottomNavBar extends ConsumerWidget {
             context.go('/profile');
             break;
           case 2:
-            final userId = ref.read(authProvider).user?.id ?? '';
-            context.push('/conversations', extra: userId);
-            break;
-          case 3:
             context.go('/notifications');
             break;
-          case 4:
+          case 3:
             context.go('/settings');
             break;
         }
@@ -63,23 +61,23 @@ class AppBottomNavBar extends ConsumerWidget {
       unselectedItemColor: isDark ? Colors.white : Colors.black,
       items: [
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(context, 'assets/icons/home-1.svg', currentIndex == 0),
+          icon: _buildSvgIcon(
+              context, 'assets/icons/home-1.svg', currentIndex == 0),
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(context, 'assets/icons/user-1.svg', currentIndex == 1),
+          icon: _buildSvgIcon(
+              context, 'assets/icons/user-1.svg', currentIndex == 1),
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(context, 'assets/icons/messages.svg', currentIndex == 2),
+          icon: _buildSvgIcon(
+              context, 'assets/icons/bell.svg', currentIndex == 2),
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: _buildSvgIcon(context, 'assets/icons/bell.svg', currentIndex == 3),
-          label: "",
-        ),
-        BottomNavigationBarItem(
-          icon: _buildSvgIcon(context, 'assets/icons/settings.svg', currentIndex == 4),
+          icon: _buildSvgIcon(
+              context, 'assets/icons/settings.svg', currentIndex == 3),
           label: "",
         ),
       ],

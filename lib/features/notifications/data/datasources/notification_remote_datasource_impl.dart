@@ -1,37 +1,24 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/api_constants.dart';
+import 'package:dio/dio.dart';
 import '../models/notification_model.dart';
 import 'notification_remote_datasource.dart';
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
-  // ✅ Uses the central ApiConstants so the IP is changed in one place only
-  final String baseUrl = ApiConstants.baseUrl;
+  final Dio dio;
 
-  Future<String?> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token'); // ← نفس الـ key اللي بتحفظ فيه الـ token
-  }
-
-  Future<Map<String, String>> _headers() async {
-    final token = await _getToken();
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
-  }
+  NotificationRemoteDataSourceImpl(this.dio);
 
   @override
   Future<List<NotificationModel>> getNotifications(
       {int page = 1, int pageSize = 50}) async {
-    final headers = await _headers();
-    final uri =
-        Uri.parse('$baseUrl/notifications?page=$page&pageSize=$pageSize');
-    final response = await http.get(uri, headers: headers);
+    final response = await dio.get(
+      '/notifications',
+      queryParameters: {'page': page, 'pageSize': pageSize},
+    );
 
     if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
+      final dynamic raw = response.data;
+      final List<dynamic> data =
+          raw is List ? raw : (raw['data'] as List? ?? []);
       return data.map((e) => NotificationModel.fromJson(e)).toList();
     }
     throw Exception('Failed to load notifications: ${response.statusCode}');
@@ -39,29 +26,35 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<int> getUnreadCount() async {
-    final headers = await _headers();
-    final uri = Uri.parse('$baseUrl/notifications/unread-count');
-    final response = await http.get(uri, headers: headers);
+    final response = await dio.get('/notifications/unread-count');
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      // ✅ Safe cast — handles int, long, or double from the JSON serializer
-      return (data['count'] as num).toInt();
+      final dynamic data = response.data;
+      if (data is int) return data;
+      if (data is Map) {
+        final value =
+            data['count'] ?? data['unreadCount'] ?? data['total'] ?? 0;
+        return (value as num).toInt();
+      }
+      return 0;
     }
-    throw Exception('Failed to get unread count');
+    throw Exception('Failed to get unread count: ${response.statusCode}');
   }
 
   @override
   Future<void> markAllAsRead() async {
-    final headers = await _headers();
-    final uri = Uri.parse('$baseUrl/notifications/read-all');
-    await http.patch(uri, headers: headers);
+    final response = await dio.patch('/notifications/read-all');
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to mark all as read: ${response.statusCode}');
+    }
   }
 
   @override
   Future<void> markAsRead(int id) async {
-    final headers = await _headers();
-    final uri = Uri.parse('$baseUrl/notifications/$id/read');
-    await http.patch(uri, headers: headers);
+    final response = await dio.patch('/notifications/$id/read');
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception(
+          'Failed to mark notification $id as read: ${response.statusCode}');
+    }
   }
 }

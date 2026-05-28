@@ -9,27 +9,71 @@ import '../../../../shared/widgets/app_main_appbar.dart';
 import '../../../../shared/widgets/quick_action_grid.dart';
 import '../../../../shared/widgets/user_header_card.dart';
 import '../../../notification_indicator/presentation/providers/notification_indicator_notifier.dart';
+import '../../../notifications/presentation/providers/notifications_provider.dart'; // ✅ جديد
 import '../providers/parent_home_provider.dart';
 import 'package:arak_app/shared/providers/current_user_provider.dart';
 
-class ParentHomeScreen extends ConsumerWidget {
+class ParentHomeScreen extends ConsumerStatefulWidget {
+  // ✅ تغيير
   const ParentHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n =
-        AppLocalizations.of(context)!; // ✅ تعريف واحد وبستخدمه في كل حتة
+  ConsumerState<ParentHomeScreen> createState() =>
+      _ParentHomeScreenState(); // ✅ تغيير
+}
+
+class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
+  // ✅ جديد
+
+  @override
+  void initState() {
+    // ✅ جديد
+    super.initState();
+    Future.microtask(() async {
+      try {
+        final count = await ref.read(getUnreadCountUseCaseProvider).call();
+        ref.read(unreadNotificationsProvider.notifier).state = count;
+      } catch (_) {}
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // ✅ شلنا WidgetRef ref من هنا
+    final l10n = AppLocalizations.of(context)!;
     final homeAsync = ref.watch(parentHomeProvider);
     final selectedIndex = ref.watch(selectedStudentIndexProvider);
     final selectedStudent = ref.watch(selectedStudentProvider);
     final notificationAsync = ref.watch(notificationProvider);
+    final unreadCount = ref.watch(unreadNotificationsProvider); // ✅ جديد
 
     return Scaffold(
-      backgroundColor:
-          Theme.of(context).scaffoldBackgroundColor, // ✅ زي teacher
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppMainAppBar(
-        title: l10n.welcome(ref.watch(currentUserProvider)?.name ?? ''), // ✅
+        title: l10n.welcome(ref.watch(currentUserProvider)?.name ?? ''),
         showBackButton: false,
+        actions: [
+          // ✅ جديد
+          Padding(
+            padding: EdgeInsets.only(right: 12.w),
+            child: Badge(
+              isLabelVisible: unreadCount > 0,
+              label: Text(
+                unreadCount > 99 ? '99+' : unreadCount.toString(),
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              backgroundColor: Colors.red,
+              child: IconButton(
+                icon: Icon(Icons.notifications_outlined, size: 24.sp),
+                onPressed: () => context.push('/notifications'),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: RefreshIndicator(
@@ -48,7 +92,7 @@ class ParentHomeScreen extends ConsumerWidget {
                     name: selectedStudent?.name ?? '',
                     subtitle: selectedStudent?.parentUsername,
                     imageUrl: selectedStudent?.profileImage,
-                    showSearch: true,
+                    showSearch: false,
                     searchRoute: "/search",
                     showVerifiedIcon: selectedStudent?.isVerified ?? false,
                     students: data.students
@@ -101,41 +145,41 @@ class ParentHomeScreen extends ConsumerWidget {
           String studentId, AppLocalizations l10n) =>
       [
         QuickActionItem(
-          title: l10n.tasks, // ✅
+          title: l10n.tasks,
           route: '/parent-home/tasks',
           iconPath: 'assets/icons/tasks.svg',
           extra: studentId,
         ),
         QuickActionItem(
-          title: l10n.evaluation, // ✅
+          title: l10n.evaluation,
           route: '/parent-home/evaluation',
           iconPath: 'assets/icons/star.svg',
         ),
         QuickActionItem(
-          title: l10n.schedule, // ✅ موجود أصلاً في ARB
+          title: l10n.schedule,
           route: '/parent-home/schedule',
           iconPath: 'assets/icons/schedule.svg',
         ),
         QuickActionItem(
-          title: l10n.contactUs, // ✅
+          title: l10n.contactUs,
           route: '/parent-home/contact',
           iconPath: 'assets/icons/contact.svg',
         ),
         QuickActionItem(
-          title: l10n.attendance, // ✅ موجود أصلاً في ARB
+          title: l10n.attendance,
           route: '/parent-home/attendance',
           iconPath: 'assets/icons/attendance.svg',
         ),
         QuickActionItem(
-          title: l10n.foxChatbot, // ✅
+          title: l10n.foxChatbot,
           route: '/parent-home/chatbot',
           iconPath: 'assets/icons/chatbot.svg',
         ),
-        // QuickActionItem(
-        //   title: l10n.messages,
-        //   route: '/conversations',
-        //   iconPath: 'assets/icons/messages.svg',
-        // ),
+        QuickActionItem(
+          title: l10n.messages,
+          route: '/conversations',
+          iconPath: 'assets/icons/messages.svg',
+        ),
       ];
 }
 
@@ -185,7 +229,7 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!; // ✅
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       children: [
@@ -233,23 +277,23 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                   children: [
                     Center(
                       child: Text(
-                        l10n.studentInformation, // ✅
+                        l10n.studentInformation,
                         style: theme.textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(height: 12.h),
                     Text(
-                      "${l10n.studentName}: ${student.name}", // ✅
+                      "${l10n.studentName}: ${student.name}",
                       style: theme.textTheme.bodyLarge
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "${l10n.studentGrade}: ${student.grade}", // ✅
+                      "${l10n.studentGrade}: ${student.grade}",
                       style: theme.textTheme.bodyMedium,
                     ),
                     Text(
-                      "${l10n.classLabel}: ${student.classNumber}", // ✅ موجود أصلاً
+                      "${l10n.classLabel}: ${student.classNumber}",
                       style: theme.textTheme.bodyMedium,
                     ),
                     SizedBox(height: 8.h),
@@ -262,7 +306,7 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              l10n.more, // ✅
+                              l10n.more,
                               style: TextStyle(
                                 color: theme.colorScheme.primary,
                                 fontSize: 12.sp,

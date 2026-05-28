@@ -115,10 +115,10 @@ class AppBottomNavBar extends ConsumerWidget {
   });
 
   Widget _buildSvgIcon(
-      BuildContext context,
-      String assetPath,
-      bool isActive,
-      ) {
+    BuildContext context,
+    String assetPath,
+    bool isActive,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SvgPicture.asset(
@@ -136,10 +136,10 @@ class AppBottomNavBar extends ConsumerWidget {
 
   /// 🔔 الجرس مع رقم الإشعارات
   Widget _buildNotificationIcon(
-      BuildContext context,
-      int unreadCount,
-      bool isActive,
-      ) {
+    BuildContext context,
+    int unreadCount,
+    bool isActive,
+  ) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -148,7 +148,6 @@ class AppBottomNavBar extends ConsumerWidget {
           'assets/icons/bell.svg',
           isActive,
         ),
-
         if (unreadCount > 0)
           Positioned(
             right: -6,
@@ -187,9 +186,8 @@ class AppBottomNavBar extends ConsumerWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: isDark ? Colors.black : Colors.white,
-      elevation: 5,
+      elevation: 4,
       currentIndex: currentIndex,
-
       onTap: (index) {
         switch (index) {
           case 0:
@@ -201,7 +199,8 @@ class AppBottomNavBar extends ConsumerWidget {
             break;
 
           case 2:
-          /// عند فتح صفحة الإشعارات نخلي العدد صفر
+
+            /// عند فتح صفحة الإشعارات نخلي العدد صفر
             ref.read(unreadNotificationsProvider.notifier).state = 0;
 
             context.go('/notifications');
@@ -212,10 +211,8 @@ class AppBottomNavBar extends ConsumerWidget {
             break;
         }
       },
-
       selectedItemColor: const Color(0xFF42B0FF),
       unselectedItemColor: isDark ? Colors.white : Colors.black,
-
       items: [
         BottomNavigationBarItem(
           icon: _buildSvgIcon(
@@ -225,7 +222,6 @@ class AppBottomNavBar extends ConsumerWidget {
           ),
           label: "",
         ),
-
         BottomNavigationBarItem(
           icon: _buildSvgIcon(
             context,
@@ -234,7 +230,6 @@ class AppBottomNavBar extends ConsumerWidget {
           ),
           label: "",
         ),
-
         BottomNavigationBarItem(
           icon: _buildNotificationIcon(
             context,
@@ -243,7 +238,6 @@ class AppBottomNavBar extends ConsumerWidget {
           ),
           label: "",
         ),
-
         BottomNavigationBarItem(
           icon: _buildSvgIcon(
             context,
