@@ -1,3 +1,4 @@
+import 'package:arak_app/features/auth/presentation/screens/widgets/auth_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/entities/user.dart';
 import '../providers/auth_providers.dart';
 import '../providers/auth_state.dart';
-import '../widgets/auth_text_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
