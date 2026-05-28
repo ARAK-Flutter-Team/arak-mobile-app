@@ -44,7 +44,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         } else {
           _scrollController.jumpTo(0);
         }
-        debugPrint('📜 Scrolled to bottom');
+        debugPrint(' Scrolled to bottom');
       }
     });
   }
@@ -52,7 +52,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    debugPrint('📱 [CHAT SCREEN] Initializing');
+    debugPrint(' [CHAT SCREEN] Initializing');
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadMessages();
@@ -60,7 +60,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   Future<void> _loadMessages() async {
-    debugPrint('🔄 Loading messages...');
+    debugPrint(' Loading messages...');
     setState(() => _isLoading = true);
 
     await ref.read(chatControllerProvider.notifier).loadMessages(
@@ -72,13 +72,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       setState(() => _isLoading = false);
       _isFirstLoad = true;
       _scrollToBottom();
-      debugPrint('✅ Messages loaded');
+      debugPrint(' Messages loaded');
     }
   }
 
   @override
   void dispose() {
-    debugPrint('📱 [CHAT SCREEN] Disposing');
+    debugPrint(' [CHAT SCREEN] Disposing');
     _scrollController.dispose();
     super.dispose();
   }
@@ -89,7 +89,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final chatId = _chatId(widget.currentUserId, widget.otherUserId);
     final messages = state.messagesMap[chatId] ?? [];
 
-    // ✅ التمرير التلقائي عند إضافة رسالة جديدة
+    //  التمرير التلقائي عند إضافة رسالة جديدة
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isFirstLoad && mounted && _scrollController.hasClients) {
         _scrollToBottom();
@@ -128,7 +128,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   senderId: widget.currentUserId,
                   receiverId: widget.otherUserId,
                   onMessageSent: (message) {
-                    debugPrint('📨 Message sent, scrolling to bottom');
+                    debugPrint(' Message sent, scrolling to bottom');
                     _scrollToBottom();
                   },
                 ),

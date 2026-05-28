@@ -580,10 +580,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noInternetConnection => 'No internet connection';
 
   @override
-  String get searchByEmail => 'Search by email...';
+  String get searchByEmail => 'Search...';
 
   @override
-  String get enterEmailToSearch => 'Enter email to search';
+  String get enterEmailToSearch => 'Search...';
 
   @override
   String get accessDenied => 'Access Denied';

@@ -19,8 +19,6 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // حالياً بنستخدم text بس
-    // لما الباك يدعم صورة/ملف/صوت هنضيفهم تاني
     return TextMessageBubble(
       message: message,
       isMe: isMe,

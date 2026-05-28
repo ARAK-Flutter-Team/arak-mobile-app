@@ -580,10 +580,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
 
   @override
-  String get searchByEmail => 'ابحث بالبريد الإلكتروني...';
+  String get searchByEmail => 'ابحث...';
 
   @override
-  String get enterEmailToSearch => 'أدخل البريد الإلكتروني للبحث';
+  String get enterEmailToSearch => 'ابحث...';
 
   @override
   String get accessDenied => 'غير مصرح بالوصول';

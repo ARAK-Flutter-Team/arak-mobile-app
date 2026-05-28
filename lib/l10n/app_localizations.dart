@@ -1211,13 +1211,13 @@ abstract class AppLocalizations {
   /// No description provided for @searchByEmail.
   ///
   /// In en, this message translates to:
-  /// **'Search by email...'**
+  /// **'Search...'**
   String get searchByEmail;
 
   /// No description provided for @enterEmailToSearch.
   ///
   /// In en, this message translates to:
-  /// **'Enter email to search'**
+  /// **'Search...'**
   String get enterEmailToSearch;
 
   /// No description provided for @accessDenied.
