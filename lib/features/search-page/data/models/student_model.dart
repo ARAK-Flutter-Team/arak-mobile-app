@@ -10,24 +10,39 @@ class StudentModel extends Student {
     required super.checkIn,
     required super.checkOut,
     required super.attendanceRate,
+    super.parentName,
+    super.parentUserId,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
-    // Try to get UUID from userId, parentId, or id
-    final id = json['userId']?.toString() ?? 
-               json['parentId']?.toString() ?? 
-               json['id']?.toString() ?? 
-               "0";
-
     return StudentModel(
-      id: id,
-      name: json['name'] ?? json['Name'] ?? "Unknown",
-      grade: json['grade'] ?? json['Grade'] ?? "N/A",
-      status: json['status'] ?? json['Status'] ?? "Unknown",
-      date: json['date'] ?? json['Date'] ?? "N/A",
-      checkIn: json['checkIn'] ?? json['CheckIn'] ?? "--:--",
-      checkOut: json['checkOut'] ?? json['CheckOut'] ?? "--:--",
-      attendanceRate: (json['attendanceRate'] ?? json['AttendanceRate'] ?? 0).toDouble(),
+      id: (json['id'] ?? json['Id'] ?? '').toString(),
+      name: json['name'] ?? json['Name'] ?? 'Unknown',
+      grade: json['grade'] ?? json['Grade'] ?? '',
+      status: json['status'] ?? json['Status'] ?? 'Active',
+      date: json['date'] ?? json['Date'] ?? '',
+      checkIn: json['checkIn'] ?? json['CheckIn'] ?? '--:--',
+      checkOut: json['checkOut'] ?? json['CheckOut'] ?? '--:--',
+      attendanceRate: (json['attendanceRate'] ?? json['AttendanceRate'] as num?)
+          ?.toDouble(),
+
+      // 🚀 INTEGRATION: Safely decode nullable parent fields from backend
+      parentName: json['parentName'] ?? json['ParentName'],
+      parentUserId: json['parentUserId'] ?? json['ParentUserId'],
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'grade': grade,
+      'status': status,
+      'date': date,
+      'checkIn': checkIn,
+      'checkOut': checkOut,
+      'attendanceRate': attendanceRate,
+      'parentName': parentName,
+      'parentUserId': parentUserId,
+    };
   }
 }

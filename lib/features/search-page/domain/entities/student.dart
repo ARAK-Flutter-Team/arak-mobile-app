@@ -7,6 +7,9 @@ class Student {
   final String checkIn;
   final String checkOut;
   final double attendanceRate;
+  // 🚀 INTEGRATION: Add nullable parent connection fields
+  final String? parentName;
+  final String? parentUserId;
 
   const Student({
     required this.id,
@@ -17,5 +20,7 @@ class Student {
     required this.checkIn,
     required this.checkOut,
     required this.attendanceRate,
+    this.parentName,
+    this.parentUserId,
   });
 }

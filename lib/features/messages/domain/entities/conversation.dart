@@ -7,6 +7,8 @@ class Conversation extends Equatable {
   final String lastMessage;
   final DateTime lastMessageTime;
   final int unreadCount;
+  // 🚀 INTEGRATION: Add participant role context
+  final String otherPartyRole;
 
   const Conversation({
     required this.otherPartyId,
@@ -14,14 +16,16 @@ class Conversation extends Equatable {
     required this.lastMessage,
     required this.lastMessageTime,
     required this.unreadCount,
+    required this.otherPartyRole,
   });
 
   @override
   List<Object?> get props => [
-    otherPartyId,
-    otherPartyName,
-    lastMessage,
-    lastMessageTime,
-    unreadCount,
-  ];
+        otherPartyId,
+        otherPartyName,
+        lastMessage,
+        lastMessageTime,
+        unreadCount,
+        otherPartyRole,
+      ];
 }

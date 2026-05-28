@@ -7,6 +7,7 @@ import 'package:arak_app/features/tasks/domain/entities/task.dart';
 import 'package:arak_app/features/tasks/data/models/task_student_status_model.dart';
 import '../../domain/entities/task_student_status.dart';
 import 'task_remote_data_source.dart';
+import 'package:flutter/foundation.dart';
 
 final taskRemoteDataSourceProvider = Provider<TaskRemoteDataSource>((ref) {
   return TaskRemoteDataSourceImpl(ref.watch(dioProvider));
@@ -46,7 +47,13 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   @override
   Future<void> deleteTask(String taskId) async {
-    await dio.delete("/Tasks/$taskId");
+    try {
+      await dio.delete('/Tasks/$taskId');
+      debugPrint('✅ Task $taskId deleted successfully.');
+    } on DioException catch (e) {
+      debugPrint('❌ Error deleting task: ${e.message}');
+      throw Exception('Failed to delete task: ${e.message}');
+    }
   }
 
   @override
