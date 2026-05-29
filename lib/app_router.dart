@@ -32,6 +32,7 @@ import 'package:arak_app/features/search-page/presentation/pages/details_page.da
 import 'package:arak_app/features/search-page/domain/entities/student.dart';
 import 'package:arak_app/features/task_status/presentation/screens/task_status_screen.dart';
 import 'package:arak_app/features/parent_home/presentation/screens/student_details_screen.dart';
+import 'package:arak_app/features/chatbot/presentation/screens/chatbot_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -104,20 +105,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/parent-home/tasks',
             name: 'parent-tasks',
             builder: (context, state) {
-
               final studentId = state.extra as String? ?? '';
 
               return ParentTasksPage(
                 studentId: studentId,
               );
             },
-
             routes: [
               GoRoute(
                 path: 'details',
                 name: 'parent-task-details',
                 builder: (context, state) {
-
                   final task = state.extra as Task;
 
                   return ParentTaskDetailsPage(
@@ -158,7 +156,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/parent-home/chatbot',
             name: 'parent-chatbot',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const ChatbotScreen(),
           ),
           GoRoute(
             path: '/search',
