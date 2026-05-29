@@ -110,7 +110,7 @@ class _ParentTasksPageState extends ConsumerState<ParentTasksPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => context.push('/parent-home/evaluation'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
                     foregroundColor: colorScheme.onPrimary,

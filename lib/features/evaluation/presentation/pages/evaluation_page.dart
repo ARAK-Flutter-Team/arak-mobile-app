@@ -149,18 +149,17 @@ class StudentEvaluationPage extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 15),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.upload, color: AppColors.primary),
-                      iconSize: 28,
-                      padding: const EdgeInsets.all(14),
-                    ),
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //       color: AppColors.primary.withValues(alpha: 0.1),
+                  //       borderRadius: BorderRadius.circular(12)),
+                  //   child: IconButton(
+                  //     onPressed: () {},
+                  //     icon: const Icon(Icons.upload, color: AppColors.primary),
+                  //     iconSize: 28,
+                  //     padding: const EdgeInsets.all(14),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
