@@ -66,11 +66,11 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              backgroundColor: Colors.red,
-              child: IconButton(
-                icon: Icon(Icons.notifications_outlined, size: 24.sp),
-                onPressed: () => context.push('/notifications'),
-              ),
+              // backgroundColor: Colors.red,
+              // child: IconButton(
+              //   icon: Icon(Icons.notifications_outlined, size: 24.sp),
+              //   onPressed: () => context.push('/notifications'),
+              // ),
             ),
           ),
         ],
@@ -299,7 +299,7 @@ class _SwipeableStudentCardState extends State<_SwipeableStudentCard> {
                     SizedBox(height: 8.h),
                     GestureDetector(
                       onTap: () => context.push(
-                        '/parent-home/student/${student.id}',
+                        '/parent-home/student/${student.numericId}', // ✅ ده int
                       ),
                       child: Center(
                         child: Row(

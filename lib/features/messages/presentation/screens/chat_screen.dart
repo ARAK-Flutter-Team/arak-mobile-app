@@ -1,3 +1,4 @@
+import 'dart:async'; // ✅ [تعديل] استيراد dart:async عشان نستخدم Timer للـ polling
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/widgets/app_main_appbar.dart';
@@ -30,6 +31,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   bool _isLoading = true;
   bool _isFirstLoad = true;
 
+  // ✅ [تعديل] متغير الـ Timer اللي هيعمل polling تلقائي للرسائل
+  Timer? _pollingTimer;
+
   void _scrollToBottom({bool animate = true}) {
     if (!_scrollController.hasClients) return;
 
@@ -57,6 +61,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadMessages();
     });
+
+    // ✅ [تعديل] بدء الـ Polling — بيجيب الرسائل الجديدة كل 5 ثوانياً تلقائياً
+    // ده بيحل مشكلة إن الطرف التاني مش بيشوف الرسالة غير لما يعمل refresh يدوي
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      if (mounted) {
+        ref.read(chatControllerProvider.notifier).loadMessages(
+              currentUserId: widget.currentUserId,
+              otherUserId: widget.otherUserId,
+              showLoading:
+                  false, // ✅ [تعديل] false عشان متبانيش loading spinner مع كل poll
+            );
+      }
+    });
   }
 
   Future<void> _loadMessages() async {
@@ -79,6 +96,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void dispose() {
     debugPrint(' [CHAT SCREEN] Disposing');
+
+    // ✅ [تعديل] إلغاء الـ Timer لما الشاشة تتقفل عشان منعملش memory leak
+    _pollingTimer?.cancel();
+
     _scrollController.dispose();
     super.dispose();
   }
@@ -89,7 +110,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final chatId = _chatId(widget.currentUserId, widget.otherUserId);
     final messages = state.messagesMap[chatId] ?? [];
 
-    //  التمرير التلقائي عند إضافة رسالة جديدة
+    // التمرير التلقائي عند إضافة رسالة جديدة
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isFirstLoad && mounted && _scrollController.hasClients) {
         _scrollToBottom();
