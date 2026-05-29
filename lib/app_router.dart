@@ -80,7 +80,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
-          GoRoute(
+          /*GoRoute(
             path: '/parent-home/tasks',
             name: 'parent-tasks',
             builder: (context, state) {
@@ -96,6 +96,33 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) {
                   final task = state.extra as Task;
                   return ParentTaskDetailsPage(task: task);
+                },
+              ),
+            ],
+          ),*/
+          GoRoute(
+            path: '/parent-home/tasks',
+            name: 'parent-tasks',
+            builder: (context, state) {
+
+              final studentId = state.extra as String? ?? '';
+
+              return ParentTasksPage(
+                studentId: studentId,
+              );
+            },
+
+            routes: [
+              GoRoute(
+                path: 'details',
+                name: 'parent-task-details',
+                builder: (context, state) {
+
+                  final task = state.extra as Task;
+
+                  return ParentTaskDetailsPage(
+                    task: task,
+                  );
                 },
               ),
             ],
